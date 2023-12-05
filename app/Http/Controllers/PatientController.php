@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use App\Models\Rebate;
+use App\Models\Patient;
+use App\Models\Voucher;
 use App\Models\Prescriber;
+use App\Models\Examination;
 use Illuminate\Http\Request;
 use App\Models\ExaminationType;
 
@@ -29,21 +33,39 @@ class PatientController extends Controller
         return view('patients.payed_patient');
     }
 
-    public function registerExamination(Request $request){
+    public function priceCalculator(Request $request){
         try{
             if($request->ajax()){
-                return response()->json($request->all());
+                $examination_data = getPrice($request->examination);
+                return response()->json(['examination_data' => $examination_data[0], 'date' => $examination_data[1], 'time' => $examination_data[2]]);
             }
         } catch (Exception $e){
             $e->getMessage();
         }
     }
 
-    public function priceCalculator(Request $request){
+    public function registerExamination(Request $request){
         try{
             if($request->ajax()){
-                $examination_data = getPrice($request->examination);
-                return response()->json(['examination_data' => $examination_data]);
+                $voucher = new Voucher;
+                $patient = new Patient;
+                $examination = new Examination;
+                $rebate = new Rebate;
+
+                $voucher->date = $request->date;
+                $voucher->time = $request->time;
+                $voucher->amount_to_pay = $request->total_amount;
+                $voucher->payed = $request->payed_amount;
+                $voucher->left_to_pay = $request->left_to_pay;
+                $voucher->discount = $request->discount;
+                $voucher->amount_after_discount = $request->after_discount;
+                $voucher->save();
+
+                dd($voucher->id);
+
+                // $patient->
+
+                return response()->json(["j" => $voucher->id]);
             }
         } catch (Exception $e){
             $e->getMessage();

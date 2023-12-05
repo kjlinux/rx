@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('vouchers', function (Blueprint $table) {
             $table->id();
             $table->date('date');
-            $table->time('time', $precision = 0);
+            $table->time('time');
             $table->mediumInteger('amount_to_pay');
             $table->mediumInteger('payed');
             $table->mediumInteger('left_to_pay');
+            $table->tinyInteger('discount');
+            $table->mediumInteger('amount_after_discount');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

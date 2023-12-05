@@ -86,7 +86,7 @@
                                     class="fas fa-fw fa-trash"></i>Supprimer</button>
                         </div>
                     </div>
-                    <form class="form-row">
+                    <form id="new_examination" class="form-row d-none">
                         <div class="input-group mb-4 col-3">
                             <input type="text" class="form-control" placeholder="Nom" id="name" name="name" />
                         </div>
@@ -207,9 +207,9 @@
                     title: 'Salary'
                 }
             ],
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/fr-FR.json',
-            },
+            // language: {
+            //     url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/fr-FR.json',
+            // },
             select: true,
             responsive: true,
             dom: 'Bfrtip',
@@ -220,14 +220,7 @@
         });
 
         $(document).ready(function() {
-            // table.column(0).visible(false);
-            $('#update').on('click', function() {
-                var id = table.row({
-                    selected: true
-                }).data()[0];
-                console.log(id);
-            })
-
+            
             table.button().add(null, {
                 action: function() {
                     if (table.row({
@@ -247,6 +240,14 @@
                 className: 'btn btn-success',
                 key: 'g'
             });
+
+            // table.column(0).visible(false);
+            $('#update').on('click', function() {
+                var id = table.row({
+                    selected: true
+                }).data()[0];
+                console.log(id);
+            })
 
             // $('#patient_table').on('click', 'tr', function() {
             //     var id = table.row(this).id();

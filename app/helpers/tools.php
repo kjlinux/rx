@@ -24,17 +24,6 @@ function getCentersWhithCategory(){
             ->pluck('center_name', 'centers.id');
 }
 
-// function _isSunday(Carbon $date){
-//     if ($date->isSunday())
-//     {
-//         return true;
-//     }
-//     else 
-//     {
-//         return false;
-//     }
-// }
-
 function isHoliday(Carbon $date){
     $format_date = Carbon::createFromFormat('Y-m-d', $date->toDateString())->format('m-d');
     $matching = DB::table('holidays')
@@ -78,5 +67,5 @@ function getPrice(Array $examinations){
         $total_price += $temporary_price;
     }
 
-    return $total_price;
+    return [$total_price, $today->toDateString(), $today->toTimeString()];
 }
