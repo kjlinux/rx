@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Ramsey\Uuid\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,4 +15,10 @@ class Voucher extends Model
     {
         return $this->hasMany(Patient::class);
     }
+
+    public function newUniqueId(): string
+    {
+        return (string) Uuid::uuid4();
+    }
+
 }

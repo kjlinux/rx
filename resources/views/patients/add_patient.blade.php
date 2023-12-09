@@ -28,11 +28,11 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">RX > <strong>PATIENTS</strong></h1>
             <!-- <a
-                            href="#"
-                            class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-                            ><i class="fas fa-download fa-sm text-white-50"></i> Generate
-                            Report</a
-                         -->
+                                                    href="#"
+                                                    class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                                                    ><i class="fas fa-download fa-sm text-white-50"></i> Generate
+                                                    Report</a
+                                                 -->
         </div>
 
         <!-- Content Row -->
@@ -56,7 +56,7 @@
                             </div>
                             <div class="input-group mb-4 col-6">
                                 <input type="text" class="form-control" placeholder="Prénom(s)" id="forename"
-                                    name="forename" required />
+                                    name="forenames" required />
                             </div>
                             <div class="input-group mb-4 col-2">
                                 <input data-inputmask="'mask': '999'" type="text" class="form-control" placeholder="Age"
@@ -66,7 +66,7 @@
                                 </div>
                             </div>
                             <div class="input-group-lg mb-4 col-2">
-                                 {{html()->select($name = 'gender', $options = ['M' => 'M', 'F' => 'F'])->class('input-group selectpicker fit')->attributes(['title' => 'Genre', 'data-width' => '100%'])->required()}} 
+                                {{ html()->select($name = 'gender', $options = ['M' => 'M', 'F' => 'F'])->class('input-group selectpicker fit')->attributes(['title' => 'Genre', 'data-width' => '100%'])->required() }}
                             </div>
                             <div class="input-group mb-4 col-4">
                                 {{ html()->select($name = 'prescriber', $options = $prescriber_data)->class('input-group selectpicker show-tick')->attributes(['title' => 'Prescripteur(s)', 'data-width' => '100%', 'data-live-search' => 'true', 'data-size' => '5', 'data-multiple-separator' => ' | '])->multiple()->required() }}
@@ -135,7 +135,7 @@
                             <input type="hidden" id="date" name="date">
                             <input type="hidden" id="time" name="time">
                             <div class="input-group-lg col-6 mb-2 mt-3">
-                                <button class="form-control bg-secondary text-white">
+                                <button type="button" id="clean" class="form-control bg-secondary text-white">
                                     <i class="fas fa-times"></i>
                                     Vider les champs
                                 </button>
@@ -160,9 +160,21 @@
             e.preventDefault();
             $.ajax({
                 method: 'POST',
-                url: "{{ route('patient.register') }}",
+                url: "{{ route('patient.record') }}",
                 data: $(this).serialize(),
                 success: function(response) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                    });
+                    Toast.fire({
+                        icon: "success",
+                        title: "Enregistrement effectué."
+                    });
+                    clean();
                     console.log(response)
                 },
                 error: function(xhr, status, error) {
@@ -199,8 +211,8 @@
                 $('#left_to_pay').val($('#total_amount').val() - $('#payed_amount').val());
             }
             if ($('#total_amount').val() !== "") {
-                $('#after_discount').val($('#total_amount').val() - ($('#total_amount').val() * Number(String($(
-                    '#discount').val()))) / 100);
+                $('#after_discount').val($('#total_amount').val() - ($('#total_amount').val() * Number($(
+                    '#discount').val())) / 100);
                 $('#left_to_pay').val($('#after_discount').val() - $('#payed_amount').val());
             }
             if ($('#total_amount').val() === "" || $('#discount').val() === "") {
@@ -246,16 +258,20 @@
         });
 
         function priceCalculator() {
+
             $.ajax({
                 method: 'POST',
                 url: "{{ route('patient.price.calculator') }}",
                 data: $('#examination').serialize(),
                 success: function(response) {
-                    $('#total_amount').val(response.examination_data)
-                    $('#date').val(response.date)
-                    $('#time').val(response.time)
+                    $('#total_amount').val(response.examination_data);
+                    $('#date').val(response.date);
+                    $('#time').val(response.time);
                 },
                 error: function(xhr, status, error) {
+                    console.log(status);
+                    console.log(xhr);
+                    console.log(error);
                     $('#total_amount').val("");
                     Swal.fire({
                         title: "Choisissez des examens",
@@ -275,8 +291,19 @@
         }
 
         $('#examination').change(function() {
-            wipeInput();
             priceCalculator();
+            wipeInput();
+        })
+
+
+        function clean() {
+            $('input').val("");
+            $('textarea').val("");
+            $('.selectpicker').selectpicker('deselectAll');
+        }
+
+        $('#clean').click(function() {
+            clean();
         })
     </script>
 @endpush

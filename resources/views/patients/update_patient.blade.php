@@ -28,11 +28,11 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">RX > <strong>PATIENTS</strong></h1>
             <!-- <a
-                                                                                                          href="#"
-                                                                                                          class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-                                                                                                          ><i class="fas fa-download fa-sm text-white-50"></i> Generate
-                                                                                                          Report</a
-                                                                                                        > -->
+                                                                                                              href="#"
+                                                                                                              class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                                                                                                              ><i class="fas fa-download fa-sm text-white-50"></i> Generate
+                                                                                                              Report</a
+                                                                                                            > -->
         </div>
 
         <!-- Content Row -->
@@ -167,60 +167,32 @@
 @endsection
 @push('script')
     <script>
-        const dataSet = [
-            ['1', 'Garrett Winters', 'Accountant', 'Tokyo', '8422', '2011/07/25', '$170,750'],
-            ['2', 'Ashton Cox', 'Junior Technical Author', 'San Francisco', '1562', '2009/01/12', '$86,000'],
-            ['3', 'Cedric Kelly', 'Senior Javascript Developer', 'Edinburgh', '6224', '2012/03/29', '$433,060'],
-            ['4', 'Airi Satou', 'Accountant', 'Tokyo', '5407', '2008/11/28', '$162,700'],
-            ['5', 'Brielle Williamson', 'Integration Specialist', 'New York', '4804', '2012/12/02', '$372,000'],
-            ['6', 'Herrod Chandler', 'Sales Assistant', 'San Francisco', '9608', '2012/08/06', '$137,500'],
-            ['7', 'Rhona Davidson', 'Integration Specialist', 'Tokyo', '6200', '2010/10/14', '$327,900'],
-            ['8', 'Colleen Hurst', 'Javascript Developer', 'San Francisco', '2360', '2009/09/15', '$205,500'],
-            ['9', 'Sonya Frost', 'Software Engineer', 'Edinburgh', '1667', '2008/12/13', '$103,600'],
-            ['10', 'Jena Gaines', 'Office Manager', 'London', '3814', '2008/12/19', '$90,560'],
-            ['11', 'Quinn Flynn', 'Support Lead', 'Edinburgh', '9497', '2013/03/03', '$342,000'],
-            ['12', 'Charde Marshall', 'Regional Director', 'San Francisco', '6741', '2008/10/16', '$470,600'],
-            ['13', 'Haley Kennedy', 'Senior Marketing Designer', 'London', '3597', '2012/12/18', '$313,500'],
-            ['14', 'Tatyana Fitzpatrick', 'Regional Director', 'London', '1965', '2010/03/17', '$385,750'],
-        ];
 
+        const dataSet = @json($register, JSON_UNESCAPED_UNICODE);
         var table = new DataTable('#patient_table', {
-            columns: [{
-                    title: 'id'
-                },
-                {
-                    title: 'Name'
-                },
-                {
-                    title: 'Position'
-                },
-                {
-                    title: 'Office'
-                },
-                {
-                    title: 'Extn.'
-                },
-                {
-                    title: 'Start date'
-                },
-                {
-                    title: 'Salary'
-                }
+            data: dataSet,
+            columns: [
+                {title: 'N°'},
+                {title: 'Nom Complet'},
+                {title: 'Age'},
+                {title: 'Sexe'},
+                {title: 'Renseignements Cliniques'},
+                {title: 'Examens'},
+                {title: 'Prescripteurs'},
+                {title: 'Provenance'},
+                {title: 'Montant'},
+                {title: 'Téléphone'},
             ],
-            // language: {
-            //     url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/fr-FR.json',
-            // },
             select: true,
             responsive: true,
             dom: 'Bfrtip',
             buttons: [
                 'excel', 'pdf', 'colvis'
             ],
-            data: dataSet
         });
 
         $(document).ready(function() {
-            
+
             table.button().add(null, {
                 action: function() {
                     if (table.row({
@@ -232,7 +204,7 @@
                             title: "Sélectionnez d'abord un patient.",
                             icon: "error",
                             showConfirmButton: false,
-                            timer : 1500
+                            timer: 1500
                         });
                     }
                 },
@@ -247,6 +219,20 @@
                     selected: true
                 }).data()[0];
                 console.log(id);
+            })
+
+            $('#update').click(function() {
+                if ($('#new_examination').hasClass('d-none')) {
+                    $('#new_examination').removeClass('d-none');
+                } else {
+                    $('#new_examination').addClass('d-none');
+                }
+            })
+
+            $('#patient_modal').on('hidden.bs.modal', function() {
+                if (!($('#new_examination').hasClass('d-none'))) {
+                    $('#new_examination').addClass('d-none');
+                }
             })
 
             // $('#patient_table').on('click', 'tr', function() {

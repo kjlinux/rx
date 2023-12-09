@@ -16,10 +16,11 @@ return new class extends Migration
             $table->date('date');
             $table->time('time');
             $table->mediumInteger('amount_to_pay');
-            $table->mediumInteger('payed');
-            $table->mediumInteger('left_to_pay');
-            $table->tinyInteger('discount');
-            $table->mediumInteger('amount_after_discount');
+            $table->mediumInteger('payed')->nullable();
+            $table->mediumInteger('left_to_pay')->nullable();
+            $table->tinyInteger('discount')->nullable();
+            $table->mediumInteger('amount_after_discount')->nullable();
+            $table->uuid('slug');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
