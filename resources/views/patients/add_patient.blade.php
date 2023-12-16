@@ -28,11 +28,11 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">RX > <strong>PATIENTS</strong></h1>
             <!-- <a
-                                                    href="#"
-                                                    class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-                                                    ><i class="fas fa-download fa-sm text-white-50"></i> Generate
-                                                    Report</a
-                                                 -->
+                                                        href="#"
+                                                        class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                                                        ><i class="fas fa-download fa-sm text-white-50"></i> Generate
+                                                        Report</a
+                                                     -->
         </div>
 
         <!-- Content Row -->
@@ -258,8 +258,7 @@
         });
 
         function priceCalculator() {
-
-            $.ajax({
+                $.ajax({
                 method: 'POST',
                 url: "{{ route('patient.price.calculator') }}",
                 data: $('#examination').serialize(),
@@ -267,18 +266,6 @@
                     $('#total_amount').val(response.examination_data);
                     $('#date').val(response.date);
                     $('#time').val(response.time);
-                },
-                error: function(xhr, status, error) {
-                    console.log(status);
-                    console.log(xhr);
-                    console.log(error);
-                    $('#total_amount').val("");
-                    Swal.fire({
-                        title: "Choisissez des examens",
-                        icon: "info",
-                        showConfirmButton: false,
-                        timer: 1000
-                    });
                 },
             });
         }
@@ -291,8 +278,8 @@
         }
 
         $('#examination').change(function() {
-            priceCalculator();
-            wipeInput();
+                priceCalculator();
+                wipeInput();
         })
 
 
@@ -300,6 +287,7 @@
             $('input').val("");
             $('textarea').val("");
             $('.selectpicker').selectpicker('deselectAll');
+            $('.selectpicker').selectpicker('render');
         }
 
         $('#clean').click(function() {

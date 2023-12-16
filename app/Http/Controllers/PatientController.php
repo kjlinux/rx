@@ -28,10 +28,12 @@ class PatientController extends Controller
         $exam_data = ExaminationType::getExaminations();
         $center_data = getCentersWhithCategory();
         $prescriber_data  = Prescriber::getPrescribers();
-        // $register = json_encode(htmlspecialchars_decode(getRegister(), ENT_QUOTES) , JSON_UNESCAPED_UNICODE);
-        // $register = json_encode(getRegister(), JSON_UNESCAPED_UNICODE);
-        // $register = array_values(getRegister());
         $register = getRegister();
+        // $deleted = Flight::where('active', 0)->delete();
+        // $examination = Examination::where('patient_id', 4)->delete();
+        // $examination->delete();
+        // $patient = Patient::find('voucher_id');
+        // $patient = getPatient(16);
         // dd($register);
         return view('patients.update_patient', compact('exam_data', 'center_data', 'prescriber_data', 'register'));
     }
@@ -46,7 +48,11 @@ class PatientController extends Controller
         try {
             if ($request->ajax()) {
                 $examination_data = getPrice($request->examination);
-                return response()->json(['examination_data' => $examination_data[0], 'date' => $examination_data[1], 'time' => $examination_data[2]]);
+                return response()->json([
+                    'examination_data' => $examination_data[0],
+                    'date' => $examination_data[1],
+                    'time' => $examination_data[2]
+                ]);
             }
         } catch (Exception $e) {
             return $e->getMessage();
@@ -87,11 +93,89 @@ class PatientController extends Controller
                     $examination->save();
                 }
 
+                // foreach ($request->prescriber as $prescriber_id) {
+                //     $rebate = new Rebate;
+                //     $rebate->amount = 1000;
+                //     $rebate->prescriber_id = $prescriber_id;
+                //     $rebate->save();
+                // }
+
                 foreach ($request->prescriber as $prescriber_id) {
-                    $rebate = new Rebate;
-                    $rebate->amount = 1000;
-                    $rebate->prescriber_id = $prescriber_id;
-                    $rebate->save();
+                    $send = new Send;
+                    $send->patient_id = $patient->id;
+                    $send->prescriber_id = $prescriber_id;
+                    $send->save();
+                }
+
+                return response()->json();
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function displayPatientInformations(Request $request)
+    {
+        try {
+            if ($request->ajax()) {
+                $patient = getPatient($request->id)[0];
+                return response()->json([
+                    'name' => $patient[0],
+                    'forename' => $patient[1],
+                    'year' => $patient[2],
+                    'gender' => $patient[3],
+                    'prescriber' => $patient[4],
+                    'center' => $patient[5],
+                    'examination' => $patient[6],
+                    'clinical_information' => $patient[7],
+                    'phone' => $patient[8],
+                    'total_amount' => $patient[9],
+                    'discount' => $patient[10],
+                    'after_discount' => $patient[11],
+                    'payed_amount' => $patient[12],
+                    'left_to_pay' => $patient[13],
+                    'date' => $patient[14],
+                    'time' => $patient[15]]);
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function updatePatientRecord(Request $request)
+    {
+        try {
+            if ($request->ajax()) {
+                $voucher = Voucher::find($request->id);
+                $patient = Patient::find($request->id);
+                $examination = Examination::where('patient_id', $request->id)->delete();
+                $send = Send::where('patient_id', $request->id)->delete();
+
+                $voucher->date = $request->date;
+                $voucher->time = $request->time;
+                $voucher->amount_to_pay = $request->total_amount;
+                $voucher->payed = $request->payed_amount;
+                $voucher->left_to_pay = $request->left_to_pay;
+                $voucher->discount = $request->discount;
+                $voucher->amount_after_discount = $request->after_discount;
+                $voucher->slug = $voucher->newUniqueId();
+                $voucher->save();
+
+                $patient->name = capitalizeWords($request->name);
+                $patient->forenames = capitalizeWords($request->forenames);
+                $patient->gender = $request->gender;
+                $patient->age = extractYear($request->year);
+                $patient->phone = deleteHyphens($request->phone);
+                $patient->clinical_information = capitalizeWords($request->clinical_information);
+                $patient->voucher_id  = $voucher->id;
+                $patient->center_id = $request->center;
+                $patient->save();
+
+                foreach ($request->examination as $examination_id) {
+                    $examination = new Examination;
+                    $examination->patient_id = $patient->id;
+                    $examination->examination_type_id = $examination_id;
+                    $examination->save();
                 }
 
                 foreach ($request->prescriber as $prescriber_id) {
@@ -101,21 +185,10 @@ class PatientController extends Controller
                     $send->save();
                 }
 
-                return response()->json(["y" => "yyy"]);
+                return response()->json();
             }
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
-
-    // public function displayRegister(Request $request){
-    //     try{
-    //         if($request->ajax()){
-    //         $register = getRegister();
-    //             return response()->json(['register' => $register]);
-    //         }
-    //     } catch (Exception $e) {
-    //         return $e->getMessage();
-    //     }
-    // }
 }

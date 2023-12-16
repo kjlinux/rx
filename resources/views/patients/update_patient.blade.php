@@ -28,11 +28,11 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">RX > <strong>PATIENTS</strong></h1>
             <!-- <a
-                                                                                                              href="#"
-                                                                                                              class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-                                                                                                              ><i class="fas fa-download fa-sm text-white-50"></i> Generate
-                                                                                                              Report</a
-                                                                                                            > -->
+                                                                                                                                      href="#"
+                                                                                                                                      class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                                                                                                                                      ><i class="fas fa-download fa-sm text-white-50"></i> Generate
+                                                                                                                                      Report</a
+                                                                                                                                    > -->
         </div>
 
         <!-- Content Row -->
@@ -87,15 +87,18 @@
                         </div>
                     </div>
                     <form id="new_examination" class="form-row d-none">
-                        <div class="input-group mb-4 col-3">
-                            <input type="text" class="form-control" placeholder="Nom" id="name" name="name" />
+                        @csrf
+                        <div class="input-group mb-4 col-4">
+                            <input type="text" class="form-control" placeholder="Nom" id="name" name="name"
+                                required />
                         </div>
                         <div class="input-group mb-4 col-6">
-                            <input type="text" class="form-control" placeholder="Prénom(s)" id="forenames"
-                                name="forenames" />
+                            <input type="text" class="form-control" placeholder="Prénom(s)" id="forename"
+                                name="forename" required />
                         </div>
-                        <div class="input-group mb-4 col-3">
-                            <input type="number" class="form-control" placeholder="Age" id="year" name="year">
+                        <div class="input-group mb-4 col-2">
+                            <input data-inputmask="'mask': '999'" type="text" class="form-control" placeholder="Age"
+                                id="year" name="year" required>
                             <div class="input-group-append">
                                 <span class="input-group-text" id="year">ans</span>
                             </div>
@@ -104,7 +107,7 @@
                             {{ html()->select($name = 'gender', $options = ['M' => 'M', 'F' => 'F'])->class('input-group selectpicker fit')->attributes(['title' => 'Genre', 'data-width' => '100%'])->required() }}
                         </div>
                         <div class="input-group mb-4 col-4">
-                            {{ html()->select($name = 'prescriber', $options = ['t' => 'test'])->class('input-group selectpicker show-tick')->attributes(['title' => 'Prescripteur(s)', 'data-width' => '100%', 'data-live-search' => 'true', 'data-size' => '5', 'data-multiple-separator' => ' | '])->multiple()->required() }}
+                            {{ html()->select($name = 'prescriber', $options = $prescriber_data)->class('input-group selectpicker show-tick')->attributes(['title' => 'Prescripteur(s)', 'data-width' => '100%', 'data-live-search' => 'true', 'data-size' => '5', 'data-multiple-separator' => ' | '])->multiple()->required() }}
                         </div>
                         <div class="input-group mb-4 col-6">
                             {{ html()->select($name = 'center', $options = $center_data)->class('input-group selectpicker show-tick')->attributes(['title' => 'Centre', 'data-width' => '100%', 'data-live-search' => 'true', 'data-size' => '5'])->required() }}
@@ -114,41 +117,58 @@
                         </div>
                         <div class="input-group mb-4 col-12">
                             <textarea class="form-control" id="clinical_information" name="clinical_information" rows="2"
-                                placeholder="Renseignements cliniques"></textarea>
+                                placeholder="Renseignements cliniques" required></textarea>
                         </div>
                         <div class="input-group mb-4 col-3">
                             <input data-inputmask="'mask': '99-99-99-99-99'" type="text" class="form-control"
-                                placeholder="Numéro de téléphone" id="phone" name="phone" />
+                                placeholder="Numéro de téléphone" id="phone" name="phone" required />
                         </div>
-                        <div class="input-group pb-2 col-4">
+                        <div class="input-group pb-2 col-3">
                             <input type="number" class="form-control" placeholder="Total à payer" id="total_amount"
-                                name="total_amount" disabled>
-                            <div class="input-group-append mb-5">
-                                <span class="input-group-text" id="total_amount">FCFA</span>
-                            </div>
+                                name="total_amount" readonly required>
                         </div>
-                        <div class="input-group pb-5 col-5">
-                            <label for="payed_bool" class="btn btn-primary">Le patient a payé la
-                                totalité.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <input type="checkbox" id="payed_bool" name="payed_bool" class="badgebox" checked><span
+                        <div class="input-group pb-5 col-3">
+                            <label for="payed_bool" class="btn btn-primary">Totalité payée&nbsp;&nbsp;&nbsp;
+                                <input type="checkbox" id="payed_bool" name="payed_bool" class="badgebox"><span
                                     class="badge">&check;</span></label>
                         </div>
-                        <div class="input-group input-group mb-2 mt-n4 col-6">
+                        <div class="input-group pb-5 col-3">
+                            <label for="discount_bool"
+                                class="btn btn-success">Réduction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="checkbox" id="discount_bool" name="discount_bool" class="badgebox"
+                                    checked><span class="badge">&check;</span></label>
+                        </div>
+                        <div class="input-group mb-2 mt-n4 col-2">
+                            <input data-inputmask="'mask': '99'" type="number" class="form-control" placeholder=""
+                                id="discount" name="discount">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="discount">%</span>
+                            </div>
+                        </div>
+                        <div class="input-group mb-2 mt-n4 col-2">
+                            <input type="number" class="form-control" placeholder="Réduction" id="after_discount"
+                                name="after_discount" readonly>
+                        </div>
+                        <div id="hidden" class="col-12 d-none"></div>
+                        <div class="input-group mb-2 mt-n4 col-4">
                             <input type="number" class="form-control" placeholder="Montant payé" id="payed_amount"
                                 name="payed_amount">
                             <div class="input-group-append">
                                 <span class="input-group-text" id="payed_amount">FCFA</span>
                             </div>
                         </div>
-                        <div class="input-group input-group mb-2 mt-n4 col-6">
+                        <div class="input-group mb-2 mt-n4 col-4">
                             <input type="number" class="form-control" placeholder="Reste à payer" id="left_to_pay"
-                                name="left_to_pay" disabled>
+                                name="left_to_pay" readonly>
                             <div class="input-group-append">
                                 <span class="input-group-text" id="left_to_pay">FCFA</span>
                             </div>
                         </div>
+                        <input type="hidden" id="date" name="date">
+                        <input type="hidden" id="time" name="time">
+                        <input type="hidden" id="id" name="id">
                         <div class="input-group-lg col-6 mb-2 mt-3">
-                            <button class="form-control bg-secondary text-white">
+                            <button type="button" id="clean" class="form-control bg-secondary text-white">
                                 <i class="fas fa-times"></i>
                                 Vider les champs
                             </button>
@@ -167,21 +187,88 @@
 @endsection
 @push('script')
     <script>
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This action cannot be reversed!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $('#new_examination').submit(function(e) {
+                    e.preventDefault();
+                    $.ajax({
+                        method: 'POST',
+                        url: "{{ route('patient.record') }}",
+                        data: $(this).serialize(),
+                        success: function(response) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                            });
+                            Toast.fire({
+                                icon: "success",
+                                iconColor: '#EC1325BD'
+                                title: "Enregistrement effectué."
+                            });
+                            clean();
+                            console.log(response)
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                title: "marche pas",
+                                icon: "error",
+                                showConfirmButton: false,
+                                timer: 500
+                            });
+                        },
+                    });
+                });
+                Swal.fire("Saved!", "", "success");
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+            }
+        });
 
         const dataSet = @json($register, JSON_UNESCAPED_UNICODE);
+        console.log(dataSet);
         var table = new DataTable('#patient_table', {
             data: dataSet,
-            columns: [
-                {title: 'N°'},
-                {title: 'Nom Complet'},
-                {title: 'Age'},
-                {title: 'Sexe'},
-                {title: 'Renseignements Cliniques'},
-                {title: 'Examens'},
-                {title: 'Prescripteurs'},
-                {title: 'Provenance'},
-                {title: 'Montant'},
-                {title: 'Téléphone'},
+            columns: [{
+                    title: 'N°'
+                },
+                {
+                    title: 'Nom Complet'
+                },
+                {
+                    title: 'Age'
+                },
+                {
+                    title: 'Sexe'
+                },
+                {
+                    title: 'Renseignements Cliniques'
+                },
+                {
+                    title: 'Examens'
+                },
+                {
+                    title: 'Prescripteurs'
+                },
+                {
+                    title: 'Provenance'
+                },
+                {
+                    title: 'Montant'
+                },
+                {
+                    title: 'Téléphone'
+                },
             ],
             select: true,
             responsive: true,
@@ -191,60 +278,237 @@
             ],
         });
 
-        $(document).ready(function() {
 
-            table.button().add(null, {
-                action: function() {
-                    if (table.row({
-                            selected: true
-                        }).any()) {
-                        $('#patient_modal').modal('show');
-                    } else {
-                        Swal.fire({
-                            title: "Sélectionnez d'abord un patient.",
-                            icon: "error",
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                    }
-                },
-                text: 'Gérer',
-                className: 'btn btn-success',
-                key: 'g'
-            });
-
-            // table.column(0).visible(false);
-            $('#update').on('click', function() {
-                var id = table.row({
-                    selected: true
-                }).data()[0];
-                console.log(id);
-            })
-
-            $('#update').click(function() {
-                if ($('#new_examination').hasClass('d-none')) {
-                    $('#new_examination').removeClass('d-none');
+        table.button().add(null, {
+            action: function() {
+                if (table.row({
+                        selected: true
+                    }).any()) {
+                    $('#patient_modal').modal('show');
                 } else {
-                    $('#new_examination').addClass('d-none');
+                    Swal.fire({
+                        title: "Sélectionnez d'abord un patient.",
+                        icon: "error",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
                 }
-            })
+            },
+            text: 'Gérer',
+            className: 'btn btn-success',
+            key: 'g'
+        });
 
-            $('#patient_modal').on('hidden.bs.modal', function() {
-                if (!($('#new_examination').hasClass('d-none'))) {
-                    $('#new_examination').addClass('d-none');
+        // table.column(0).visible(false);
+
+        $('#update').click(function() {
+            if ($('#new_examination').hasClass('d-none')) {
+                $('#new_examination').removeClass('d-none');
+            } else {
+                $('#new_examination').addClass('d-none');
+            }
+        })
+
+        $('#patient_modal').on('hidden.bs.modal', function() {
+            if (!($('#new_examination').hasClass('d-none'))) {
+                $('#new_examination').addClass('d-none');
+                clean();
+            }
+        })
+
+        $('#update').on('click', function() {
+            $('#id').val(table.row({
+                selected: true
+            }).data()[0]);
+            Swal.fire({
+                title: 'Chargement des informations.',
+                didOpen: () => {
+                    Swal.showLoading();
+                    $.ajax({
+                        method: 'POST',
+                        url: "{{ route('patient.informations') }}",
+                        data: $('#id').serialize(),
+                        success: function(response) {
+                            console.log(response);
+                            fillPatientInformations(response);
+                            Swal.close();
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                title: "Erreur lors de la récupération des informations du patient.",
+                                icon: "error",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        },
+                    });
                 }
-            })
+            });
+        })
 
-            // $('#patient_table').on('click', 'tr', function() {
-            //     var id = table.row(this).id();
-            //     console.log(id);
-            // });
+        function convertStringToArray(inputString) {
+            return inputString.split(',').map(String);
+        }
 
-            // $('#patient_table').on('click', 'tr', function() {
-            //     var id = table.row(this).index();
-            //     console.log(id);
-            // });
+        function fillPatientInformations(data) {
+            $('#name').val(data.name);
+            $('#forename').val(data.forename);
+            $('#year').val(data.year);
+            $('#gender').val(data.gender);
+            $('#center').val(data.center);
+            $('#clinical_information').val(data.clinical_information);
+            $('#phone').val(data.phone);
+            $('#total_amount').val(data.total_amount);
+            $('#discount').val(data.discount);
+            $('#after_discount').val(data.after_discount);
+            $('#payed_amount').val(data.payed_amount);
+            $('#left_to_pay').val(data.left_to_pay);
+            $('#date').val(data.date);
+            $('#time').val(data.time);
+            $('#prescriber').selectpicker('val', convertStringToArray(data.prescriber));
+            $('#examination').selectpicker('val', convertStringToArray(data.examination));
+            $('.selectpicker').selectpicker('render');
+            if ($('#discount').val() === '' && $('#after_discount').val() === '') {
+                $('#discount_bool').prop('checked', false);
+                $('#discount').parent().addClass('d-none').prop('required', false);
+                $('#after_discount').parent().addClass('d-none').prop('required', false);
+            }
+            if ($('#payed_amount').val() === '') {
+                $('#payed_bool').prop('checked', true);
+                $('#hidden').removeClass('d-none');
+                $('#payed_amount').parent().addClass('d-none').prop('required', false);
+                $('#left_to_pay').parent().addClass('d-none').prop('required', false);
+            }
+            if ($('#discount').val() !== '' || $('#after_discount').val() !== '') {
+                $('#discount_bool').prop('checked', true);
+                $('#discount').parent().removeClass('d-none').prop('required', true);
+                $('#after_discount').parent().removeClass('d-none').prop('required', true);
+            }
+            if ($('#payed_amount').val() !== '') {
+                $('#payed_bool').prop('checked', false);
+                $('#hidden').addClass('d-none');
+                $('#payed_amount').parent().removeClass('d-none').prop('required', true);
+                $('#left_to_pay').parent().removeClass('d-none').prop('required', true);
+            }
+        }
 
+        var payed_amount = () => {
+            if ($('#total_amount').val() !== "" && $('#payed_amount').val() === "") {
+                $('#left_to_pay').val($('#total_amount').val() - $('#after_discount').val());
+            }
+            if ($('#total_amount').val() !== "") {
+                if ($('#after_discount').val() !== "") {
+                    $('#after_discount').val($('#total_amount').val() - ($('#total_amount').val() * Number($(
+                        '#discount').val())) / 100);
+                    $('#left_to_pay').val($('#after_discount').val() - $('#payed_amount').val());
+                } else {
+                    $('#left_to_pay').val($('#total_amount').val() - $('#payed_amount').val());
+                }
+            }
+            if ($('#total_amount').val() === "" || $('#payed_amount').val() === "") {
+                $('#left_to_pay').val("");
+            }
+        }
+
+        var discount = () => {
+            if ($('#total_amount').val() !== "" && $('#discount').val() === "") {
+                $('#left_to_pay').val($('#total_amount').val() - $('#payed_amount').val());
+            }
+            if ($('#total_amount').val() !== "") {
+                $('#after_discount').val($('#total_amount').val() - ($('#total_amount').val() * Number($(
+                    '#discount').val())) / 100);
+                $('#left_to_pay').val($('#after_discount').val() - $('#payed_amount').val());
+            }
+            if ($('#total_amount').val() === "" || $('#discount').val() === "") {
+                $('#after_discount').val("");
+            }
+        }
+
+        $('#payed_bool').change(function() {
+            $('#payed_amount').val("");
+            payed_amount();
+            discount();
+            if ($(this).prop('checked') == true) {
+                $('#hidden').removeClass('d-none');
+                $('#payed_amount').parent().addClass('d-none').prop('required', false);
+                $('#left_to_pay').parent().addClass('d-none').prop('required', false);
+            } else {
+                $('#hidden').addClass('d-none');
+                $('#payed_amount').parent().removeClass('d-none').prop('required', true);
+                $('#left_to_pay').parent().removeClass('d-none').prop('required', true);
+            }
+
+        })
+
+        $('#discount_bool').change(function() {
+            $('#discount').val("");
+            discount();
+            payed_amount();
+            if ($(this).prop('checked') == false) {
+                $('#discount').parent().addClass('d-none').prop('required', false);
+                $('#after_discount').parent().addClass('d-none').prop('required', false);
+            } else {
+                $('#discount').parent().removeClass('d-none').prop('required', true);
+                $('#after_discount').parent().removeClass('d-none').prop('required', true);
+            }
+        })
+
+        $('#payed_amount').keyup(function() {
+            payed_amount();
+        });
+
+        $('#discount').keyup(function() {
+            discount();
+        });
+
+        function priceCalculator() {
+
+            $.ajax({
+                method: 'POST',
+                url: "{{ route('patient.price.calculator') }}",
+                data: $('#examination').serialize(),
+                success: function(response) {
+                    $('#total_amount').val(response.examination_data);
+                    $('#date').val(response.date);
+                    $('#time').val(response.time);
+                },
+                error: function(xhr, status, error) {
+                    console.log(status);
+                    console.log(xhr);
+                    console.log(error);
+                    $('#total_amount').val("");
+                    Swal.fire({
+                        title: "Choisissez des examens",
+                        icon: "info",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                },
+            });
+        }
+
+        function wipePriceInput() {
+            $('#discount').val("");
+            $('#after_discount').val("");
+            $('#payed_amount').val("");
+            $('#left_to_pay').val("");
+        }
+
+        $('#examination').change(function() {
+            priceCalculator();
+            wipePriceInput();
+        })
+
+
+        function clean() {
+            $('input').val("");
+            $('textarea').val("");
+            $('.selectpicker').selectpicker('deselectAll');
+            $('.selectpicker').selectpicker('render');
+        }
+
+        $('#clean').click(function() {
+            clean();
         })
     </script>
 @endpush

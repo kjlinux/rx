@@ -37,6 +37,10 @@ function deleteHyphens(string $number) {
     return $noHyphens;
 }
 
+function convertToArray(string $phrase) {
+    return explode(',', $phrase);
+}
+
 function getCentersWhithCategory()
 {
     return DB::table('center_categories')
@@ -104,15 +108,49 @@ function getRegister()
                 patients.age AS 'Age', 
                 patients.gender AS 'Sexe', 
                 patients.clinical_information AS 'Renseignements Cliniques', 
-                GROUP_CONCAT(examinations_type.name) AS 'Examens',
+                GROUP_CONCAT(DISTINCT examinations_type.name) AS 'Examens',
                 GROUP_CONCAT(DISTINCT CONCAT('Dr. ', prescribers.name, ' ', prescribers.forenames)) AS 'Prescripteurs', 
                 CONCAT(center_categories.name, ' ', centers.name) AS 'Provenance', 
-                CASE 
+                CASE
                     WHEN vouchers.discount IS NULL THEN vouchers.amount_to_pay 
                     ELSE CONCAT(vouchers.amount_after_discount, '/', vouchers.discount, '%') 
                 END AS 'Montant', 
                 patients.phone AS 'Téléphone'")
         ->groupBy('patients.id')
+        ->orderByDesc('patients.updated_at')
+        ->get()
+        ->map(function ($item) {
+            return array_values((array) $item);
+        })
+        ->toArray();
+}
+
+function getPatient(int $patient_id)
+{
+    return DB::table('patients')
+        ->join('vouchers', 'vouchers.id', '=', 'patients.voucher_id')
+        ->join('centers', 'centers.id', '=', 'patients.center_id')
+        ->join('examinations', 'examinations.patient_id', '=', 'patients.id')
+        ->join('sends', 'sends.patient_id', '=', 'patients.id')
+        ->join('prescribers', 'prescribers.id', '=', 'sends.prescriber_id')
+        ->selectRaw("patients.name, 
+            patients.forenames, 
+            patients.age, 
+            patients.gender, 
+            GROUP_CONCAT(DISTINCT sends.prescriber_id) AS prescribers,
+            patients.center_id, 
+            GROUP_CONCAT(examinations.examination_type_id) AS examinations, 
+            patients.clinical_information,
+            patients.phone,
+            vouchers.amount_to_pay,
+            vouchers.discount,
+            vouchers.amount_after_discount,
+            vouchers.payed,
+            vouchers.left_to_pay,
+            vouchers.date,
+            vouchers.time")
+        ->groupBy('patients.id')
+        ->where('patients.id', $patient_id)
         ->get()
         ->map(function ($item) {
             return array_values((array) $item);

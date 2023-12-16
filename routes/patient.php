@@ -10,4 +10,6 @@ Route::prefix('patient')->group(function (){
     Route::post('/record_examination', [PatientController::class, 'recordExamination'])->name('patient.record');
     Route::post('/price_calculator', [PatientController::class, 'priceCalculator'])->name('patient.price.calculator');
     Route::post('/register', [PatientController::class, 'displayRegister'])->name('patient.register');
+    Route::post('/informations', [PatientController::class, 'displayPatientInformations'])->name('patient.informations');
+    Route::post('/update_patient_record', [PatientController::class, 'updatePatientRecord'])->name('patient.update.record');
 });
