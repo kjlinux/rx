@@ -17,14 +17,14 @@ function getInitial(String $phrase)
     return $initiales;
 }
 
-function extractYear(String $chaine)
-{
-    if (preg_match('/^(\d{2})_/', $chaine, $matches)) {
-        return $matches[1];
-    } else {
-        return 0;
-    }
-}
+// function extractYear(String $chaine)
+// {
+//     if (preg_match('/^(\d{3})_/', $chaine, $matches)) {
+//         return $matches[1];
+//     } else {
+//         return 0;
+//     }
+// }
 
 function capitalizeWords(string $phrase)
 {

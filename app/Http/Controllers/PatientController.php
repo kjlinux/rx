@@ -79,8 +79,8 @@ class PatientController extends Controller
                 $patient->name = capitalizeWords($request->name);
                 $patient->forenames = capitalizeWords($request->forenames);
                 $patient->gender = $request->gender;
-                $patient->age = extractYear($request->year);
-                $patient->phone = deleteHyphens($request->phone);
+                $patient->age = $request->year;
+                $patient->phone = $request->phone;
                 $patient->clinical_information = capitalizeWords($request->clinical_information);
                 $patient->voucher_id  = $voucher->id;
                 $patient->center_id = $request->center;
@@ -135,7 +135,8 @@ class PatientController extends Controller
                     'payed_amount' => $patient[12],
                     'left_to_pay' => $patient[13],
                     'date' => $patient[14],
-                    'time' => $patient[15]]);
+                    'time' => $patient[15]
+                ]);
             }
         } catch (Exception $e) {
             return $e->getMessage();
@@ -146,10 +147,11 @@ class PatientController extends Controller
     {
         try {
             if ($request->ajax()) {
+                $register = getRegister();
                 $voucher = Voucher::find($request->id);
                 $patient = Patient::find($request->id);
-                $examination = Examination::where('patient_id', $request->id)->delete();
-                $send = Send::where('patient_id', $request->id)->delete();
+                // $examination = Examination::where('patient_id', $request->id)->delete();
+                // $send = Send::where('patient_id', $request->id)->delete();
 
                 $voucher->date = $request->date;
                 $voucher->time = $request->time;
@@ -162,10 +164,10 @@ class PatientController extends Controller
                 $voucher->save();
 
                 $patient->name = capitalizeWords($request->name);
-                $patient->forenames = capitalizeWords($request->forenames);
+                $patient->forenames = capitalizeWords($request->forename);
                 $patient->gender = $request->gender;
-                $patient->age = extractYear($request->year);
-                $patient->phone = deleteHyphens($request->phone);
+                $patient->age = $request->year;
+                $patient->phone = $request->phone;
                 $patient->clinical_information = capitalizeWords($request->clinical_information);
                 $patient->voucher_id  = $voucher->id;
                 $patient->center_id = $request->center;
@@ -185,7 +187,7 @@ class PatientController extends Controller
                     $send->save();
                 }
 
-                return response()->json();
+                return response()->json($register);
             }
         } catch (Exception $e) {
             return $e->getMessage();

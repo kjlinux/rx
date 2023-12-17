@@ -28,11 +28,11 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">RX > <strong>PATIENTS</strong></h1>
             <!-- <a
-                                                                                                                                      href="#"
-                                                                                                                                      class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-                                                                                                                                      ><i class="fas fa-download fa-sm text-white-50"></i> Generate
-                                                                                                                                      Report</a
-                                                                                                                                    > -->
+                                                                                                                                          href="#"
+                                                                                                                                          class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                                                                                                                                          ><i class="fas fa-download fa-sm text-white-50"></i> Generate
+                                                                                                                                          Report</a
+                                                                                                                                        > -->
         </div>
 
         <!-- Content Row -->
@@ -97,7 +97,7 @@
                                 name="forename" required />
                         </div>
                         <div class="input-group mb-4 col-2">
-                            <input data-inputmask="'mask': '999'" type="text" class="form-control" placeholder="Age"
+                            <input type="number" class="form-control" placeholder="Age"
                                 id="year" name="year" required>
                             <div class="input-group-append">
                                 <span class="input-group-text" id="year">ans</span>
@@ -187,21 +187,25 @@
 @endsection
 @push('script')
     <script>
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'This action cannot be reversed!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $('#new_examination').submit(function(e) {
-                    e.preventDefault();
+        var dataSet = @json($register, JSON_UNESCAPED_UNICODE);
+        console.log(dataSet);
+
+        $('#new_examination').submit(function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Êtes-vous sûr.e ?',
+                // text: 'This action cannot be reversed!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#30D659',
+                cancelButtonColor: '#3085d6',
+                cancelButtonText: 'Revenir',
+                confirmButtonText: 'Oui, je suis sûr.e',
+            }).then((result) => {
+                if (result.isConfirmed) {
                     $.ajax({
                         method: 'POST',
-                        url: "{{ route('patient.record') }}",
+                        url: "{{ route('patient.update.record') }}",
                         data: $(this).serialize(),
                         success: function(response) {
                             const Toast = Swal.mixin({
@@ -213,13 +217,18 @@
                             });
                             Toast.fire({
                                 icon: "success",
-                                iconColor: '#EC1325BD'
-                                title: "Enregistrement effectué."
+                                iconColor: '#EC1325BD',
+                                title: "Modification effectuée."
                             });
                             clean();
-                            console.log(response)
+                            $('#patient_modal').modal('hide');
+                            dataSet = response;
+                            console.log(dataSet);
+                            table.draw();
                         },
                         error: function(xhr, status, error) {
+                            console.log(error);
+                            console.log(xhr);
                             Swal.fire({
                                 title: "marche pas",
                                 icon: "error",
@@ -228,15 +237,13 @@
                             });
                         },
                     });
-                });
-                Swal.fire("Saved!", "", "success");
-            } else if (result.isDenied) {
-                Swal.fire("Changes are not saved", "", "info");
-            }
+                    // Swal.fire("Saved!", "", "success");
+                } else if (result.isDenied) {
+                    Swal.fire("Modification annulée.", "", "info");
+                }
+            });
         });
 
-        const dataSet = @json($register, JSON_UNESCAPED_UNICODE);
-        console.log(dataSet);
         var table = new DataTable('#patient_table', {
             data: dataSet,
             columns: [{
@@ -329,7 +336,6 @@
                         url: "{{ route('patient.informations') }}",
                         data: $('#id').serialize(),
                         success: function(response) {
-                            console.log(response);
                             fillPatientInformations(response);
                             Swal.close();
                         },
@@ -471,19 +477,7 @@
                     $('#total_amount').val(response.examination_data);
                     $('#date').val(response.date);
                     $('#time').val(response.time);
-                },
-                error: function(xhr, status, error) {
-                    console.log(status);
-                    console.log(xhr);
-                    console.log(error);
-                    $('#total_amount').val("");
-                    Swal.fire({
-                        title: "Choisissez des examens",
-                        icon: "info",
-                        showConfirmButton: false,
-                        timer: 1000
-                    });
-                },
+                }
             });
         }
 

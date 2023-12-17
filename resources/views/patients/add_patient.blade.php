@@ -59,7 +59,7 @@
                                     name="forenames" required />
                             </div>
                             <div class="input-group mb-4 col-2">
-                                <input data-inputmask="'mask': '999'" type="text" class="form-control" placeholder="Age"
+                                <input type="number" class="form-control" placeholder="Age"
                                     id="year" name="year" required>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="year">ans</span>
@@ -266,7 +266,7 @@
                     $('#total_amount').val(response.examination_data);
                     $('#date').val(response.date);
                     $('#time').val(response.time);
-                },
+                }
             });
         }
 
