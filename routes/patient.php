@@ -12,4 +12,8 @@ Route::prefix('patient')->group(function (){
     Route::post('/register', [PatientController::class, 'displayRegister'])->name('patient.register');
     Route::post('/informations', [PatientController::class, 'displayPatientInformations'])->name('patient.informations');
     Route::post('/update_patient_record', [PatientController::class, 'updatePatientRecord'])->name('patient.update.record');
+    Route::get('/refresh_datatable', [PatientController::class, 'dataTableRefresh'])->name('patient.refresh');
+    Route::post('/delete_patient', [PatientController::class, 'deletePatient'])->name('patient.delete');
+    Route::get('/refresh_datatable_payment', [PatientController::class, 'dataTableRefreshPayment'])->name('patient.refresh.payment');
+    Route::post('/confirm_patient_payment', [PatientController::class, 'confirmPatientPayment'])->name('patient.confirm.payment');
 });

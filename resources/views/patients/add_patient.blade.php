@@ -175,7 +175,6 @@
                         title: "Enregistrement effectué."
                     });
                     clean();
-                    console.log(response)
                 },
                 error: function(xhr, status, error) {
                     Swal.fire({

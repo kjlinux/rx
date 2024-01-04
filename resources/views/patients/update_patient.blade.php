@@ -28,11 +28,11 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">RX > <strong>PATIENTS</strong></h1>
             <!-- <a
-                                                                                                                                          href="#"
-                                                                                                                                          class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-                                                                                                                                          ><i class="fas fa-download fa-sm text-white-50"></i> Generate
-                                                                                                                                          Report</a
-                                                                                                                                        > -->
+                                                                                                                                                          href="#"
+                                                                                                                                                          class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                                                                                                                                                          ><i class="fas fa-download fa-sm text-white-50"></i> Generate
+                                                                                                                                                          Report</a
+                                                                                                                                                        > -->
         </div>
 
         <!-- Content Row -->
@@ -77,11 +77,11 @@
                                 Modifier</button>
                         </div>
                         <div class="mb-4 col-4">
-                            <button class="btn btn-secondary btn-lg text-white w-100"><i
+                            <button id="print" class="btn btn-secondary btn-lg text-white w-100"><i
                                     class="fas fa-fw fa-print"></i><span>Imprimer
                                     reçu</span></button>
                         </div>
-                        <div class="mb-4 col-4">
+                        <div id="delete" class="mb-4 col-4">
                             <button class="btn btn-danger btn-lg text-white w-100"><i
                                     class="fas fa-fw fa-trash"></i>Supprimer</button>
                         </div>
@@ -97,8 +97,8 @@
                                 name="forename" required />
                         </div>
                         <div class="input-group mb-4 col-2">
-                            <input type="number" class="form-control" placeholder="Age"
-                                id="year" name="year" required>
+                            <input type="number" class="form-control" placeholder="Age" id="year" name="year"
+                                required>
                             <div class="input-group-append">
                                 <span class="input-group-text" id="year">ans</span>
                             </div>
@@ -188,7 +188,76 @@
 @push('script')
     <script>
         var dataSet = @json($register, JSON_UNESCAPED_UNICODE);
-        console.log(dataSet);
+        // console.log(dataSet);
+
+        function dataRefresh() {
+            $.ajax({
+                url: "{{ route('patient.refresh') }}",
+                method: 'GET',
+                success: function(data) {
+                    table.clear().rows.add(data).draw();
+                    // console.log(data);
+                },
+                error: function(error) {
+                    console.error('Erreur lors de la récupération des données : ', error);
+                }
+            });
+        }
+
+        $('#delete').click(function(){
+            $('#id').val(table.row({
+                selected: true
+            }).data()[1]);
+            Swal.fire({
+                title: 'Êtes-vous sûr.e ?',
+                text: 'Cette action est irréversible.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#30D659',
+                cancelButtonColor: '#3085d6',
+                cancelButtonText: 'Revenir',
+                confirmButtonText: 'Oui, je suis sûr.e',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        method: 'POST',
+                        url: "{{ route('patient.delete') }}",
+                        data: $('#id').serialize(),
+                        success: function(response) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                            });
+                            Toast.fire({
+                                icon: "success",
+                                iconColor: 'green',
+                                title: "Suppression effectuée."
+                            });
+                            clean();
+                            $('#patient_modal').modal('hide');
+                            dataRefresh();
+                        },
+                        error: function(xhr, status, error) {
+                            console.log(error);
+                            console.log(xhr);
+                            Swal.fire({
+                                title: "marche pas",
+                                icon: "error",
+                                showConfirmButton: false,
+                                timer: 500
+                            });
+                        },
+                    });
+                    // Swal.fire("Saved!", "", "success");
+                } else if (result.isDenied) {
+                    Swal.fire("Suppression annulée.", "", "info");
+                }
+            });
+        })
+
 
         $('#new_examination').submit(function(e) {
             e.preventDefault();
@@ -222,9 +291,7 @@
                             });
                             clean();
                             $('#patient_modal').modal('hide');
-                            dataSet = response;
-                            console.log(dataSet);
-                            table.draw();
+                            dataRefresh();
                         },
                         error: function(xhr, status, error) {
                             console.log(error);
@@ -247,6 +314,9 @@
         var table = new DataTable('#patient_table', {
             data: dataSet,
             columns: [{
+                    title: 'updated_at'
+                },
+                {
                     title: 'N°'
                 },
                 {
@@ -277,6 +347,13 @@
                     title: 'Téléphone'
                 },
             ],
+            columnDefs: [{
+                targets: 0,
+                visible: false
+            }],
+            order: [
+                [0, 'desc']
+            ],
             select: true,
             responsive: true,
             dom: 'Bfrtip',
@@ -306,8 +383,6 @@
             key: 'g'
         });
 
-        // table.column(0).visible(false);
-
         $('#update').click(function() {
             if ($('#new_examination').hasClass('d-none')) {
                 $('#new_examination').removeClass('d-none');
@@ -326,7 +401,7 @@
         $('#update').on('click', function() {
             $('#id').val(table.row({
                 selected: true
-            }).data()[0]);
+            }).data()[1]);
             Swal.fire({
                 title: 'Chargement des informations.',
                 didOpen: () => {
@@ -397,6 +472,8 @@
                 $('#left_to_pay').parent().removeClass('d-none').prop('required', true);
             }
         }
+        
+
 
         var payed_amount = () => {
             if ($('#total_amount').val() !== "" && $('#payed_amount').val() === "") {

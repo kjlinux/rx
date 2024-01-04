@@ -28,11 +28,11 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">RX > <strong>PRESCRIPTEURS</strong></h1>
             <!-- <a
-                                                                      href="#"
-                                                                      class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-                                                                      ><i class="fas fa-download fa-sm text-white-50"></i> Generate
-                                                                      Report</a
-                                                                    > -->
+                                                                          href="#"
+                                                                          class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                                                                          ><i class="fas fa-download fa-sm text-white-50"></i> Generate
+                                                                          Report</a
+                                                                        > -->
         </div>
 
         <!-- Content Row -->
@@ -72,18 +72,18 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="mb-4 col-6">
-                            <button class="btn btn-primary btn-lg text-white w-100"><i class="fas fa-pencil-alt"></i>
+                            <button id="update" class="btn btn-primary btn-lg text-white w-100"><i
+                                    class="fas fa-pencil-alt"></i>
                                 Modifier</button>
                         </div>
                         <div class="mb-4 col-6">
-                            <button class="btn btn-danger btn-lg text-white w-100"><i
+                            <button id="delete" class="btn btn-danger btn-lg text-white w-100"><i
                                     class="fas fa-fw fa-trash"></i>Supprimer</button>
                         </div>
                     </div>
-                    <form class="form-row">
+                    <form class="form-row d-none" id="new_prescriber">
                         <div class="input-group mb-4 col-4">
-                            <input type="text" class="form-control" placeholder="Nom" id="name"
-                                name="name" />
+                            <input type="text" class="form-control" placeholder="Nom" id="name" name="name" />
                         </div>
                         <div class="input-group mb-4 col-8">
                             <input type="text" class="form-control" placeholder="Prénom(s)" id="forename"
@@ -97,9 +97,16 @@
                         </div>
                         <div class="input-group mb-4 col-6">
                             {{ html()->select($name = 'speciality', $options = $speciality_data)->class('input-group selectpicker show-tick')->attributes(['title' => 'Spécialité', 'data-width' => '100%', 'data-live-search' => 'true', 'data-size' => '5'])->required() }}
-                        </div>                            
+                        </div>
+                        <input type="hidden" id="id" name="id">
                         <div class="col-6"></div>
-                        <div class="input-group-lg col-12 mb-2 mt-3">
+                        <div class="input-group-lg col-6 mb-2 mt-3">
+                            <button type="button" id="clean" class="form-control bg-secondary text-white">
+                                <i class="fas fa-times"></i>
+                                Vider les champs
+                            </button>
+                        </div>
+                        <div class="input-group-lg col-6 mb-2 mt-3">
                             <button type="submit" class="form-control bg-success text-white">
                                 <span><i class="fas fa-check-circle"></i></span>
                                 Valider les modifications apportées
@@ -113,54 +120,151 @@
 @endsection
 @push('script')
     <script>
-        const dataSet = [
-            ['Garrett Winters', 'Accountant', 'Tokyo', '8422', '2011/07/25', '$170,750'],
-            ['Ashton Cox', 'Junior Technical Author', 'San Francisco', '1562', '2009/01/12', '$86,000'],
-            ['Cedric Kelly', 'Senior Javascript Developer', 'Edinburgh', '6224', '2012/03/29', '$433,060'],
-            ['Airi Satou', 'Accountant', 'Tokyo', '5407', '2008/11/28', '$162,700'],
-            ['Brielle Williamson', 'Integration Specialist', 'New York', '4804', '2012/12/02', '$372,000'],
-            ['Herrod Chandler', 'Sales Assistant', 'San Francisco', '9608', '2012/08/06', '$137,500'],
-            ['Rhona Davidson', 'Integration Specialist', 'Tokyo', '6200', '2010/10/14', '$327,900'],
-            ['Colleen Hurst', 'Javascript Developer', 'San Francisco', '2360', '2009/09/15', '$205,500'],
-            ['Sonya Frost', 'Software Engineer', 'Edinburgh', '1667', '2008/12/13', '$103,600'],
-            ['Jena Gaines', 'Office Manager', 'London', '3814', '2008/12/19', '$90,560'],
-            ['Quinn Flynn', 'Support Lead', 'Edinburgh', '9497', '2013/03/03', '$342,000'],
-            ['Charde Marshall', 'Regional Director', 'San Francisco', '6741', '2008/10/16', '$470,600'],
-            ['Haley Kennedy', 'Senior Marketing Designer', 'London', '3597', '2012/12/18', '$313,500'],
-            ['Tatyana Fitzpatrick', 'Regional Director', 'London', '1965', '2010/03/17', '$385,750'],
-        ];
+        var dataSet = @json($prescribers, JSON_UNESCAPED_UNICODE);
+        // console.log(dataSet);
 
-        new DataTable('#prescriber_table', {
-            columns: [{
-                    title: 'Name'
+        function dataRefresh() {
+            $.ajax({
+                url: "{{ route('prescriber.refresh') }}",
+                method: 'GET',
+                success: function(data) {
+                    table.clear().rows.add(data).draw();
                 },
-                {
-                    title: 'Position'
-                },
-                {
-                    title: 'Office'
-                },
-                {
-                    title: 'Extn.'
-                },
-                {
-                    title: 'Start date'
-                },
-                {
-                    title: 'Salary'
-                },
-                {
-                    title: 'Action'
+                error: function(error) {
+                    console.error('Erreur lors de la récupération des données : ', error);
                 }
+            });
+        }
+
+        $('#delete').click(function(){
+            $('#id').val(table.row({
+                selected: true
+            }).data()[0]);
+            Swal.fire({
+                title: 'Êtes-vous sûr.e ?',
+                text: 'Cette action est irréversible.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#30D659',
+                cancelButtonColor: '#3085d6',
+                cancelButtonText: 'Revenir',
+                confirmButtonText: 'Oui, je suis sûr.e',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        method: 'POST',
+                        url: "{{ route('prescriber.delete') }}",
+                        data: $('#id').serialize(),
+                        success: function(response) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                            });
+                            Toast.fire({
+                                icon: "success",
+                                iconColor: 'green',
+                                title: "Suppression effectuée."
+                            });
+                            clean();
+                            dataRefresh();
+                        },
+                        error: function(xhr, status, error) {
+                            console.log(error);
+                            console.log(xhr);
+                            Swal.fire({
+                                title: "marche pas",
+                                icon: "error",
+                                showConfirmButton: false,
+                                timer: 500
+                            });
+                        },
+                    });
+                } else if (result.isDenied) {
+                    Swal.fire("Suppression annulée.", "", "info");
+                }
+            });
+        })
+
+
+        $('#new_prescriber').submit(function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Êtes-vous sûr.e ?',
+                // text: 'This action cannot be reversed!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#30D659',
+                cancelButtonColor: '#3085d6',
+                cancelButtonText: 'Revenir',
+                confirmButtonText: 'Oui, je suis sûr.e',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        method: 'POST',
+                        url: "{{ route('prescriber.update.record') }}",
+                        data: $(this).serialize(),
+                        success: function(response) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                            });
+                            Toast.fire({
+                                icon: "success",
+                                iconColor: '#EC1325BD',
+                                title: "Modification effectuée."
+                            });
+                            clean();
+                            $('#prescriber_modal').modal('hide');
+                            dataRefresh();
+                        },
+                        error: function(xhr, status, error) {
+                            console.log(error);
+                            console.log(xhr);
+                            Swal.fire({
+                                title: "marche pas",
+                                icon: "error",
+                                showConfirmButton: false,
+                                timer: 500
+                            });
+                        },
+                    });
+                    // Swal.fire("Saved!", "", "success");
+                } else if (result.isDenied) {
+                    Swal.fire("Modification annulée.", "", "info");
+                }
+            });
+        });
+
+        var table = new DataTable('#prescriber_table', {
+            columns: [{
+                    title: 'id'
+                }, 
+                {
+                    title: 'Nom complet'
+                },
+                {
+                    title: 'Centre'
+                },
+                {
+                    title: 'Fonction'
+                },
+                {
+                    title: 'Spécialité'
+                },
             ],
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/fr-FR.json',
-            },
-            "columnDefs": [{
-                "data": null,
-                "defaultContent": "<button class=\"btn btn-danger text-white\" type=\"button\" data-toggle=\"modal\" data-target=\"#prescriber_modal\">Gérer</button>",
-                "targets": -1
+            columnDefs: [{
+                targets: 0,
+                visible: false
             }],
+            order: [
+                [1, 'asc']
+            ],
             select: true,
             dom: 'Bfrtip',
             buttons: [
@@ -168,5 +272,91 @@
             ],
             data: dataSet
         });
+
+        table.button().add(null, {
+            action: function() {
+                if (table.row({
+                        selected: true
+                    }).any()) {
+                    $('#prescriber_modal').modal('show');
+                } else {
+                    Swal.fire({
+                        title: "Sélectionnez d'abord un prescripteur.",
+                        icon: "error",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            },
+            text: 'Gérer',
+            className: 'btn btn-danger',
+            key: 'g'
+        });
+
+        $('#update').click(function() {
+            if ($('#new_prescriber').hasClass('d-none')) {
+                $('#new_prescriber').removeClass('d-none');
+            } else {
+                $('#new_prescriber').addClass('d-none');
+            }
+        })
+
+        $('#prescriber_modal').on('hidden.bs.modal', function() {
+            if (!($('#new_prescriber').hasClass('d-none'))) {
+                $('#new_prescriber').addClass('d-none');
+                clean();
+            }
+        })
+
+        $('#update').on('click', function() {
+            $('#id').val(table.row({
+                selected: true
+            }).data()[0]);
+            console.log($('#id').val());
+            Swal.fire({
+                title: 'Chargement des informations.',
+                didOpen: () => {
+                    Swal.showLoading();
+                    $.ajax({
+                        method: 'POST',
+                        url: "{{ route('prescriber.informations') }}",
+                        data: $('#id').serialize(),
+                        success: function(response) {
+                            fillPrescriberInformations(response);
+                            console.log(response);
+                            Swal.close();
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                title: "Erreur lors de la récupération des informations du prescripteur.",
+                                icon: "error",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        },
+                    });
+                }
+            });
+        })
+
+        function fillPrescriberInformations(data) {
+            $('#name').val(data.name);
+            $('#forename').val(data.forename);
+            $('#center').val(data.center);
+            $('#function').val(data.function);
+            $('#speciality').val(data.speciality);
+            $('.selectpicker').selectpicker('render');
+        }
+
+        function clean() {
+            $('input').val("");
+            $('textarea').val("");
+            $('.selectpicker').selectpicker('deselectAll');
+            $('.selectpicker').selectpicker('render');
+        }
+
+        $('#clean').click(function() {
+            clean();
+        })
     </script>
 @endpush

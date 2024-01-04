@@ -40,7 +40,9 @@ class PatientController extends Controller
 
     public function payedPatient()
     {
-        return view('patients.payed_patient');
+        // dd(getLeftToPayForPatient());
+        $left_to_pay = getLeftToPayForPatient();
+        return view('patients.payed_patient', compact('left_to_pay'));
     }
 
     public function priceCalculator(Request $request)
@@ -137,6 +139,7 @@ class PatientController extends Controller
                     'date' => $patient[14],
                     'time' => $patient[15]
                 ]);
+                // return response()->json($request->all());
             }
         } catch (Exception $e) {
             return $e->getMessage();
@@ -147,11 +150,10 @@ class PatientController extends Controller
     {
         try {
             if ($request->ajax()) {
-                $register = getRegister();
                 $voucher = Voucher::find($request->id);
                 $patient = Patient::find($request->id);
-                // $examination = Examination::where('patient_id', $request->id)->delete();
-                // $send = Send::where('patient_id', $request->id)->delete();
+                $examination = Examination::where('patient_id', $request->id)->delete();
+                $send = Send::where('patient_id', $request->id)->delete();
 
                 $voucher->date = $request->date;
                 $voucher->time = $request->time;
@@ -187,7 +189,55 @@ class PatientController extends Controller
                     $send->save();
                 }
 
-                return response()->json($register);
+                return response()->json();
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function dataTableRefresh(Request $request)
+    {
+        try {
+            if ($request->ajax()) {
+                return response()->json(getRegister());
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function deletePatient(Request $request)
+    {
+        try {
+            if ($request->ajax()) {
+                Send::where('patient_id', $request->id)->delete();
+                Examination::where('patient_id', $request->id)->delete();
+                Patient::where('id', $request->id)->delete();
+                Voucher::where('id', $request->id)->delete();
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function dataTableRefreshPayment(Request $request){
+        try {
+            if ($request->ajax()) {
+                return response()->json(getLeftToPayForPatient());
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function confirmPatientPayment(Request $request){
+        try {
+            if ($request->ajax()) {
+                $voucher = Voucher::find($request->id);
+                $voucher->payed = NULL;
+                $voucher->left_to_pay = NULL;
+                $voucher->save();
             }
         } catch (Exception $e) {
             return $e->getMessage();
