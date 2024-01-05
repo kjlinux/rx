@@ -34,7 +34,7 @@
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href={{ route('dashboard') }}>
                 <div class="sidebar-brand-icon rotate-n-15">
                     <iconify-icon icon="jam:medical" style="color: white" width="60" height="60"></iconify-icon>
                 </div>
@@ -131,6 +131,8 @@
             <div id="content">
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <h5 class="mt-3" id="dateHeure"></h5>
+
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
@@ -150,7 +152,7 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                {{-- <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profil
                                 </a>
@@ -158,7 +160,7 @@
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Paramètres
                                 </a>
-                                <div class="dropdown-divider"></div>
+                                <div class="dropdown-divider"></div> --}}
                                 <a class="dropdown-item" href="#" data-toggle="modal"
                                     data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -200,23 +202,24 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Se déconnecter ?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    Select "Logout" below if you are ready to end your current session.
+                    Sélectionner "Se déconnecter" si vous êtes prêt à mettre fin à votre session en cours.
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">
-                        Cancel
+                        Retour
                     </button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href={{ route('logout') }}>Se déconnecter</a>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
@@ -229,11 +232,11 @@
     <script src={{ asset('js/sb-admin-2.min.js') }}></script>
 
     <!-- Page level plugins -->
-    {{-- <script src={{ asset('vendor/chart.js/Chart.min.js') }}></script>
+    <script src={{ asset('vendor/chart.js/Chart.min.js') }}></script>
 
     <!-- Page level custom scripts -->
     <script src={{ asset('js/demo/chart-area-demo.js') }}></script>
-    <script src={{ asset('js/demo/chart-pie-demo.js') }}></script> --}}
+    <script src={{ asset('js/demo/chart-pie-demo.js') }}></script>
     <script src={{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
     {{-- <script src={{ asset('js/datatables.min.js') }}></script> --}}
@@ -250,6 +253,33 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
+        });
+    </script>
+    <script>
+        function updateTime() {
+            var datePosition = $('#dateHeure');
+
+            var date = new Date();
+
+            var days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+            var months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre',
+                'Octobre', 'Novembre', 'Décembre'
+            ];
+
+            var dateString = days[date.getDay()] + ' ' +
+                date.getDate() + ' ' +
+                months[date.getMonth()] + ' ' +
+                date.getFullYear() + ', ' +
+                ('0' + date.getHours()).slice(-2) + ':' +
+                ('0' + date.getMinutes()).slice(-2) + ':' +
+                ('0' + date.getSeconds()).slice(-2);
+
+            datePosition.text(dateString);
+        }
+
+        $(document).ready(function() {
+            updateTime();
+            setInterval(updateTime, 1000);
         });
     </script>
     @stack('script')
