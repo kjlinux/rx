@@ -34,12 +34,21 @@
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href={{ route('dashboard') }}>
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <iconify-icon icon="jam:medical" style="color: white" width="60" height="60"></iconify-icon>
-                </div>
-                <div class="sidebar-brand-text mx-3">RX</div>
-            </a>
+            @can('check dashboard')
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href={{ route('dashboard') }}>
+                    <div class="sidebar-brand-icon rotate-n-15">
+                        <iconify-icon icon="jam:medical" style="color: white" width="60" height="60"></iconify-icon>
+                    </div>
+                    <div class="sidebar-brand-text mx-3">RX</div>
+                </a>
+            @else
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href={{ route('patient.new') }}>
+                    <div class="sidebar-brand-icon rotate-n-15">
+                        <iconify-icon icon="jam:medical" style="color: white" width="60" height="60"></iconify-icon>
+                    </div>
+                    <div class="sidebar-brand-text mx-3">RX</div>
+                </a>
+            @endcan
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0" />
@@ -151,7 +160,8 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->name}}</span>
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
                                 <img class="img-profile rounded-circle" src={{ asset('img/hospital.png') }}
                                     title="profil" />
                             </a>
