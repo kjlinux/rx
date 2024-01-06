@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Models\Prescriber;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -30,7 +29,9 @@ class DatabaseSeeder extends Seeder
             CenterCategory::class,
             Center::class,
             Prescribers::class,
-            HolidaySeeder::class
+            HolidaySeeder::class,
+            UserSeeder::class,
+            RoleSeeder::class
         ]);
     }
 }

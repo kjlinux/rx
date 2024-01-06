@@ -3,7 +3,7 @@
 
 <head>
     <title>X-ray service</title>
-    <link rel="shortcut icon" type="image/png" href={{ asset('img/rx-logo-2.png') }}>
+    <link rel="shortcut icon" type="image/png" href={{ asset('img/rx.png') }}>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">

@@ -10,7 +10,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>X-Ray Service</title>
-    <link rel="shortcut icon" type="image/png" href={{ asset('img/rx-logo-2.png') }}>
+    <link rel="shortcut icon" type="image/png" href={{ asset('img/rx.png') }}>
     <!-- Custom fonts for this template-->
     <link href={{ asset('vendor/fontawesome-free/css/all.min.css') }} rel="stylesheet" type="text/css" />
     <link
@@ -45,11 +45,13 @@
             <hr class="sidebar-divider my-0" />
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href={{ route('dashboard') }}>
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Tableau de bord</span></a>
-            </li>
+            @can('check dashboard')
+                <li class="nav-item active">
+                    <a class="nav-link" href={{ route('dashboard') }}>
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Tableau de bord</span></a>
+                </li>
+            @endcan
 
             <!-- Divider -->
             <hr class="sidebar-divider" />
@@ -82,19 +84,23 @@
             <!-- Heading -->
             <div class="sidebar-heading">Prescripteurs</div>
 
-            <li class="nav-item">
-                <a class="nav-link" href={{ route('prescriber.new') }}>
-                    <iconify-icon icon="basil:add-outline" width="13" height="13"></iconify-icon>
-                    <span>Ajouter prescripteur</span></a>
-            </li>
+            @can('add prescriber')
+                <li class="nav-item">
+                    <a class="nav-link" href={{ route('prescriber.new') }}>
+                        <iconify-icon icon="basil:add-outline" width="13" height="13"></iconify-icon>
+                        <span>Ajouter prescripteur</span></a>
+                </li>
+            @endcan
 
-            <li class="nav-item">
-                <a class="nav-link" href={{ route('prescriber.update') }}>
-                    <iconify-icon
-                        icon="streamline:interface-edit-write-2-change-document-edit-modify-paper-pencil-write-writing"
-                        width="13" height="13"></iconify-icon>
-                    <span>Informations prescripteur</span></a>
-            </li>
+            @can('manage prescriber informations')
+                <li class="nav-item">
+                    <a class="nav-link" href={{ route('prescriber.update') }}>
+                        <iconify-icon
+                            icon="streamline:interface-edit-write-2-change-document-edit-modify-paper-pencil-write-writing"
+                            width="13" height="13"></iconify-icon>
+                        <span>Informations prescripteur</span></a>
+                </li>
+            @endcan
 
             <li class="nav-item">
                 <a class="nav-link" href={{ route('prescriber.payed') }}>
@@ -145,9 +151,9 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Administrateur</span>
-                                <img class="img-profile rounded-circle" src={{ asset('img/undraw_profile.svg') }}
-                                    title="cjhvkh" />
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->name}}</span>
+                                <img class="img-profile rounded-circle" src={{ asset('img/hospital.png') }}
+                                    title="profil" />
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -254,8 +260,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-    </script>
-    <script>
+
         function updateTime() {
             var datePosition = $('#dateHeure');
 
