@@ -20,7 +20,9 @@ class PatientController extends Controller
         $exam_data = ExaminationType::getExaminations();
         $center_data = getCentersWhithCategory();
         $prescriber_data  = Prescriber::getPrescribers();
-        return view('patients.add_patient', compact('exam_data', 'center_data', 'prescriber_data'));
+        return redirect()->route('voucher.generate');
+
+        // return view('patients.add_patient', compact('exam_data', 'center_data', 'prescriber_data'));
     }
 
     public function updatePatient()
@@ -43,6 +45,10 @@ class PatientController extends Controller
         // dd(getLeftToPayForPatient());
         $left_to_pay = getLeftToPayForPatient();
         return view('patients.payed_patient', compact('left_to_pay'));
+    }
+
+    public function testVoucher(){
+        return view('voucher');
     }
 
     public function priceCalculator(Request $request)
@@ -109,7 +115,7 @@ class PatientController extends Controller
                     $send->save();
                 }
 
-                return response()->json();
+                return redirect()->route('voucher.generate');
             }
         } catch (Exception $e) {
             return $e->getMessage();
