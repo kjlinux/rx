@@ -4,13 +4,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>v</title>
+    <link rel="shortcut icon" type="image/png" href={{ asset('img/rx.png') }}>
+    <title>{{ $data['name'] }}  {{ $data['forenames'] }}</title>
     <link href={{ asset('css/sb-admin-2.css') }} rel="stylesheet" />
-    <style>
-        .page-break {
-            page-break-after: always;
-        }
-    </style>
 </head>
 
 <body>
@@ -36,18 +32,18 @@
         </div>
         <div class="row mt-3 mr-3" style="background-color: #326195">
             <div class="col-12 text-white text-left">
-                <span>Reçu de paiement N° 23452</span>
-                <span style="margin-left: 227px">Samedi 20 Janvier 2024, 14:14:14</span>
+                <span>Reçu de paiement N° {{ $data['id'] }}</span>
+                <span style="margin-left: 227px">{{ $data['date'] }}, {{ $data['time'] }}</span>
             </div>
         </div>
         <div class="row mt-3">
             <div class="col-12">
                 <span style="font-size: 20px; color:#326195">Nom:</span>
-                <span style="font-size: 20px; margin-left: 61px">DJohn</span>
+                <span style="font-size: 20px; margin-left: 61px">{{ $data['name'] }}</span>
             </div>
             <div class="col-12">
                 <span style="font-size: 20px; color:#326195">Prénom.s:</span>
-                <span style="font-size: 20px; margin-left: 18px">Doe</span>
+                <span style="font-size: 20px; margin-left: 18px">{{ $data['forenames'] }}</span>
             </div>
             <div class="col-12">
                 <span style="font-size: 20px; color:#326195">Examen.s :</span>
@@ -56,15 +52,15 @@
         </div>
         <div class="row mt-3 mr-3" style="background-color: #326195">
             <div class="col text-white">
-                <span>Net à payer : 15000 F</span>
-                <span style="margin-left: 101px">Total payé : 10000 F</span>
-                <span style="margin-left: 101px">Reste à payer : 5000 F</span>
+                <span>Net à payer : {{ $data['amount_to_pay'] }} F</span>
+                <span style="margin-left: 101px">Total payé : {{ $data['payed'] }} F</span>
+                <span style="margin-left: 101px">Reste à payer : {{ $data['left_to_pay'] }} F</span>
             </div>
         </div>
         <div class="row mt-3 mr-3" style="background-color: #326195">
             <div class="col text-white">
-                <span>Montant en lettres : quinze-mille</span>
-                <span style="margin-left: 360px">Francs CFA</span>
+                <span>Montant en lettres : {{ $data['amount_to_pay_in_letters'] }}</span>
+                <span style="margin-left: 350px">Francs CFA</span>
             </div>
         </div>
         <div class="row mt-3">

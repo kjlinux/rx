@@ -175,7 +175,7 @@
                             console.log(error);
                             console.log(xhr);
                             Swal.fire({
-                                title: "marche pas",
+                                title: "Erreur lors de l'exécution",
                                 icon: "error",
                                 showConfirmButton: false,
                                 timer: 500
@@ -227,7 +227,7 @@
                             console.log(error);
                             console.log(xhr);
                             Swal.fire({
-                                title: "marche pas",
+                                title: "Erreur lors de l'exécution",
                                 icon: "error",
                                 showConfirmButton: false,
                                 timer: 500

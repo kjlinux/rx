@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/v', [VoucherController::class, 'generateVoucher'])->name('voucher.generate');
+Route::post('/delete_pdf', [VoucherController::class, 'deleteVoucherAfterStream'])->name('voucher.delete');
 
 require __DIR__.'/auth.php';
 require __DIR__.'/patient.php';

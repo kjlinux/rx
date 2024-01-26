@@ -20,9 +20,10 @@ class PatientController extends Controller
         $exam_data = ExaminationType::getExaminations();
         $center_data = getCentersWhithCategory();
         $prescriber_data  = Prescriber::getPrescribers();
-        return redirect()->route('voucher.generate');
 
-        // return view('patients.add_patient', compact('exam_data', 'center_data', 'prescriber_data'));
+        // return VoucherController::generateVoucher($data);
+
+        return view('patients.add_patient', compact('exam_data', 'center_data', 'prescriber_data'));
     }
 
     public function updatePatient()
@@ -47,7 +48,8 @@ class PatientController extends Controller
         return view('patients.payed_patient', compact('left_to_pay'));
     }
 
-    public function testVoucher(){
+    public function testVoucher()
+    {
         return view('voucher');
     }
 
@@ -81,7 +83,7 @@ class PatientController extends Controller
                 $voucher->left_to_pay = $request->left_to_pay;
                 $voucher->discount = $request->discount;
                 $voucher->amount_after_discount = $request->after_discount;
-                $voucher->slug = $voucher->newUniqueId();
+                $voucher->slug = $voucher->slug();
                 $voucher->save();
 
                 $patient->name = capitalizeWords($request->name);
@@ -115,7 +117,21 @@ class PatientController extends Controller
                     $send->save();
                 }
 
-                return redirect()->route('voucher.generate');
+                $data = array();
+                $data['id'] = $patient->id;
+                $data['date'] = convertToDateString($voucher->date);
+                $data['time'] = $voucher->time;
+                $data['name'] = $patient->name;
+                $data['forenames'] = $patient->forenames;
+                $data['amount_to_pay'] = is_null($voucher->amount_to_pay) ? 0 : $voucher->amount_to_pay;
+                // $data['payed'] = is_null($voucher->payed) || is_empty($voucher->payed) ? 0 : $voucher->payed;
+                $data['payed'] = isset($voucher->payed) ? $voucher->payed : 0;
+                $data['left_to_pay'] = $voucher->left_to_pay;
+                $data['amount_to_pay_in_letters'] = capitalizeWords(nummberToLetters($voucher->amount_to_pay));
+                $data['slug'] = $voucher->slug;
+        
+                return VoucherController::generateVoucher($data);
+
             }
         } catch (Exception $e) {
             return $e->getMessage();
@@ -227,7 +243,8 @@ class PatientController extends Controller
         }
     }
 
-    public function dataTableRefreshPayment(Request $request){
+    public function dataTableRefreshPayment(Request $request)
+    {
         try {
             if ($request->ajax()) {
                 return response()->json(getLeftToPayForPatient());
@@ -237,7 +254,8 @@ class PatientController extends Controller
         }
     }
 
-    public function confirmPatientPayment(Request $request){
+    public function confirmPatientPayment(Request $request)
+    {
         try {
             if ($request->ajax()) {
                 $voucher = Voucher::find($request->id);

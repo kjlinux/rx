@@ -16,7 +16,7 @@ class Voucher extends Model
         return $this->hasMany(Patient::class);
     }
 
-    public function newUniqueId(): string
+    public function slug(): string
     {
         return (string) Uuid::uuid4();
     }

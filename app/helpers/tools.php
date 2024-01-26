@@ -245,3 +245,75 @@ function getRebates(){
     })
     ->toArray();
 }
+
+function convertToDateString($dateStr) {
+    $date = new DateTime($dateStr);
+
+    $days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+
+    $months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+
+    $day = $days[$date->format('w')];
+    $dayNumber = $date->format('j');
+    $month = $months[$date->format('n') - 1];
+    $year = $date->format('Y');
+
+    $output = "$day $dayNumber $month $year";
+
+    return $output;
+}
+
+
+function nummberToLetters($number) {
+    $digit = array(
+        0 => 'zéro', 1 => 'un', 2 => 'deux', 3 => 'trois', 4 => 'quatre',
+        5 => 'cinq', 6 => 'six', 7 => 'sept', 8 => 'huit', 9 => 'neuf',
+        10 => 'dix', 11 => 'onze', 12 => 'douze', 13 => 'treize', 14 => 'quatorze',
+        15 => 'quinze', 16 => 'seize', 17 => 'dix-sept', 18 => 'dix-huit', 19 => 'dix-neuf',
+        20 => 'vingt', 30 => 'trente', 40 => 'quarante', 50 => 'cinquante',
+        60 => 'soixante', 70 => 'soixante-dix', 80 => 'quatre-vingt', 90 => 'quatre-vingt-dix'
+    );
+
+    if (!is_numeric($number)) {
+        return false;
+    }
+
+    if (($number >= 0 && $number <= 19) || $number == 100) {
+        return $digit[$number];
+    }
+
+    if ($number > 1000000) {
+        return false;
+    }
+
+    $output = '';
+
+    if ($number >= 1000) {
+        $output .= nummberToLetters(floor($number / 1000)) . ' mille ';
+        $number %= 1000;
+    }
+
+    if ($number >= 100) {
+        $output .= nummberToLetters(floor($number / 100)) . ' cent ';
+        $number %= 100;
+    }
+
+    if ($number >= 20) {
+        if ($number >= 70 && $number <= 79) {
+            $output .= 'soixante-' . nummberToLetters($number - 60);
+        } elseif ($number >= 90) {
+            $output .= 'quatre-vingt-' . nummberToLetters($number - 80);
+        } else {
+            $output .= $digit[floor($number / 10) * 10];
+            $rest = $number % 10;
+
+            if ($rest) {
+                $output .= '-' . $digit[$rest];
+            }
+        }
+    } elseif ($number > 0) {
+        $output .= $digit[$number];
+    }
+
+    return $output;
+}

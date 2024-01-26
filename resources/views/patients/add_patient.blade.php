@@ -28,11 +28,11 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">RX > <strong>PATIENTS</strong></h1>
             <!-- <a
-                                                        href="#"
-                                                        class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-                                                        ><i class="fas fa-download fa-sm text-white-50"></i> Generate
-                                                        Report</a
-                                                     -->
+                                                                        href="#"
+                                                                        class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                                                                        ><i class="fas fa-download fa-sm text-white-50"></i> Generate
+                                                                        Report</a
+                                                                     -->
         </div>
 
         <!-- Content Row -->
@@ -59,8 +59,8 @@
                                     name="forenames" required />
                             </div>
                             <div class="input-group mb-4 col-2">
-                                <input type="number" class="form-control" placeholder="Age"
-                                    id="year" name="year" required>
+                                <input type="number" class="form-control" placeholder="Age" id="year" name="year"
+                                    required>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="year">ans</span>
                                 </div>
@@ -134,6 +134,7 @@
                             </div>
                             <input type="hidden" id="date" name="date">
                             <input type="hidden" id="time" name="time">
+                            <input type="hidden" id="voucher" name="voucher">
                             <div class="input-group-lg col-6 mb-2 mt-3">
                                 <button type="button" id="clean" class="form-control bg-secondary text-white">
                                     <i class="fas fa-times"></i>
@@ -163,6 +164,7 @@
                 url: "{{ route('patient.record') }}",
                 data: $(this).serialize(),
                 success: function(response) {
+                    const pdfUrl = response.pdf_url;
                     const Toast = Swal.mixin({
                         toast: true,
                         position: "top-end",
@@ -174,11 +176,14 @@
                         icon: "success",
                         title: "Enregistrement effectué."
                     });
+                    redirectToVoucher(pdfUrl);
                     clean();
+                    $('#voucher').val(response.voucher_id);
+                    deleteVoucherAfterStream(pdfUrl);
                 },
                 error: function(xhr, status, error) {
                     Swal.fire({
-                        title: "marche pas",
+                        title: "Erreur lors de l'exécution",
                         icon: "error",
                         showConfirmButton: false,
                         timer: 500
@@ -186,6 +191,22 @@
                 },
             });
         });
+
+        function redirectToVoucher(link) {
+            window.open(link, '_blank');
+        }
+
+        function deleteVoucherAfterStream(pdfUrl) {
+            $.ajax({
+                method: 'POST',
+                url: "{{ route('voucher.delete') }}",
+                data: $('#voucher').serialize(),
+                success: function(response) {},
+                error: function(deleteError) {
+                    console.log("bad");
+                }
+            });
+        }
 
         var payed_amount = () => {
             if ($('#total_amount').val() !== "" && $('#payed_amount').val() === "") {
@@ -257,7 +278,7 @@
         });
 
         function priceCalculator() {
-                $.ajax({
+            $.ajax({
                 method: 'POST',
                 url: "{{ route('patient.price.calculator') }}",
                 data: $('#examination').serialize(),
@@ -277,8 +298,8 @@
         }
 
         $('#examination').change(function() {
-                priceCalculator();
-                wipeInput();
+            priceCalculator();
+            wipeInput();
         })
 
 
