@@ -105,7 +105,6 @@ class PatientController extends Controller
 
                 // foreach ($request->prescriber as $prescriber_id) {
                 //     $rebate = new Rebate;
-                //     $rebate->amount = 1000;
                 //     $rebate->prescriber_id = $prescriber_id;
                 //     $rebate->save();
                 // }
@@ -123,11 +122,11 @@ class PatientController extends Controller
                 $data['time'] = $voucher->time;
                 $data['name'] = $patient->name;
                 $data['forenames'] = $patient->forenames;
-                $data['amount_to_pay'] = is_null($voucher->amount_to_pay) ? 0 : $voucher->amount_to_pay;
-                // $data['payed'] = is_null($voucher->payed) || is_empty($voucher->payed) ? 0 : $voucher->payed;
-                $data['payed'] = isset($voucher->payed) ? $voucher->payed : 0;
-                $data['left_to_pay'] = $voucher->left_to_pay;
-                $data['amount_to_pay_in_letters'] = capitalizeWords(nummberToLetters($voucher->amount_to_pay));
+                $data['amount_to_pay'] = is_null($voucher->amount_after_discount) ?  $voucher->amount_to_pay : $voucher->amount_after_discount;
+                $data['payed'] = is_null($voucher->payed) ? 0 : $voucher->payed;
+                $data['left_to_pay'] = is_null($voucher->payed) ? 0 : $voucher->left_to_pay;
+                $data['amount_to_pay_in_letters'] = capitalizeWords(nummberToLetters($data['amount_to_pay']));
+                $data['examination'] = getExaminationsNames($request->examination);
                 $data['slug'] = $voucher->slug;
         
                 return VoucherController::generateVoucher($data);
@@ -184,7 +183,7 @@ class PatientController extends Controller
                 $voucher->left_to_pay = $request->left_to_pay;
                 $voucher->discount = $request->discount;
                 $voucher->amount_after_discount = $request->after_discount;
-                $voucher->slug = $voucher->newUniqueId();
+                // $voucher->slug = $voucher->slug();
                 $voucher->save();
 
                 $patient->name = capitalizeWords($request->name);

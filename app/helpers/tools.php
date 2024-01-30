@@ -161,46 +161,47 @@ function getPatient(int $patient_id)
         ->toArray();
 }
 
-function getPrescribers(int $prescriber_id = null){
-    if($prescriber_id == null){
+function getPrescribers(int $prescriber_id = null)
+{
+    if ($prescriber_id == null) {
         return DB::table('prescribers')
-        ->join('centers', 'centers.id', '=', 'prescribers.center_id')
-        ->join('center_categories', 'center_categories.id', '=', 'centers.center_category_id')
-        ->join('functions', 'functions.id', '=', 'prescribers.function_id')
-        ->join('specialities', 'specialities.id', '=', 'prescribers.speciality_id')
-        ->selectRaw("prescribers.id  AS id, 
+            ->join('centers', 'centers.id', '=', 'prescribers.center_id')
+            ->join('center_categories', 'center_categories.id', '=', 'centers.center_category_id')
+            ->join('functions', 'functions.id', '=', 'prescribers.function_id')
+            ->join('specialities', 'specialities.id', '=', 'prescribers.speciality_id')
+            ->selectRaw("prescribers.id  AS id, 
             CONCAT('Dr. ', prescribers.name, ' ', prescribers.forenames) AS name, 
             CONCAT(center_categories.name, ' ', centers.name) AS center, 
             functions.name AS _function, 
             specialities.name AS speciality")
-        ->get()
-        ->map(function ($item) {
-            return array_values((array) $item);
-        })
-        ->toArray();
+            ->get()
+            ->map(function ($item) {
+                return array_values((array) $item);
+            })
+            ->toArray();
     } else {
         return DB::table('prescribers')
-        ->selectRaw("name, forenames, center_id, function_id, speciality_id")
-        ->where('prescribers.id', $prescriber_id)
-        ->get()
-        ->map(function ($item) {
-            return array_values((array) $item);
-        })
-        ->toArray();
+            ->selectRaw("name, forenames, center_id, function_id, speciality_id")
+            ->where('prescribers.id', $prescriber_id)
+            ->get()
+            ->map(function ($item) {
+                return array_values((array) $item);
+            })
+            ->toArray();
     }
-
 }
 
-function getLeftToPayForPatient(){
+function getLeftToPayForPatient()
+{
     return DB::table('patients')
-    ->join('vouchers', 'vouchers.id', '=', 'patients.voucher_id')
-    ->join('centers', 'centers.id', '=', 'patients.center_id')
-    ->join('center_categories', 'center_categories.id', '=', 'centers.center_category_id')
-    ->join('examinations', 'examinations.patient_id', '=', 'patients.id')
-    ->join('examinations_type', 'examinations_type.id', '=', 'examinations.examination_type_id')
-    ->join('sends', 'sends.patient_id', '=', 'patients.id')
-    ->join('prescribers', 'prescribers.id', '=', 'sends.prescriber_id')
-    ->selectRaw("patients.updated_at AS 'Updated at',
+        ->join('vouchers', 'vouchers.id', '=', 'patients.voucher_id')
+        ->join('centers', 'centers.id', '=', 'patients.center_id')
+        ->join('center_categories', 'center_categories.id', '=', 'centers.center_category_id')
+        ->join('examinations', 'examinations.patient_id', '=', 'patients.id')
+        ->join('examinations_type', 'examinations_type.id', '=', 'examinations.examination_type_id')
+        ->join('sends', 'sends.patient_id', '=', 'patients.id')
+        ->join('prescribers', 'prescribers.id', '=', 'sends.prescriber_id')
+        ->selectRaw("patients.updated_at AS 'Updated at',
             patients.id AS 'N°', 
             CONCAT(patients.name, ' ', patients.forenames) AS 'Nom Complet', 
             GROUP_CONCAT(DISTINCT examinations_type.name) AS 'Examens',
@@ -208,25 +209,26 @@ function getLeftToPayForPatient(){
             vouchers.amount_to_pay,
             vouchers.payed,
             vouchers.left_to_pay")
-    ->groupBy('patients.id')
-    ->whereRaw('vouchers.left_to_pay IS NOT NULL',)
-    ->orderByDesc('patients.updated_at')
-    ->get()
-    ->map(function ($item) {
-        return array_values((array) $item);
-    })
-    ->toArray();
+        ->groupBy('patients.id')
+        ->whereRaw('vouchers.payed IS NOT NULL',)
+        ->orderByDesc('patients.updated_at')
+        ->get()
+        ->map(function ($item) {
+            return array_values((array) $item);
+        })
+        ->toArray();
 }
 
-function getRebates(){
+function getRebates()
+{
     return DB::table('prescribers')
-    ->join('centers', 'centers.id', '=', 'prescribers.center_id')
-    ->join('center_categories', 'center_categories.id', '=', 'centers.center_category_id')
-    ->join('functions', 'functions.id', '=', 'prescribers.function_id')
-    ->join('specialities', 'specialities.id', '=', 'prescribers.speciality_id')
-    ->join('sends', 'sends.prescriber_id', 'prescribers.id')
-    ->join('patients', 'patients.id', 'sends.prescriber_id')
-    ->selectRaw("sends.id  AS id, 
+        ->join('centers', 'centers.id', '=', 'prescribers.center_id')
+        ->join('center_categories', 'center_categories.id', '=', 'centers.center_category_id')
+        ->join('functions', 'functions.id', '=', 'prescribers.function_id')
+        ->join('specialities', 'specialities.id', '=', 'prescribers.speciality_id')
+        ->join('sends', 'sends.prescriber_id', 'prescribers.id')
+        ->join('patients', 'patients.id', 'sends.patient_id')
+        ->selectRaw("sends.id  AS id, 
         CONCAT('Dr. ', prescribers.name, ' ', prescribers.forenames) AS name, 
         CONCAT(center_categories.name, ' ', centers.name) AS center, 
         specialities.name AS speciality,
@@ -237,16 +239,17 @@ function getRebates(){
             ELSE COUNT(sends.patient_id)*5000
         END AS 'Ristourne',
         DATE(sends.created_at)")
-    ->groupBy('prescribers.id', DB::raw("DATE('sends.created_at'), sends.created_at, sends.id"))
-    ->orderBy('sends.created_at')
-    ->get()
-    ->map(function ($item) {
-        return array_values((array) $item);
-    })
-    ->toArray();
+        ->groupBy('prescribers.id', DB::raw("DATE('sends.created_at'), sends.created_at, sends.id")) /*Do not modify this line !*/
+        ->orderBy('sends.created_at')
+        ->get()
+        ->map(function ($item) {
+            return array_values((array) $item);
+        })
+        ->toArray();
 }
 
-function convertToDateString($dateStr) {
+function convertToDateString($dateStr)
+{
     $date = new DateTime($dateStr);
 
     $days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
@@ -263,8 +266,8 @@ function convertToDateString($dateStr) {
     return $output;
 }
 
-
-function nummberToLetters($number) {
+function nummberToLetters($number)
+{
     $digit = array(
         0 => 'zéro', 1 => 'un', 2 => 'deux', 3 => 'trois', 4 => 'quatre',
         5 => 'cinq', 6 => 'six', 7 => 'sept', 8 => 'huit', 9 => 'neuf',
@@ -317,3 +320,23 @@ function nummberToLetters($number) {
 
     return $output;
 }
+
+function getExaminationsNames(array $examinations){
+    $output = 'RX ';
+    foreach($examinations as $examination){
+        $query = DB::table('examinations_type')
+            ->select('name')
+            ->where('id', $examination)
+            ->pluck('name');
+        
+        $output .= $query[0].',';
+    }
+
+    return rtrim($output, ',');
+}
+
+/* il affiche ceux qu'on a mis la reduction sans pour autant payer apres dns la page de confirmation de paiement 
+    fucntion poour retoourner le nom des examens pour le reçu
+    verifier pour les info patiet lors du changement dexamens ce qui se passe
+    les prescripteurs doivent avoir l'option autre
+ */

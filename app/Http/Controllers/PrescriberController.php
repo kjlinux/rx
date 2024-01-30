@@ -13,14 +13,16 @@ use App\Http\Controllers\Controller;
 class PrescriberController extends Controller
 {
     //
-    public function new_prescriber(){
+    public function new_prescriber()
+    {
         $center_data = getCentersWhithCategory();
         $function_data = Functions::getFunctions();
         $speciality_data = Speciality::getSpecialities();
         return view('prescribers.add_prescriber', compact('center_data', 'function_data', 'speciality_data'));
     }
 
-    public function update_prescriber(){
+    public function update_prescriber()
+    {
         $center_data = getCentersWhithCategory();
         $function_data = Functions::getFunctions();
         $speciality_data = Speciality::getSpecialities();
@@ -29,7 +31,8 @@ class PrescriberController extends Controller
         return view('prescribers.update_prescriber', compact('center_data', 'function_data', 'speciality_data', 'prescribers'));
     }
 
-    public function payed_prescriber(){
+    public function payed_prescriber()
+    {
         $rebates = getRebates();
         // dd($rebates);
         return view('prescribers.payed_prescriber', compact('rebates'));
@@ -111,7 +114,8 @@ class PrescriberController extends Controller
         }
     }
 
-    public function dataTableRefreshPayment(Request $request){
+    public function dataTableRefreshPayment(Request $request)
+    {
         try {
             if ($request->ajax()) {
                 return response()->json(getRebates());
@@ -121,7 +125,8 @@ class PrescriberController extends Controller
         }
     }
 
-    public function confirmPrescriberPayment(Request $request){
+    public function confirmPrescriberPayment(Request $request)
+    {
         try {
             if ($request->ajax()) {
                 Send::where('id', $request->id)->delete();
