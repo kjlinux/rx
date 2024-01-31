@@ -76,6 +76,15 @@ class PatientController extends Controller
                 $voucher = new Voucher;
                 $patient = new Patient;
 
+                $patient->name = capitalizeWords($request->name);
+                $patient->forenames = capitalizeWords($request->forenames);
+                $patient->gender = $request->gender;
+                $patient->age = $request->year;
+                $patient->phone = $request->phone;
+                $patient->clinical_information = capitalizeWords($request->clinical_information);
+                $patient->center_id = $request->center;
+                $patient->save();
+
                 $voucher->date = $request->date;
                 $voucher->time = $request->time;
                 $voucher->amount_to_pay = $request->total_amount;
@@ -84,17 +93,8 @@ class PatientController extends Controller
                 $voucher->discount = $request->discount;
                 $voucher->amount_after_discount = $request->after_discount;
                 $voucher->slug = $voucher->slug();
+                $voucher->patient_id  = $patient->id;
                 $voucher->save();
-
-                $patient->name = capitalizeWords($request->name);
-                $patient->forenames = capitalizeWords($request->forenames);
-                $patient->gender = $request->gender;
-                $patient->age = $request->year;
-                $patient->phone = $request->phone;
-                $patient->clinical_information = capitalizeWords($request->clinical_information);
-                $patient->voucher_id  = $voucher->id;
-                $patient->center_id = $request->center;
-                $patient->save();
 
                 foreach ($request->examination as $examination_id) {
                     $examination = new Examination;
@@ -176,6 +176,15 @@ class PatientController extends Controller
                 $examination = Examination::where('patient_id', $request->id)->delete();
                 $send = Send::where('patient_id', $request->id)->delete();
 
+                $patient->name = capitalizeWords($request->name);
+                $patient->forenames = capitalizeWords($request->forenames);
+                $patient->gender = $request->gender;
+                $patient->age = $request->year;
+                $patient->phone = $request->phone;
+                $patient->clinical_information = capitalizeWords($request->clinical_information);
+                $patient->center_id = $request->center;
+                $patient->save();
+
                 $voucher->date = $request->date;
                 $voucher->time = $request->time;
                 $voucher->amount_to_pay = $request->total_amount;
@@ -184,17 +193,8 @@ class PatientController extends Controller
                 $voucher->discount = $request->discount;
                 $voucher->amount_after_discount = $request->after_discount;
                 // $voucher->slug = $voucher->slug();
+                $voucher->patient_id  = $patient->id;
                 $voucher->save();
-
-                $patient->name = capitalizeWords($request->name);
-                $patient->forenames = capitalizeWords($request->forename);
-                $patient->gender = $request->gender;
-                $patient->age = $request->year;
-                $patient->phone = $request->phone;
-                $patient->clinical_information = capitalizeWords($request->clinical_information);
-                $patient->voucher_id  = $voucher->id;
-                $patient->center_id = $request->center;
-                $patient->save();
 
                 foreach ($request->examination as $examination_id) {
                     $examination = new Examination;

@@ -4,6 +4,10 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Examination;
+use App\Models\Prescriber;
+use App\Models\Send;
+use App\Models\Voucher;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -28,10 +32,14 @@ class DatabaseSeeder extends Seeder
             Specialities::class,
             CenterCategory::class,
             Center::class,
-            Prescribers::class,
             HolidaySeeder::class,
             UserSeeder::class,
-            RoleSeeder::class
+            RoleSeeder::class,
+            PrescriberSeeder::class,
+            PatientSeeder::class,
+            VoucherSeeder::class,
+            ExaminationSeeder::class,
+            SendSeeder::class,
         ]);
     }
 }

@@ -97,8 +97,8 @@ function getPrice(array $examinations)
 
 function getRegister()
 {
-    return DB::table('patients')
-        ->join('vouchers', 'vouchers.id', '=', 'patients.voucher_id')
+    return DB::table('vouchers')
+        ->join('patients', 'patients.id', '=', 'vouchers.patient_id')
         ->join('centers', 'centers.id', '=', 'patients.center_id')
         ->join('center_categories', 'center_categories.id', '=', 'centers.center_category_id')
         ->join('examinations', 'examinations.patient_id', '=', 'patients.id')
@@ -119,7 +119,7 @@ function getRegister()
                     ELSE CONCAT(vouchers.amount_after_discount, '/', vouchers.discount, '%') 
                 END AS 'Montant', 
                 patients.phone AS 'Téléphone'")
-        ->groupBy('patients.id')
+        ->groupBy('vouchers.id')
         ->orderByDesc('patients.updated_at')
         ->get()
         ->map(function ($item) {
@@ -130,8 +130,8 @@ function getRegister()
 
 function getPatient(int $patient_id)
 {
-    return DB::table('patients')
-        ->join('vouchers', 'vouchers.id', '=', 'patients.voucher_id')
+    return DB::table('vouchers')
+        ->join('patients', 'patients.id', '=', 'vouchers.patient_id')
         ->join('centers', 'centers.id', '=', 'patients.center_id')
         ->join('examinations', 'examinations.patient_id', '=', 'patients.id')
         ->join('sends', 'sends.patient_id', '=', 'patients.id')
@@ -152,7 +152,7 @@ function getPatient(int $patient_id)
             vouchers.left_to_pay,
             vouchers.date,
             vouchers.time")
-        ->groupBy('patients.id')
+        ->groupBy('vouchers.id')
         ->where('patients.id', $patient_id)
         ->get()
         ->map(function ($item) {
@@ -193,8 +193,8 @@ function getPrescribers(int $prescriber_id = null)
 
 function getLeftToPayForPatient()
 {
-    return DB::table('patients')
-        ->join('vouchers', 'vouchers.id', '=', 'patients.voucher_id')
+    return DB::table('vouchers')
+        ->join('patients', 'patients.id', '=', 'vouchers.patient_id')
         ->join('centers', 'centers.id', '=', 'patients.center_id')
         ->join('center_categories', 'center_categories.id', '=', 'centers.center_category_id')
         ->join('examinations', 'examinations.patient_id', '=', 'patients.id')
@@ -209,7 +209,7 @@ function getLeftToPayForPatient()
             vouchers.amount_to_pay,
             vouchers.payed,
             vouchers.left_to_pay")
-        ->groupBy('patients.id')
+        ->groupBy('vouchers.id')
         ->whereRaw('vouchers.payed IS NOT NULL',)
         ->orderByDesc('patients.updated_at')
         ->get()

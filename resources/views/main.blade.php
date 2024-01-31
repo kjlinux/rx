@@ -127,7 +127,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="charts.html">
                     <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
+                    <span>Statisiques</span></a>
             </li>
 
             <!-- Divider -->
@@ -264,6 +264,7 @@
     <script src={{ asset('js/jquery.inputmask.min.js') }}></script>
     <script src={{ asset('js/inputmask.binding.js') }}></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
     <script>
         $.ajaxSetup({
             headers: {

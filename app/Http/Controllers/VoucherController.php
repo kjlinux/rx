@@ -19,6 +19,17 @@ class VoucherController extends Controller
         // return $pdf->stream('voucher.pdf');
     }
 
+    static function generateVoucherStream(Request $request)
+    {
+        $pdf = Pdf::loadView('voucher', compact('data'));
+        $pdf->setPaper('a4', 'portrait');
+        $filename =  $data['slug'].'.pdf';
+        $pdf->save(storage_path('app/public/' . $filename));
+
+        return response()->json(['pdf_url' => asset('v/' . $filename), 'voucher_id' => $data['slug']]);
+        // return $pdf->stream('voucher.pdf');
+    }
+
     public function deleteVoucherAfterStream(Request $request)
     {
         $filePath = storage_path('app/public/'.$request->voucher.'.pdf');

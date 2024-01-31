@@ -19,7 +19,6 @@ return new class extends Migration
             $table->unsignedTinyInteger('age');
             $table->tinyText('phone');
             $table->mediumText('clinical_information');
-            $table->foreignId('voucher_id')->constrained();
             $table->foreignId('center_id')->constrained();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

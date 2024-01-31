@@ -21,6 +21,7 @@ return new class extends Migration
             $table->tinyInteger('discount')->nullable();
             $table->mediumInteger('amount_after_discount')->nullable();
             $table->uuid('slug');
+            $table->foreignId('patient_id')->constrained();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
