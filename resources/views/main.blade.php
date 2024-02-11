@@ -120,18 +120,19 @@
             <!-- Divider -->
             <hr class="sidebar-divider" />
 
-            <!-- Heading -->
-            <div class="sidebar-heading">Statistiques</div>
+            @can('check insights')
+                <!-- Heading -->
+                <div class="sidebar-heading">Statistiques</div>
 
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Statisiques</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block" />
+                <!-- Nav Item - Charts -->
+                <li class="nav-item">
+                    <a class="nav-link" href="charts.html">
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>Statisiques</span></a>
+                </li>
+                <!-- Divider -->
+                <hr class="sidebar-divider d-none d-md-block" />
+            @endcan
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
@@ -237,25 +238,12 @@
     </div>
 
 
-    <!-- Bootstrap core JavaScript-->
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-
     <script src={{ asset('js/jquery.min.js') }}></script>
-
-    <!-- Core plugin JavaScript-->
     <script src={{ asset('vendor/jquery-easing/jquery.easing.min.js') }}></script>
-    <!-- Custom scripts for all pages-->
     <script src={{ asset('js/sb-admin-2.min.js') }}></script>
-
-    <!-- Page level plugins -->
-    <script src={{ asset('vendor/chart.js/Chart.min.js') }}></script>
-
-    <!-- Page level custom scripts -->
-    <script src={{ asset('js/demo/chart-area-demo.js') }}></script>
-    <script src={{ asset('js/demo/chart-pie-demo.js') }}></script>
     <script src={{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-    {{-- <script src={{ asset('js/datatables.min.js') }}></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
     <script

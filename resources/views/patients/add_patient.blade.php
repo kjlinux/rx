@@ -69,7 +69,7 @@
                                 {{ html()->select($name = 'gender', $options = ['M' => 'M', 'F' => 'F'])->class('input-group selectpicker fit')->attributes(['title' => 'Genre', 'data-width' => '100%'])->required() }}
                             </div>
                             <div class="input-group mb-4 col-4">
-                                {{ html()->select($name = 'prescriber', $options = $prescriber_data)->class('input-group selectpicker show-tick')->attributes(['title' => 'Prescripteur(s)', 'data-width' => '100%', 'data-live-search' => 'true', 'data-size' => '5', 'data-multiple-separator' => ' | '])->multiple()->required() }}
+                                {{ html()->select($name = 'prescriber', $options = $prescriber_data)->class('input-group selectpicker show-tick')->attributes(['title' => 'Prescripteur(s)', 'data-width' => '100%', 'data-live-search' => 'true', 'data-size' => '5', 'data-multiple-separator' => ' | '])->multiple() }}
                             </div>
                             <div class="input-group mb-4 col-6">
                                 {{ html()->select($name = 'center', $options = $center_data)->class('input-group selectpicker show-tick')->attributes(['title' => 'Centre', 'data-width' => '100%', 'data-live-search' => 'true', 'data-size' => '5'])->required() }}
@@ -179,7 +179,7 @@
                     redirectToVoucher(pdfUrl);
                     clean();
                     $('#voucher').val(response.voucher_id);
-                    deleteVoucherAfterStream(pdfUrl);
+                    deleteVoucherAfterStream();
                 },
                 error: function(xhr, status, error) {
                     Swal.fire({
@@ -196,7 +196,7 @@
             window.open(link, '_blank');
         }
 
-        function deleteVoucherAfterStream(pdfUrl) {
+        function deleteVoucherAfterStream() {
             $.ajax({
                 method: 'POST',
                 url: "{{ route('voucher.delete') }}",

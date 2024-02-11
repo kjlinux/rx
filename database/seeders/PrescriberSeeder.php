@@ -14,6 +14,6 @@ class PrescriberSeeder extends Seeder
     public function run(): void
     {
         //
-        Prescriber::factory(25)->create();
+        Prescriber::factory(10)->create();
     }
 }

@@ -20,7 +20,7 @@ class PatientController extends Controller
         $exam_data = ExaminationType::getExaminations();
         $center_data = getCentersWhithCategory();
         $prescriber_data  = Prescriber::getPrescribers();
-
+        // dd($prescriber_data);
         // return VoucherController::generateVoucher($data);
 
         return view('patients.add_patient', compact('exam_data', 'center_data', 'prescriber_data'));
@@ -111,9 +111,11 @@ class PatientController extends Controller
 
                 foreach ($request->prescriber as $prescriber_id) {
                     $send = new Send;
-                    $send->patient_id = $patient->id;
-                    $send->prescriber_id = $prescriber_id;
-                    $send->save();
+                    if($prescriber_id != null){
+                        $send->patient_id = $patient->id;
+                        $send->prescriber_id = $prescriber_id;
+                        $send->save();
+                    }
                 }
 
                 $data = array();
@@ -158,9 +160,10 @@ class PatientController extends Controller
                     'payed_amount' => $patient[12],
                     'left_to_pay' => $patient[13],
                     'date' => $patient[14],
-                    'time' => $patient[15]
+                    'time' => $patient[15],
+                    'slug' => $patient[16]
                 ]);
-                // return response()->json($request->all());
+                return response()->json($request->all());
             }
         } catch (Exception $e) {
             return $e->getMessage();
@@ -177,7 +180,7 @@ class PatientController extends Controller
                 $send = Send::where('patient_id', $request->id)->delete();
 
                 $patient->name = capitalizeWords($request->name);
-                $patient->forenames = capitalizeWords($request->forenames);
+                $patient->forenames = capitalizeWords($request->forename);
                 $patient->gender = $request->gender;
                 $patient->age = $request->year;
                 $patient->phone = $request->phone;
@@ -192,7 +195,7 @@ class PatientController extends Controller
                 $voucher->left_to_pay = $request->left_to_pay;
                 $voucher->discount = $request->discount;
                 $voucher->amount_after_discount = $request->after_discount;
-                // $voucher->slug = $voucher->slug();
+                $voucher->slug = $voucher->slug();
                 $voucher->patient_id  = $patient->id;
                 $voucher->save();
 
@@ -205,9 +208,11 @@ class PatientController extends Controller
 
                 foreach ($request->prescriber as $prescriber_id) {
                     $send = new Send;
-                    $send->patient_id = $patient->id;
-                    $send->prescriber_id = $prescriber_id;
-                    $send->save();
+                    if($prescriber_id != null){
+                        $send->patient_id = $patient->id;
+                        $send->prescriber_id = $prescriber_id;
+                        $send->save();
+                    }
                 }
 
                 return response()->json();

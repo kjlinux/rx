@@ -25,7 +25,7 @@ class PatientFactory extends Factory
             'forenames' => fake()->name(),
             'gender' => fake()->randomElement(['M', 'F']),
             'age' => fake()->numberBetween($min = 6, $max = 123),
-            'phone' => fake()->phoneNumber(),
+            'phone' => fake()->numerify('##########'),
             'clinical_information' => fake()->sentence(rand(1, 10)),
             'center_id' => fake()->numberBetween($min = 1, $max = 11),
         ];

@@ -121,11 +121,11 @@ function getRegister()
                 patients.phone AS 'Téléphone'")
         ->groupBy('vouchers.id')
         ->orderByDesc('patients.updated_at')
-        ->get()
-        ->map(function ($item) {
-            return array_values((array) $item);
-        })
-        ->toArray();
+        ->paginate(10);
+        // ->map(function ($item) {
+        //     return array_values((array) $item);
+        // })
+        // ->toArray();
 }
 
 function getPatient(int $patient_id)
@@ -151,7 +151,8 @@ function getPatient(int $patient_id)
             vouchers.payed,
             vouchers.left_to_pay,
             vouchers.date,
-            vouchers.time")
+            vouchers.time,
+            vouchers.slug")
         ->groupBy('vouchers.id')
         ->where('patients.id', $patient_id)
         ->get()
@@ -331,12 +332,11 @@ function getExaminationsNames(array $examinations){
         
         $output .= $query[0].',';
     }
-
     return rtrim($output, ',');
 }
 
-/* il affiche ceux qu'on a mis la reduction sans pour autant payer apres dns la page de confirmation de paiement 
-    fucntion poour retoourner le nom des examens pour le reçu
+/* 
     verifier pour les info patiet lors du changement dexamens ce qui se passe
-    les prescripteurs doivent avoir l'option autre
+    gerer les reductions et reste a payer lors de la modification dun patient
  */
+

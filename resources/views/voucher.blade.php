@@ -55,13 +55,13 @@
             <div class="col text-white">
                 <span>Net à payer : {{ $data['amount_to_pay'] }} F</span>
                 <span style="margin-left: 101px">Total payé : {{ $data['payed'] }} F</span>
-                <span style="margin-left: 101px">Reste à payer : {{ $data['left_to_pay'] }} F</span>
+                <span style="margin-left: 78px">Reste à payer : {{ $data['left_to_pay'] }} F</span>
             </div>
         </div>
         <div class="row mt-3 mr-3" style="background-color: #326195">
             <div class="col text-white">
                 <span>Montant en lettres : {{ $data['amount_to_pay_in_letters'] }}</span>
-                <span style="margin-left: 150px">Francs CFA</span>
+                <span style="margin-left: 140px">Francs CFA</span>
             </div>
         </div>
         <div class="row mt-3">
@@ -120,7 +120,7 @@
             <div class="col text-white">
                 <span>Net à payer : {{ $data['amount_to_pay'] }} F</span>
                 <span style="margin-left: 101px">Total payé : {{ $data['payed'] }} F</span>
-                <span style="margin-left: 101px">Reste à payer : {{ $data['left_to_pay'] }} F</span>
+                <span style="margin-left: 78px">Reste à payer : {{ $data['left_to_pay'] }} F</span>
             </div>
         </div>
         <div class="row mt-3 mr-3" style="background-color: #326195">

@@ -33,8 +33,11 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+//Do not touch the next line, i don't know how i used it but printer works.
 Route::get('/v', [VoucherController::class, 'generateVoucher'])->name('voucher.generate');
+Route::post('/vs', [VoucherController::class, 'generateVoucherStream'])->name('voucher.generate.stream');
 Route::post('/delete_pdf', [VoucherController::class, 'deleteVoucherAfterStream'])->name('voucher.delete');
+Route::post('/delete_pdf_stream', [VoucherController::class, 'deleteVoucherAfterStreamWithoutRegistering'])->name('voucher.delete.stream');
 
 require __DIR__.'/auth.php';
 require __DIR__.'/patient.php';

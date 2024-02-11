@@ -28,11 +28,11 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">RX > <strong>PATIENTS</strong></h1>
             <!-- <a
-                                                                                                                                                              href="#"
-                                                                                                                                                              class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-                                                                                                                                                              ><i class="fas fa-download fa-sm text-white-50"></i> Generate
-                                                                                                                                                              Report</a
-                                                                                                                                                            > -->
+                                                                                                                                                                  href="#"
+                                                                                                                                                                  class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                                                                                                                                                                  ><i class="fas fa-download fa-sm text-white-50"></i> Generate
+                                                                                                                                                                  Report</a
+                                                                                                                                                                > -->
         </div>
 
         <!-- Content Row -->
@@ -180,6 +180,7 @@
                         <input type="hidden" id="date" name="date">
                         <input type="hidden" id="time" name="time">
                         <input type="hidden" id="id" name="id">
+                        <input type="hidden" id="slug" name="slug">
                         <div class="input-group-lg col-6 mb-2 mt-3">
                             <button type="button" id="clean" class="form-control bg-secondary text-white">
                                 <i class="fas fa-times"></i>
@@ -209,7 +210,6 @@
                 method: 'GET',
                 success: function(data) {
                     table.clear().rows.add(data).draw();
-                    // console.log(data);
                 },
                 error: function(error) {
                     console.error('Erreur lors de la récupération des données : ', error);
@@ -270,7 +270,6 @@
                 }
             });
         })
-
 
         $('#new_examination').submit(function(e) {
             e.preventDefault();
@@ -440,6 +439,73 @@
             });
         })
 
+        $('#print').on('click', function() {
+            $('#id').val(table.row({
+                selected: true
+            }).data()[1]);
+            Swal.fire({
+                title: 'Construction du reçu...',
+                didOpen: () => {
+                    Swal.showLoading();
+                    $.ajax({
+                        method: 'POST',
+                        url: "{{ route('patient.informations') }}",
+                        data: $('#id').serialize(),
+                        success: function(response) {
+                            fillPatientInformations(response);
+                            printerStream();
+                            Swal.close();
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                title: "Erreur lors de la récupération des informations du patient.",
+                                icon: "error",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        },
+                    });
+                }
+            });
+        })
+
+        function printerStream() {
+            $.ajax({
+                method: 'POST',
+                url: "{{ route('voucher.generate.stream') }}",
+                data: $('#new_examination').serialize(),
+                success: function(response) {
+                    const pdfUrl = response.pdf_url;
+                    redirectToVoucher(pdfUrl);
+                    deleteVoucherAfterStream();
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        title: "Erreur lors de la récupération des informations du patient.",
+                        icon: "error",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                },
+            });
+        }
+
+        function redirectToVoucher(link) {
+            window.open(link, '_blank');
+        }
+
+        function deleteVoucherAfterStream() {
+            $.ajax({
+                method: 'POST',
+                url: "{{ route('voucher.delete.stream') }}",
+                data: $('#slug').serialize(),
+                success: function(response) {},
+                error: function(deleteError) {
+                    console.log("bad");
+                }
+            });
+        }
+
         function convertStringToArray(inputString) {
             return inputString.split(',').map(String);
         }
@@ -459,6 +525,7 @@
             $('#left_to_pay').val(data.left_to_pay);
             $('#date').val(data.date);
             $('#time').val(data.time);
+            $('#slug').val(data.slug);
             $('#prescriber').selectpicker('val', convertStringToArray(data.prescriber));
             $('#examination').selectpicker('val', convertStringToArray(data.examination));
             $('.selectpicker').selectpicker('render');
@@ -485,8 +552,6 @@
                 $('#left_to_pay').parent().removeClass('d-none').prop('required', true);
             }
         }
-
-
 
         var payed_amount = () => {
             if ($('#total_amount').val() !== "" && $('#payed_amount').val() === "") {

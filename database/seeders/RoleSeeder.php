@@ -19,11 +19,12 @@ class RoleSeeder extends Seeder
         $addPrescriberPermission = Permission::create(['name' => 'add prescriber']);
         $managePrescriberIformationsPermission = Permission::create(['name' => 'manage prescriber informations']);
         $checkDashboardPermission = Permission::create(['name' => 'check dashboard']);
+        $checkInsightsPermission = Permission::create(['name' => 'check insights']);
 
         $adminRole = Role::create(['name' => 'admin']);
         // $accountantRole = Role::create(['name' => 'editor']);
 
-        $adminRole->givePermissionTo($deletePatientPermission, $addPrescriberPermission, $managePrescriberIformationsPermission, $checkDashboardPermission);
+        $adminRole->givePermissionTo($deletePatientPermission, $addPrescriberPermission, $managePrescriberIformationsPermission, $checkDashboardPermission, $checkInsightsPermission);
 
         // Attribution de rôles à un utilisateur (exemple)
         $user = \App\Models\User::find(1); 

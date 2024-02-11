@@ -14,6 +14,6 @@ class SendSeeder extends Seeder
     public function run(): void
     {
         //
-        Send::factory(50)->create();
+        Send::factory(100)->create();
     }
 }
