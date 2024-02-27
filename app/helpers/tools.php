@@ -4,17 +4,17 @@ use Carbon\Carbon;
 use App\Models\ExaminationType;
 use Illuminate\Support\Facades\DB;
 
-function getInitial(String $phrase)
+function getInitial(String $string)
 {
-    $mots = explode(' ', $phrase);
-    $initiales = '';
+    $words = explode(' ', $string);
+    $initials = '';
 
-    foreach ($mots as $mot) {
-        $premiereLettre = substr($mot, 0, 1);
-        $initiales .= strtoupper($premiereLettre);
+    foreach ($words as $word) {
+        $firstLetter = substr($word, 0, 1);
+        $initials .= strtoupper($firstLetter);
     }
 
-    return $initiales;
+    return $initials;
 }
 
 // function extractYear(String $chaine)
@@ -121,11 +121,12 @@ function getRegister()
                 patients.phone AS 'Téléphone'")
         ->groupBy('vouchers.id')
         ->orderByDesc('patients.updated_at')
-        ->paginate(10);
-        // ->map(function ($item) {
-        //     return array_values((array) $item);
-        // })
-        // ->toArray();
+        // ->paginate(10);
+        ->get()
+        ->map(function ($item) {
+            return array_values((array) $item);
+        })
+        ->toArray();
 }
 
 function getPatient(int $patient_id)
@@ -338,5 +339,6 @@ function getExaminationsNames(array $examinations){
 /* 
     verifier pour les info patiet lors du changement dexamens ce qui se passe
     gerer les reductions et reste a payer lors de la modification dun patient
+    refler le problee de deconnexion on name null
  */
 

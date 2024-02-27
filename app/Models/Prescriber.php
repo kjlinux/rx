@@ -16,10 +16,10 @@ class Prescriber extends Model
         return $this->belongsTo(Center::class);
     }
 
-    public function rebates(): HasMany
-    {
-        return $this->hasMany(Rebate::class);
-    }
+    // public function rebates(): HasMany
+    // {
+    //     return $this->hasMany(Rebate::class);
+    // }
 
     public function patients(): BelongsTo
     {
@@ -38,5 +38,10 @@ class Prescriber extends Model
 
     static function getPrescribers(){
         return self::selectRaw("CONCAT('Dr. ', name, ' ', forenames) AS prescribers, id")->pluck('prescribers', 'id');
+    }
+
+    public function sends()
+    {
+        return $this->hasMany(Send::class, 'prescriber_id', 'id');
     }
 }

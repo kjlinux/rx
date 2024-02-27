@@ -126,7 +126,7 @@
 
                 <!-- Nav Item - Charts -->
                 <li class="nav-item">
-                    <a class="nav-link" href="charts.html">
+                    <a class="nav-link" href={{ route('insights') }}>
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Statisiques</span></a>
                 </li>
@@ -253,6 +253,11 @@
     <script src={{ asset('js/inputmask.binding.js') }}></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src={{ asset('js/charts.js') }}></script>
     <script>
         $.ajaxSetup({
             headers: {

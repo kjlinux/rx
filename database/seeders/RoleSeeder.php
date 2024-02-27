@@ -26,8 +26,8 @@ class RoleSeeder extends Seeder
 
         $adminRole->givePermissionTo($deletePatientPermission, $addPrescriberPermission, $managePrescriberIformationsPermission, $checkDashboardPermission, $checkInsightsPermission);
 
-        // Attribution de rôles à un utilisateur (exemple)
-        $user = \App\Models\User::find(1); 
+        // Attribution de rôles à un utilisateur
+        $user = \App\Models\User::find(1);
         if ($user) {
             $user->assignRole('admin');
         }

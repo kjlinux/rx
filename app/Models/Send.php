@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Send extends Model
 {
     use HasFactory;
+
+    public function prescriber()
+    {
+        return $this->belongsTo(Prescriber::class, 'prescriber_id', 'id');
+    }
 }
