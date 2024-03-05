@@ -1,14 +1,16 @@
 <?php
 
 use App\Models\Patient;
+use App\Models\Voucher;
 use App\Models\Prescriber;
+use App\Models\Examination;
 use Illuminate\Support\Facades\DB;
 
 function getInsights()
 {
     return array(
         getInitial('Nombre de prescripteurs par centre') => 'Nombre de prescripteurs par centre',
-        getInitial('Nombre total de patients suivis') => 'Nombre total de patients suivis',
+        // getInitial('Nombre total de patients suivis') => 'Nombre total de patients suivis',
         getInitial('Répartition des patients par genre') => 'Répartition des patients par genre',
         getInitial('Répartition des patients par tranche d\'âge') => 'Répartition des patients par tranche d\'âge',
         getInitial('Top prescripteurs par le nombre d\'examens prescrits') => 'Top prescripteurs par le nombre d\'examens prescrits',
@@ -16,7 +18,7 @@ function getInsights()
         'RDPPSP' => 'Répartition des prescripteurs par spécialité',
         getInitial('Nombre d\'examens prescrits par spécialité') => 'Nombre d\'examens prescrits par spécialité',
         getInitial('Top examens les plus prescrits') => 'Top examens les plus prescrits',
-        getInitial('Total des recettes générées par le cabinet') => 'Total des recettes générées par le cabinet',
+        getInitial('Total des recettes générées') => 'Total des recettes générées',
         'MDMTAPPP' => 'Moyenne du montant total à payer par patient',
         'EDRAFDTMOA' => 'Évolution des recettes au fil du temps (mensuelle ou annuelle)',
         getInitial('Montant total des recettes générées') => 'Montant total des recettes générées',
@@ -76,9 +78,9 @@ function getAgeGroupForPatients()
         ->orderBy('age_group')
         ->pluck('age_group')
         ->toArray();
-    
-    foreach($agesGroup as $ageGroup){
-        $interval = $ageGroup.'-'.$ageGroup+9 ;
+
+    foreach ($agesGroup as $ageGroup) {
+        $interval = $ageGroup . '-' . $ageGroup + 9;
         array_push($ageInterval, $interval);
     }
     return $ageInterval;
@@ -92,8 +94,141 @@ function getPatientsByAgeGroup()
         ->pluck('patient_count');
 }
 
-function getTopPrescribers(){
+function getTopPrescribersCount()
+{
     return Prescriber::withCount('sends')
-    ->orderBy('sends_count', 'desc')
+        ->orderBy('sends_count', 'desc')
+        ->pluck('sends_count')
+        ->chunk(5);
+    // ->get();
+}
+
+function getTopPrescribersName()
+{
+    return Prescriber::withCount('sends')
+        ->orderByDesc('sends_count')
+        ->get()
+        ->map(function ($prescriber) {
+            return 'Dr. ' . $prescriber->name . ' ' . $prescriber->forenames;
+        })
+        ->chunk(5);
+}
+
+function getPrescribersName()
+{
+    return Prescriber::withCount('sends')
+        ->orderByDesc('sends_count')
+        ->get()
+        ->map(function ($prescriber) {
+            return 'Dr. ' . $prescriber->name . ' ' . $prescriber->forenames;
+        });
+}
+
+function getDiscountsPerPrescriber()
+{
+    return Prescriber::select('prescribers.id', 'name', DB::raw('SUM(CASE WHEN speciality_id = 2 THEN 5000 ELSE 1000 END) AS total_discount'))
+        ->leftJoin('sends', 'prescribers.id', '=', 'sends.prescriber_id')
+        ->groupBy('prescribers.id', 'prescribers.name')
+        ->pluck('total_discount')
+        ->map(function ($discount) {
+            return intval($discount);
+        });
+}
+
+function prescribersBySpecialty()
+{
+    return Prescriber::join('specialities', 'prescribers.speciality_id', '=', 'specialities.id')
+        ->select('specialities.name as name', DB::raw('count(*) as y'))
+        ->groupBy('specialities.name')
+        ->get();
+}
+
+function examsBySpecialtyName()
+{
+    return Examination::join('examinations_type', 'examinations.examination_type_id', '=', 'examinations_type.id')
+        ->join('examinations_group', 'examinations_type.examination_group_id', '=', 'examinations_group.id')
+        ->select('examinations_group.name as group_name', DB::raw('count(*) as exam_count'))
+        ->groupBy('examinations_group.name')
+        ->pluck('group_name');
+}
+
+function examsBySpecialtyCount()
+{
+    return Examination::join('examinations_type', 'examinations.examination_type_id', '=', 'examinations_type.id')
+        ->join('examinations_group', 'examinations_type.examination_group_id', '=', 'examinations_group.id')
+        ->select('examinations_group.name as group_name', DB::raw('count(*) as exam_count'))
+        ->groupBy('examinations_group.name')
+        ->pluck('exam_count');
+}
+
+function topExamsName()
+{
+    return Examination::join('examinations_type', 'examinations.examination_type_id', '=', 'examinations_type.id')
+        ->select('examinations_type.name as exam_name', DB::raw('count(*) as exam_count'))
+        ->groupBy('examinations_type.name')
+        ->orderBy('exam_count', 'desc')
+        ->pluck('exam_name')
+        ->chunk(10);
+}
+
+function topExamsCount()
+{
+    return Examination::join('examinations_type', 'examinations.examination_type_id', '=', 'examinations_type.id')
+        ->select('examinations_type.name as exam_name', DB::raw('count(*) as exam_count'))
+        ->groupBy('examinations_type.name')
+        ->orderBy('exam_count', 'desc')
+        ->pluck('exam_count')
+        ->chunk(10);
+}
+
+function totalRevenue($year)
+{
+    $totalRevenuePerMonth = Voucher::select(
+        DB::raw('MONTHNAME(date) as month'),
+        DB::raw('DAY(date) as day'),
+        DB::raw('SUM(amount_to_pay) as total_revenue')
+    )
+    ->whereYear('date', intval($year))
+    ->groupBy('month', 'day')
+    ->orderBy('month', 'asc')
+    ->orderBy('day', 'asc')
     ->get();
+    
+    $monthsFr = [
+        'January' => 'Janvier',
+        'February' => 'Février',
+        'March' => 'Mars',
+        'April' => 'Avril',
+        'May' => 'Mai',
+        'June' => 'Juin',
+        'July' => 'Juillet',
+        'August' => 'Août',
+        'September' => 'Septembre',
+        'October' => 'Octobre',
+        'November' => 'Novembre',
+        'December' => 'Décembre',
+    ];
+
+    // Initialisation d'un tableau pour stocker les résultats formatés
+    $formattedData = [];
+
+    // Boucle à travers les résultats et formatage des données
+    foreach ($totalRevenuePerMonth as $result) {
+        // Si le mois n'existe pas dans $formattedData, on l'initialise
+        if (!isset($formattedData[$result->month])) {
+            $formattedData[$result->month] = [
+                'name' => $monthsFr[$result->month],
+                'data' => array_fill(0, 31, 0) // Initialise les recettes de chaque jour à 0
+            ];
+        }
+
+        // On attribue le montant de recette au jour correspondant
+        $formattedData[$result->month]['data'][$result->day - 1] = intval($result->total_revenue);
+    }
+
+    // Réorganisation des données pour avoir un tableau séquentiel
+    $formattedData = array_values($formattedData);
+
+    // Retourner les données formatées
+    return $formattedData;
 }

@@ -341,4 +341,3 @@ function getExaminationsNames(array $examinations){
     gerer les reductions et reste a payer lors de la modification dun patient
     refler le problee de deconnexion on name null
  */
-

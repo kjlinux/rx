@@ -8,6 +8,9 @@ function draw(chart, title, data, name = null, categories = null, text = null, t
     if (chart === 'column') {
         drawColumn(title, name, categories, data, text = null, tooltip = null);
     }
+    if (chart === 'line') {
+        drawLine(title, data, text = null);
+    }
 }
 
 function drawBar(title, name, categories, data, text = null, tooltip = null) {
@@ -150,3 +153,44 @@ function drawColumn(title, name, categories, data, text = null, tooltip = null) 
     });
 }
 
+function drawLine(title, data, text = null) {
+    Highcharts.chart('container', {
+        title: {
+            text: title,
+            align: 'left'
+        },
+        yAxis: {
+            title: {
+                text: text
+            }
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle'
+        },
+        plotOptions: {
+            series: {
+                label: {
+                    connectorAllowed: false
+                },
+            }
+        },
+        series: data,
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                    }
+                }
+            }]
+        }
+
+    });
+}

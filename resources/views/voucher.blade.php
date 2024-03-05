@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/png" href={{ asset('img/rx.png') }}>
+    <link rel="shortcut icon" type="image/png" href={{ asset('img/rx.png') }}/>
     <title>{{ $data['name'] }} {{ $data['forenames'] }}</title>
     <link href={{ asset('css/sb-admin-2.css') }} rel="stylesheet" />
 </head>

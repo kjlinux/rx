@@ -22,6 +22,10 @@
                             <div class="input-group mb-4 col-7">
                                 {{ html()->select($name = 'insight', $options = $listOfInsights)->class('input-group selectpicker show-tick')->attributes(['title' => 'Cliquez pour sélectionner', 'data-width' => '100%', 'data-live-search' => 'true', 'data-size' => '7'])->required() }}
                             </div>
+                            <div class="input-group mb-4 col-2 d-none">
+                                <input type="text" class="form-control" placeholder="Année" id="yearpicker"
+                                    name="yearpicker" />
+                            </div>
                         </form>
                         <div id="container" width="100%" height="100%"></div>
                     </div>
@@ -32,19 +36,28 @@
 @endsection
 @push('script')
     <script>
+        $('#yearpicker').datepicker({
+            view: 'years',
+            minView: 'years',
+            dateFormat: 'yyyy',
+            onSelect: function() {
+                drawer();
+            }
+        })
+
         function drawer() {
             $.ajax({
                 method: 'POST',
                 url: "{{ route('insights.drawer') }}",
-                data: $('#insight').serialize(),
+                data: $('#state').serialize(),
                 success: function(response) {
-                    draw(chart=response.chart, 
-                         title=response.title, 
-                         data=response.data,
-                         name=response.name, 
-                         categories=response.categories);
+                    draw(chart = response.chart,
+                        title = response.title,
+                        data = response.data,
+                        name = response.name,
+                        categories = response.categories);
                     $('#chart').text(response.title);
-                console.log(response)
+                    console.log(response)
                 },
                 error: function(xhr, status, error) {
                     Swal.fire({
@@ -58,7 +71,30 @@
         }
 
         $('#insight').change(function() {
-            drawer();
+            _controlYearField();
+            if ($('#yearpicker').parent().hasClass('d-none')) {
+                drawer();
+            }
         })
+
+        function _controlYearField() {
+            if ($('.selectpicker').val() === _getInitial('Total des recettes générées')) {
+                $('#yearpicker').prop('required', true).parent().removeClass('d-none');
+            } else {
+                $('#yearpicker').prop('required', false).parent().addClass('d-none');
+            }
+        }
+
+        function _getInitial(string) {
+            const words = string.split(' ');
+            let initials = '';
+
+            words.forEach(word => {
+                const firstLetter = word.charAt(0);
+                initials += firstLetter.toUpperCase();
+            });
+
+            return initials;
+        }
     </script>
 @endpush
