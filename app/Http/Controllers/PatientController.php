@@ -20,7 +20,7 @@ class PatientController extends Controller
         $exam_data = ExaminationType::getExaminations();
         $center_data = getCentersWhithCategory();
         $prescriber_data  = Prescriber::getPrescribers();
-        // dd($prescriber_data);
+        // dd(isSpecialHoliday());
         // return VoucherController::generateVoucher($data);
 
         return view('patients.add_patient', compact('exam_data', 'center_data', 'prescriber_data'));
@@ -163,7 +163,7 @@ class PatientController extends Controller
                     'time' => $patient[15],
                     'slug' => $patient[16]
                 ]);
-                return response()->json($request->all());
+                // return response()->json($request->all());
             }
         } catch (Exception $e) {
             return $e->getMessage();

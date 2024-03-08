@@ -33,6 +33,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::post('/update_holiday', [DashboardController::class, 'updateHoliday'])->name('update.holiday');
+Route::get('/check_holiday', [DashboardController::class, 'checkHoliday'])->name('check.holiday');
 
 require __DIR__.'/auth.php';
 require __DIR__.'/patient.php';

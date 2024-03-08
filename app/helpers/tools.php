@@ -57,12 +57,25 @@ function isHoliday(Carbon $date)
     $format_date = Carbon::createFromFormat('Y-m-d', $date->toDateString())->format('m-d');
     $matching = DB::table('holidays')
         ->select('name')
-        ->where('primary_date', $format_date)
-        ->orWhere('secondary_date', $format_date)
+        ->where('date', $format_date)
         ->where('activated', 1)
         ->pluck('name');
 
     if (!$matching->isEmpty()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function isSpecialHoliday()
+{
+    $checking = DB::table('holidays')
+        ->select('activated')
+        ->where('name', 'Holiday')
+        ->pluck('activated');
+
+    if ($checking[0] == 1) {
         return true;
     } else {
         return false;
@@ -81,7 +94,7 @@ function getPrice(array $examinations)
 
         $temporary_price = $z_coefficient[0] * 1000;
 
-        if ($today->isSunday() || isHoliday($today)) {
+        if ($today->isSunday() || isHoliday($today) || isSpecialHoliday()) {
             $temporary_price += 2500;
         }
 
@@ -323,15 +336,16 @@ function nummberToLetters($number)
     return $output;
 }
 
-function getExaminationsNames(array $examinations){
+function getExaminationsNames(array $examinations)
+{
     $output = 'RX ';
-    foreach($examinations as $examination){
+    foreach ($examinations as $examination) {
         $query = DB::table('examinations_type')
             ->select('name')
             ->where('id', $examination)
             ->pluck('name');
-        
-        $output .= $query[0].',';
+
+        $output .= $query[0] . ',';
     }
     return rtrim($output, ',');
 }

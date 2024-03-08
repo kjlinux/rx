@@ -78,7 +78,8 @@
         })
 
         function _controlYearField() {
-            if ($('.selectpicker').val() === _getInitial('Total des recettes générées')) {
+            if ($('.selectpicker').val() === _getInitial('Total des recettes générées') ||
+                $('.selectpicker').val() === 'EDRAFDT') {
                 $('#yearpicker').prop('required', true).parent().removeClass('d-none');
             } else {
                 $('#yearpicker').prop('required', false).parent().addClass('d-none');

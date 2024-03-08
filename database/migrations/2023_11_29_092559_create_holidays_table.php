@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('holidays', function (Blueprint $table) {
             $table->id();
             $table->mediumText('name');
-            $table->tinyText('primary_date');
-            $table->tinyText('secondary_date')->nullable();
-            $table->boolean('activated');
+            $table->tinyText('date')->nullable();
+            $table->boolean('activated')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

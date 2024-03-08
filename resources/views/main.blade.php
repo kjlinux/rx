@@ -5,8 +5,6 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="RX Srrvice" content />
-    <meta name="Koffi Jude" content />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>X-Ray Service</title>
@@ -22,10 +20,11 @@
     <link
         href="https://cdn.datatables.net/v/bs4/jszip-3.10.1/dt-1.13.8/af-2.6.0/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/cr-1.7.0/fc-4.3.0/fh-3.4.0/kt-2.11.0/r-2.5.0/rg-1.4.1/rr-1.4.1/sl-1.7.0/datatables.min.css"
         rel="stylesheet">
-    {{-- <link rel="stylesheet" href={{ asset('css/datepicker.material.css') }}> --}}
     <link href="https://cdn.jsdelivr.net/npm/air-datepicker/dist/css/datepicker.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/css/bootstrap-switch-button.min.css"
+        rel="stylesheet">
 </head>
-    @stack('style')
+@stack('style')
 </head>
 
 <body id="page-top">
@@ -148,11 +147,13 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                {{-- <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profil
-                                </a>
                                 <a class="dropdown-item" href="#">
+                                    <i class="fas fa-calendar-check fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Férié
+                                    <input type="checkbox" id="switch" name="switch" data-onlabel="Oui"
+                                        data-offlabel="Non" data-offstyle="danger" data-size="xs">
+                                </a>
+                                {{-- <a class="dropdown-item" href="#">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Paramètres
                                 </a>
@@ -229,9 +230,12 @@
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <script src={{ asset('js/charts.js') }}></script>
-    {{-- <script src={{ asset('js/datepicker.js') }}></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/air-datepicker/dist/js/datepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/dist/bootstrap-switch-button.min.js">
+    </script>
     <script>
+        document.getElementById('switch').switchButton('enable');
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -262,7 +266,68 @@
         $(document).ready(function() {
             updateTime();
             setInterval(updateTime, 1000);
+            checkHoliday();
         });
+
+        $('#switch').change(function() {
+            updateHoliday();
+        })
+
+        function updateHoliday() {
+            $.ajax({
+                method: 'POST',
+                url: "{{ route('update.holiday') }}",
+                data: $('#switch').serialize(),
+                success: function(response) {
+                    // if (response === 0) {
+                    //     Swal.fire({
+                    //         title: "Vous avez désactivé le mode férié.",
+                    //         icon: "info",
+                    //         showConfirmButton: false,
+                    //         timer: 2000
+                    //     });
+                    // } else {
+                    //     Swal.fire({
+                    //         title: "Vous avez défini le jour d'aujourd'hui comme férié.",
+                    //         icon: "warning",
+                    //         showConfirmButton: false,
+                    //         timer: 2000
+                    //     });
+                    // }
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        title: "Erreur lors de l'exécution",
+                        icon: "error",
+                        showConfirmButton: false,
+                        timer: 500
+                    });
+                },
+            });
+        }
+
+        function checkHoliday() {
+            $.ajax({
+                method: 'GET',
+                url: "{{ route('check.holiday') }}",
+                success: function(data) {
+                    if (data[0] === true || data[1] === true) {
+                        document.getElementById('switch').switchButton('on');
+                    } else if (data[0] === false && data[1] === false) {
+                        document.getElementById('switch').switchButton('off');
+                    }
+                    // console.log(data);
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        title: "Erreur lors de l'exécution",
+                        icon: "error",
+                        showConfirmButton: false,
+                        timer: 500
+                    });
+                },
+            });
+        }
     </script>
     @stack('script')
 </body>

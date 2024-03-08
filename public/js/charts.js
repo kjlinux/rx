@@ -9,7 +9,16 @@ function draw(chart, title, data, name = null, categories = null, text = null, t
         drawColumn(title, name, categories, data, text = null, tooltip = null);
     }
     if (chart === 'line') {
-        drawLine(title, data, text = null);
+        drawLine(title, categories = null, data, text = null);
+    }
+    if (chart === 'line_months') {
+        drawLineWithMonths(title, data, text = null);
+    }
+    if (chart === 'area') {
+        drawArea(title, data, text = null)
+    }
+    if (chart === 'area_months') {
+        drawAreaWithMonths(title, data, text = null)
     }
 }
 
@@ -153,11 +162,59 @@ function drawColumn(title, name, categories, data, text = null, tooltip = null) 
     });
 }
 
-function drawLine(title, data, text = null) {
+function drawLine(title, categories = null, data, text = null) {
     Highcharts.chart('container', {
         title: {
             text: title,
             align: 'left'
+        },
+        xAxis: {
+            categories: categories
+        },
+        yAxis: {
+            title: {
+                text: text
+            }
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle'
+        },
+        plotOptions: {
+            series: {
+                label: {
+                    connectorAllowed: false
+                },
+                pointStart: 1
+            }
+        },
+        series: data,
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                    }
+                }
+            }]
+        }
+    });
+}
+
+function drawLineWithMonths(title, data, text = null) {
+    Highcharts.chart('container', {
+        title: {
+            text: title,
+            align: 'left'
+        },
+        xAxis: {
+            categories: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
         },
         yAxis: {
             title: {
@@ -193,4 +250,77 @@ function drawLine(title, data, text = null) {
         }
 
     });
+}
+
+function drawArea(title, data, text = null) {
+    Highcharts.chart('container', {
+        chart: {
+            type: 'area'
+        },
+        title: {
+            text: title
+        },
+        yAxis: {
+            title: {
+                text: text
+            }
+        },
+        plotOptions: {
+            area: {
+                marker: {
+                    enabled: false,
+                    symbol: 'circle',
+                    radius: 2,
+                    states: {
+                        hover: {
+                            enabled: true
+                        }
+                    }
+                }
+            },
+            series: {
+                label: {
+                    connectorAllowed: false
+                },
+                pointStart: 1
+            }
+        },
+        series: data
+    });
+
+}
+
+function drawAreaWithMonths(title, data, text = null) {
+    Highcharts.chart('container', {
+        chart: {
+            type: 'area'
+        },
+        title: {
+            text: title
+        },
+        xAxis: {
+            categories: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+        },
+        yAxis: {
+            title: {
+                text: text
+            }
+        },
+        plotOptions: {
+            area: {
+                marker: {
+                    enabled: false,
+                    symbol: 'circle',
+                    radius: 2,
+                    states: {
+                        hover: {
+                            enabled: true
+                        }
+                    }
+                }
+            }
+        },
+        series: data
+    });
+
 }

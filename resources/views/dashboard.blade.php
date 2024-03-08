@@ -1,14 +1,11 @@
 @extends('main')
 @section('layout')
     <div class="container-fluid">
-        <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Tableau de bord</h1>
+            <h1 class="h3 mb-0 text-gray-800">RX > <strong>TABLEAU DE BORD</strong></h1>
         </div>
 
-        <!-- Content Row -->
         <div class="row">
-            <!-- Earnings (Monthly) Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-primary shadow h-100 py-2">
                     <div class="card-body">
@@ -18,7 +15,7 @@
                                     Patients aujourd'hui
                                 </div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                    21
+                                    {{ $datas['countPatientsToday'] }}
                                 </div>
                             </div>
                             <div class="col-auto">
@@ -29,7 +26,6 @@
                 </div>
             </div>
 
-            <!-- Earnings (Monthly) Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-success shadow h-100 py-2">
                     <div class="card-body">
@@ -39,7 +35,7 @@
                                     Encaissé aujourd'hui
                                 </div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                    80000 FCFA
+                                    {{ $datas['totalRevenueToday'] }} FCFA
                                 </div>
                             </div>
                             <div class="col-auto">
@@ -50,7 +46,6 @@
                 </div>
             </div>
 
-            <!-- Earnings (Monthly) Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-info shadow h-100 py-2">
                     <div class="card-body">
@@ -62,26 +57,19 @@
                                 <div class="row no-gutters align-items-center">
                                     <div class="col-auto">
                                         <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                                            21000 FCFA
+                                            {{ $datas['totalRemainingToPay'] }} FCFA
                                         </div>
                                     </div>
-                                    <div class="col">
-                                        <div class="progress progress-sm mr-2">
-                                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%"
-                                                aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Pending Requests Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-warning shadow h-100 py-2">
                     <div class="card-body">
@@ -91,7 +79,7 @@
                                     Total à payer aux prescripteurs
                                 </div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                    21000 FCFA
+                                    {{ $datas['totalToPayPrescribers'] }} FCFA
                                 </div>
                             </div>
                             <div class="col-auto">
@@ -103,18 +91,14 @@
             </div>
         </div>
 
-        <!-- Content Row -->
-
         <div class="row">
-            <!-- Area Chart -->
-            <div class="col-xl-8 col-lg-7">
+            <div class="col-xl-7 col-lg-6">
                 <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">
-                            Encaissements mensuels
+                            Recettes générées
                         </h6>
-                        <div class="dropdown no-arrow">
+                        {{-- <div class="dropdown no-arrow">
                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
@@ -127,170 +111,102 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#">Something else here</a>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
-                    <!-- Card Body -->
                     <div class="card-body">
-                        <div id="container">
-                            {{-- <canvas id="myAreaChart"></canvas> --}}
+                        <div id="line_revenue">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Pie Chart -->
-            <div class="col-xl-4 col-lg-5">
+            <div class="col-xl-5 col-lg-6">
                 <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">
-                            Top 3 des examens réalisés
+                            Répartition des prescripteurs par spécialité
                         </h6>
-                        <div class="dropdown no-arrow">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                aria-labelledby="dropdownMenuLink">
-                                <div class="dropdown-header">Dropdown Header:</div>
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
                     </div>
-                    <!-- Card Body -->
                     <div class="card-body">
-                        <div id="pie">
-                            {{-- <canvas id="myPieChart"></canvas> --}}
+                        <div id="pie_prescriber_speciality">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Content Row -->
         <div class="row">
-            <!-- Content Column -->
             <div class="col-lg-6 mb-4">
-                <!-- Project Card Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Examens les plus réalisés</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Top examens les plus prescrits</h6>
                     </div>
-                    <div id="area" class="card-body">
-
+                    <div id="column_top_exams" class="card-body">
                     </div>
                 </div>
-
-                <!-- Color System -->
             </div>
 
             <div class="col-lg-6 mb-4">
-                <!-- Project Card Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Nombre d'examens ce mois</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Heures de la journée les plus fréquentées pour les
+                            examens</h6>
                     </div>
-                    <div id="line" class="card-body">
-
+                    <div id="bar_busy_hours" class="card-body">
                     </div>
                 </div>
-
-                <!-- Color System -->
             </div>
         </div>
     </div>
 @endsection
 @push('script')
     <script>
-        Highcharts.chart('container', {
+        Highcharts.chart('line_revenue', {
             title: {
-                text: 'Statistiques des services de radiologie',
+                text: '{{ $datas['line_revenue']['title'] }}',
                 align: 'left'
-            },
-            xAxis: {
-                categories: ['Radiographies', 'Scanners CT', 'IRM', 'Échographie', 'Fluoroscopie']
             },
             yAxis: {
                 title: {
-                    text: 'Nombre de procédures'
+                    text: null
                 }
             },
-            tooltip: {
-                valueSuffix: ' procédures'
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
             },
             plotOptions: {
                 series: {
-                    borderRadius: '25%'
+                    label: {
+                        connectorAllowed: false
+                    },
+                    pointStart: 1
                 }
             },
-            series: [{
-                type: 'column',
-                name: '2020',
-                data: [120, 85, 60, 40, 30]
-            }, {
-                type: 'column',
-                name: '2021',
-                data: [110, 90, 65, 45, 28]
-            }, {
-                type: 'column',
-                name: '2022',
-                data: [125, 95, 70, 50, 32]
-            }, {
-                type: 'line',
-                step: 'center',
-                name: 'Moyenne',
-                data: [118.33, 90, 65, 45, 30],
-                marker: {
-                    lineWidth: 2,
-                    lineColor: Highcharts.getOptions().colors[3],
-                    fillColor: 'white'
-                }
-            }, {
-                type: 'pie',
-                name: 'Total',
-                data: [{
-                    name: '2020',
-                    y: 335,
-                    color: Highcharts.getOptions().colors[0], // Couleur 2020
-                    dataLabels: {
-                        enabled: true,
-                        distance: -50,
-                        format: '{point.total} Procédures',
-                        style: {
-                            fontSize: '15px'
+            series: @json($datas['line_revenue']['data']),
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
                         }
                     }
-                }, {
-                    name: '2021',
-                    y: 338,
-                    color: Highcharts.getOptions().colors[1] // Couleur 2021
-                }, {
-                    name: '2022',
-                    y: 372,
-                    color: Highcharts.getOptions().colors[2] // Couleur 2022
-                }],
-                center: [75, 65],
-                size: 100,
-                innerSize: '70%',
-                showInLegend: false,
-                dataLabels: {
-                    enabled: false
-                }
-            }]
+                }]
+            }
         });
 
-
-
-        Highcharts.chart('pie', {
+        Highcharts.chart('pie_prescriber_speciality', {
             chart: {
                 type: 'pie'
             },
             title: {
-                text: 'Composition des procédures de radiologie'
+                text: '{{ $datas['pie_prescriber_speciality']['title'] }}'
             },
             tooltip: {
                 valueSuffix: '%'
@@ -307,7 +223,7 @@
                         distance: -40,
                         format: '{point.percentage:.1f}%',
                         style: {
-                            fontSize: '0.5em',
+                            fontSize: '1.2em',
                             textOutline: 'none',
                             opacity: 0.7
                         },
@@ -320,161 +236,93 @@
                 }
             },
             series: [{
-                name: 'Pourcentage',
+                name: 'Proportion',
                 colorByPoint: true,
-                data: [{
-                        name: 'Radiographies',
-                        y: 35.02
-                    },
-                    {
-                        name: 'Scanners CT',
-                        sliced: true,
-                        selected: true,
-                        y: 26.71
-                    },
-                    {
-                        name: 'IRM',
-                        y: 15.09
-                    },
-                    {
-                        name: 'Échographie',
-                        y: 18.5
-                    },
-                    {
-                        name: 'Fluoroscopie',
-                        y: 4.68
-                    }
-                ]
+                data: @json($datas['pie_prescriber_speciality']['data'])
             }]
         });
 
-
-        Highcharts.chart('area', {
+        Highcharts.chart('column_top_exams', {
             chart: {
-                type: 'area'
+                type: 'column'
             },
             title: {
-                text: 'Émissions de gaz à effet de serre liées à l\'activité médicale de radiologie',
+                text: '{{ $datas['column_top_exams']['title'] }}',
                 align: 'left'
             },
+            xAxis: {
+                categories: @json($datas['column_top_exams']['categories']),
+                crosshair: true,
+            },
             yAxis: {
+                min: 0,
                 title: {
-                    useHTML: true,
-                    text: 'Millions de tonnes d\'équivalents CO<sub>2</sub>'
+                    text: null
                 }
             },
-            tooltip: {
-                shared: true,
-                headerFormat: '<span style="font-size:12px"><b>{point.key}</b></span><br>'
-            },
             plotOptions: {
-                series: {
-                    pointStart: 2012
-                },
-                area: {
-                    stacking: 'normal',
-                    lineColor: '#666666',
-                    lineWidth: 1,
-                    marker: {
-                        lineWidth: 1,
-                        lineColor: '#666666'
-                    }
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
                 }
             },
             series: [{
-                name: 'Radiographies',
-                data: [5, 6, 8, 10, 12, 9, 7, 5, 4]
-            }, {
-                name: 'Scanners CT',
-                data: [4, 5, 7, 9, 11, 8, 6, 4, 3]
-            }, {
-                name: 'IRM',
-                data: [3, 4, 6, 8, 10, 7, 5, 3, 2]
-            }, {
-                name: 'Échographie',
-                data: [2, 3, 5, 7, 9, 6, 4, 2, 1]
-            }, {
-                name: 'Fluoroscopie',
-                data: [1, 2, 3, 4, 5, 3, 2, 1, 0]
+                name: '{{ $datas['column_top_exams']['name'] }}',
+                data: @json($datas['column_top_exams']['data'])
             }]
         });
 
-
-        Highcharts.chart('line', {
-
+        Highcharts.chart('bar_busy_hours', {
+            chart: {
+                type: 'bar'
+            },
             title: {
-                text: 'Croissance du Chiffre d\'Affaires du Service de Radiologie',
+                text: '{{ $datas['bar_busy_hours']['title'] }}',
                 align: 'left'
             },
-
-            yAxis: {
-                title: {
-                    text: 'Chiffre d\'Affaires (en millions de francs)'
-                }
-            },
-
             xAxis: {
-                accessibility: {
-                    rangeDescription: 'Plage : 2010 à 2020'
+                categories: @json($datas['bar_busy_hours']['categories']),
+                title: {
+                    text: null
+                },
+                gridLineWidth: 1,
+                lineWidth: 0
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: null,
+                    align: 'high'
+                },
+                labels: {
+                    overflow: 'justify'
+                },
+                gridLineWidth: 0
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: '50%',
+                    dataLabels: {
+                        enabled: true
+                    },
+                    groupPadding: 0.1
                 }
             },
-
             legend: {
                 layout: 'vertical',
                 align: 'right',
-                verticalAlign: 'middle'
+                verticalAlign: 'top',
+                x: -40,
+                y: 80,
+                floating: true,
+                borderWidth: 1,
+                backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+                shadow: true
             },
-
-            plotOptions: {
-                series: {
-                    label: {
-                        connectorAllowed: false
-                    },
-                    pointStart: 2010
-                }
-            },
-
             series: [{
-                name: 'Imagerie Médicale',
-                data: [15, 20, 25, 30, 35, 40,
-                    45, 50, 55, 60, 65
-                ]
-            }, {
-                name: 'Consultations Spécialisées',
-                data: [10, 15, 20, 25, 30, 35,
-                    40, 45, 50, 55, 60
-                ]
-            }, {
-                name: 'Interventions Chirurgicales',
-                data: [5, 10, 15, 20, 25, 30,
-                    35, 40, 45, 50, 55
-                ]
-            }, {
-                name: 'Services de Radiologie Interventionnelle',
-                data: [2, 5, 8, 12, 15, 18,
-                    20, 22, 25, 28, 30
-                ]
-            }, {
-                name: 'Autres Services',
-                data: [8, 12, 15, 18, 20, 22,
-                    25, 28, 30, 32, 35
-                ]
-            }],
-
-            responsive: {
-                rules: [{
-                    condition: {
-                        maxWidth: 500
-                    },
-                    chartOptions: {
-                        legend: {
-                            layout: 'horizontal',
-                            align: 'center',
-                            verticalAlign: 'bottom'
-                        }
-                    }
-                }]
-            }
+                name: '{{ $datas['bar_busy_hours']['name'] }}',
+                data: @json($datas['bar_busy_hours']['data'])
+            }]
         });
     </script>
 @endpush
