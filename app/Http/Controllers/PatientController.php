@@ -91,7 +91,7 @@ class PatientController extends Controller
                 $voucher->payed = $request->payed_amount;
                 $voucher->left_to_pay = $request->left_to_pay;
                 $voucher->discount = $request->discount;
-                $voucher->amount_after_discount = $request->after_discount;
+                $voucher->amount_after_discount = is_null($request->after_discount) ? $request->total_amount : $request->after_discount;
                 $voucher->slug = $voucher->slug();
                 $voucher->patient_id  = $patient->id;
                 $voucher->save();
@@ -194,7 +194,7 @@ class PatientController extends Controller
                 $voucher->payed = $request->payed_amount;
                 $voucher->left_to_pay = $request->left_to_pay;
                 $voucher->discount = $request->discount;
-                $voucher->amount_after_discount = $request->after_discount;
+                $voucher->amount_after_discount = is_null($request->after_discount) ? $request->total_amount : $request->after_discount;
                 $voucher->slug = $voucher->slug();
                 $voucher->patient_id  = $patient->id;
                 $voucher->save();

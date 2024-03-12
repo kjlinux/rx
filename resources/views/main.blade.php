@@ -33,14 +33,14 @@
             @can('check dashboard')
                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href={{ route('dashboard') }}>
                     <div class="sidebar-brand-icon rotate-n-15">
-                        <iconify-icon icon="jam:medical" style="color: white" width="60" height="60"></iconify-icon>
+                        <i class="fas fa-medkit"></i>
                     </div>
                     <div class="sidebar-brand-text mx-3">RX</div>
                 </a>
             @else
                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href={{ route('patient.new') }}>
                     <div class="sidebar-brand-icon rotate-n-15">
-                        <iconify-icon icon="jam:medical" style="color: white" width="60" height="60"></iconify-icon>
+                        <i class="fas fa-medkit"></i>
                     </div>
                     <div class="sidebar-brand-text mx-3">RX</div>
                 </a>
@@ -49,7 +49,7 @@
             <hr class="sidebar-divider my-0" />
 
             @can('check dashboard')
-                <li class="nav-item active">
+                <li class="nav-item @if (request()->routeIs('dashboard')) active @endif">
                     <a class="nav-link" href={{ route('dashboard') }}>
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Tableau de bord</span></a>
@@ -60,22 +60,21 @@
 
             <div class="sidebar-heading">Patients</div>
 
-            <li class="nav-item">
+            <li class="nav-item @if (request()->routeIs('patient.new')) active @endif">
                 <a class="nav-link" href={{ route('patient.new') }}>
-                    <iconify-icon icon="zondicons:add-outline" width="13" height="13"></iconify-icon>
+                    <i class="fas fa-fw fa-plus"></i>
                     <span>Ajouter un patient</span></a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item @if (request()->routeIs('patient.update')) active @endif">
                 <a class="nav-link" href={{ route('patient.update') }}>
-                    <iconify-icon icon="streamline:interface-edit-pencil-change-edit-modify-pencil-write-writing"
-                        width="13" height="13"></iconify-icon>
+                    <i class="fas fa-info-circle"></i>
                     <span>Informations patient</span></a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item @if (request()->routeIs('patient.payed')) active @endif">
                 <a class="nav-link" href={{ route('patient.payed') }}>
-                    <iconify-icon icon="tdesign:money" width="13" height="13"></iconify-icon>
+                    <i class="fas fa-money-bill-wave"></i>
                     <span>Consulter reste à payer</span></a>
             </li>
 
@@ -84,26 +83,24 @@
             <div class="sidebar-heading">Prescripteurs</div>
 
             @can('add prescriber')
-                <li class="nav-item">
+                <li class="nav-item @if (request()->routeIs('prescriber.new')) active @endif">
                     <a class="nav-link" href={{ route('prescriber.new') }}>
-                        <iconify-icon icon="basil:add-outline" width="13" height="13"></iconify-icon>
+                        <i class="fas fa-plus"></i>
                         <span>Ajouter prescripteur</span></a>
                 </li>
             @endcan
 
             @can('manage prescriber informations')
-                <li class="nav-item">
+                <li class="nav-item @if (request()->routeIs('prescriber.update')) active @endif">
                     <a class="nav-link" href={{ route('prescriber.update') }}>
-                        <iconify-icon
-                            icon="streamline:interface-edit-write-2-change-document-edit-modify-paper-pencil-write-writing"
-                            width="13" height="13"></iconify-icon>
+                        <i class="fas fa-pencil-alt"></i>
                         <span>Informations prescripteur</span></a>
                 </li>
             @endcan
 
-            <li class="nav-item">
+            <li class="nav-item @if (request()->routeIs('prescriber.payed')) active @endif">
                 <a class="nav-link" href={{ route('prescriber.payed') }}>
-                    <iconify-icon icon="dashicons:money-alt" width="13" height="13"></iconify-icon>
+                    <i class="fas fa-money-bill-alt"></i>
                     <span>Consulter ristournes prescripteur</span></a>
             </li>
 
@@ -112,7 +109,7 @@
             @can('check insights')
                 <div class="sidebar-heading">Statistiques</div>
 
-                <li class="nav-item">
+                <li class="nav-item @if (request()->routeIs('insights')) active @endif">
                     <a class="nav-link" href={{ route('insights') }}>
                         <i class="fas fa-fw fa-chart-area"></i>
                         <span>Statisiques</span></a>
@@ -140,19 +137,21 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span
-                                    class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
                                 <img class="img-profile rounded-circle" src={{ asset('img/hospital.png') }}
                                     title="profil" />
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-calendar-check fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Férié
-                                    <input type="checkbox" id="switch" name="switch" data-onlabel="Oui"
-                                        data-offlabel="Non" data-offstyle="danger" data-size="xs">
-                                </a>
+                                @can('make holiday')
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-calendar-check fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Férié
+                                        <input type="checkbox" id="switch" name="switch" data-toggle="switchbutton" data-onlabel="Oui"
+                                            data-offlabel="Non" data-offstyle="danger" data-size="xs">
+                                            {{-- <input type="checkbox" id="name" name="name"> --}}
+                                    </a>
+                                @endcan
                                 {{-- <a class="dropdown-item" href="#">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Paramètres
@@ -183,7 +182,7 @@
     </div>
 
     <a class="scroll-to-top rounded" href="#page-top">
-        <iconify-icon icon="icon-park-outline:up-c" width="25" height="25" class="mt-2"></iconify-icon>
+        <i class="fas fa-caret-up"></i>
     </a>
 
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -209,8 +208,6 @@
         </div>
     </div>
 
-
-    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     <script src={{ asset('js/jquery.min.js') }}></script>
     <script src={{ asset('vendor/jquery-easing/jquery.easing.min.js') }}></script>
     <script src={{ asset('js/sb-admin-2.min.js') }}></script>
@@ -235,6 +232,33 @@
     </script>
     <script>
         document.getElementById('switch').switchButton('enable');
+
+        Highcharts.setOptions({
+            lang: {
+                months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+                    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+                ],
+                weekdays: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+                decimalPoint: ",",
+                downloadPNG: "Télécharger en image PNG",
+                downloadJPEG: "Télécharger en image JPEG",
+                downloadPDF: "Télécharger en document PDF",
+                downloadSVG: "Télécharger en document Vectoriel",
+                exportButtonTitle: "Export du graphique",
+                loading: "Chargement en cours...",
+                printButtonTitle: "Imprimer le graphique",
+                resetZoom: "Réinitialiser le zoom",
+                resetZoomTitle: "Réinitialiser le zoom au niveau 1:1",
+                thousandsSep: " ",
+                printChart: "Imprimer",
+                viewFullscreen: "Afficher en plein écran",
+                exitFullscreen: "Fermer le plein écran",
+                downloadCSV: "Télécharger au format CSV",
+                downloadXLS: "Télécharger au format XLS",
+                viewData: "Afficher la table de données",
+                hideData: "Fermer la table de données"
+            }
+        });
 
         $.ajaxSetup({
             headers: {
@@ -316,7 +340,6 @@
                     } else if (data[0] === false && data[1] === false) {
                         document.getElementById('switch').switchButton('off');
                     }
-                    // console.log(data);
                 },
                 error: function(xhr, status, error) {
                     Swal.fire({

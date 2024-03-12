@@ -149,8 +149,6 @@
                             dataTableRefreshPayment();
                         },
                         error: function(xhr, status, error) {
-                            console.log(error);
-                            console.log(xhr);
                             Swal.fire({
                                 title: "Erreur lors de l'exécution",
                                 icon: "error",

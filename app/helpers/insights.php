@@ -187,7 +187,7 @@ function totalRevenue($year)
     $totalRevenuePerMonth = Voucher::select(
         DB::raw('MONTHNAME(date) as month'),
         DB::raw('DAY(date) as day'),
-        DB::raw('SUM(amount_to_pay) as total_revenue')
+        DB::raw('SUM(amount_after_discount) as total_revenue')
     )
         ->whereYear('date', intval($year))
         ->groupBy('month', 'day')
@@ -365,12 +365,12 @@ function countPatientsToday()
 function totalRevenueToday()
 {
     $today = Carbon::today();
-    return Voucher::whereDate('date', $today)->sum('amount_to_pay');
+    return Voucher::whereDate('date', $today)->sum('amount_after_discount');
 }
 
 function totalRemainingToPay()
 {
-    $totalAmountToPay = Voucher::sum('amount_to_pay');
+    $totalAmountToPay = Voucher::sum('amount_after_discount');
     $totalAmountPaid = Voucher::sum('payed');
     return $totalAmountToPay - $totalAmountPaid;
 }

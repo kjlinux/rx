@@ -349,9 +349,3 @@ function getExaminationsNames(array $examinations)
     }
     return rtrim($output, ',');
 }
-
-/* 
-    verifier pour les info patiet lors du changement dexamens ce qui se passe
-    gerer les reductions et reste a payer lors de la modification dun patient
-    refler le problee de deconnexion on name null
- */

@@ -17,6 +17,9 @@
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
                                     {{ $datas['countPatientsToday'] }}
                                 </div>
+                                <div class="spinner-grow text-primary" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-procedures fa-2x text-gray-300"></i>
@@ -34,8 +37,11 @@
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                     Encaissé aujourd'hui
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                    {{ $datas['totalRevenueToday'] }} FCFA
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                        {{ $datas['totalRevenueToday'] }} FCFA
+                                    </div>
+                                <div class="spinner-grow text-success" role="status">
+                                    <span class="sr-only">Loading...</span>
                                 </div>
                             </div>
                             <div class="col-auto">
@@ -55,14 +61,15 @@
                                     Total restant à payer pour les patients
                                 </div>
                                 <div class="row no-gutters align-items-center">
-                                    <div class="col-auto">
                                         <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
                                             {{ $datas['totalRemainingToPay'] }} FCFA
                                         </div>
-                                    </div>
                                     <div class="col-auto">
                                         <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                     </div>
+                                    {{-- <div class="spinner-grow text-info" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -81,6 +88,9 @@
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
                                     {{ $datas['totalToPayPrescribers'] }} FCFA
                                 </div>
+                                {{-- <div class="spinner-grow text-warning" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div> --}}
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>

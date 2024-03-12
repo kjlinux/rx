@@ -372,6 +372,9 @@
             buttons: [
                 'excel', 'pdf', 'colvis'
             ],
+            // language: {
+            //     url: "{{asset('json/french_pack_datatable.json')}}",
+            // },
         });
 
 

@@ -87,9 +87,10 @@
                                         class="badge">&check;</span></label>
                             </div>
                             <div class="input-group pb-5 col-2">
-                                <label for="discount_bool" class="btn btn-success">Réduction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <input type="checkbox" id="discount_bool" name="discount_bool" class="badgebox"><span
-                                        class="badge">&check;</span></label>
+                                @can('make discount')
+                                    <label for="discount_bool" class="btn btn-success">Réduction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <input type="checkbox" id="discount_bool" name="discount_bool" class="badgebox"><span
+                                        class="badge">&check;</span></label> @endcan
                             </div>
                             <div class="input-group mb-2 mt-n4 col-2 d-none">
                                 <input data-inputmask="'mask': '99'" type="number" class="form-control"
@@ -289,7 +290,6 @@
             priceCalculator();
             wipeInput();
         })
-
 
         function clean() {
             $('input').val("");

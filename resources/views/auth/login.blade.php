@@ -9,9 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <link href={{ asset('vendor/fontawesome-free/css/all.min.css') }} rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href={{ asset('css/style.css') }}>
 
     <style>
@@ -22,19 +20,19 @@
 
 </head>
 
-<body class="" style="background-image: url('{{ asset('img/bg_login.jpg') }}');">
+<body class="" style="background-image: url('{{ asset('img/bg_login.jpg') }}');  background-size: cover; background-position: center; background-repeat: no-repeat;">
     <section class="ftco-section mt-n3">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6 text-center mb-5">
-                    <h2 class="heading-section"><iconify-icon icon="jam:medical" style="color: white" width="60"
-                            height="60"></iconify-icon>Service RX</h2>
+                    <h1 class="heading-section"><i class="fas fa-medkit mr-2" style="color: white" width="60"
+                            height="60"></i>Service RX</h1>
                 </div>
             </div>
             <div class="row justify-content-center">
                 <div class="col-md-6 col-lg-4">
                     <div class="login-wrap p-0">
-                        <h3 class="mb-4 text-center">Connectez-vous</h3>
+                        <h3 class="mb-5 text-center">Connectez-vous</h3>
                         {{-- <x-auth-session-status class="mb-4" :status="session('status')" /> --}}
                         <form method="POST" action="{{ route('login') }}" class="signin-form">
                             @csrf
@@ -69,7 +67,6 @@
         </div>
     </section>
 
-    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     <script src={{ asset('js/jquery.min.js') }}></script>
     <script src={{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}></script>
     <script src={{ asset('js/main.js') }}></script>
