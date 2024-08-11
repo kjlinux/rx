@@ -111,7 +111,7 @@ class PatientController extends Controller
 
                 foreach ($request->prescriber as $prescriber_id) {
                     $send = new Send;
-                    if($prescriber_id != null){
+                    if ($prescriber_id != null) {
                         $send->patient_id = $patient->id;
                         $send->prescriber_id = $prescriber_id;
                         $send->save();
@@ -130,9 +130,8 @@ class PatientController extends Controller
                 $data['amount_to_pay_in_letters'] = capitalizeWords(nummberToLetters($data['amount_to_pay']));
                 $data['examination'] = getExaminationsNames($request->examination);
                 $data['slug'] = $voucher->slug;
-        
-                return VoucherController::generateVoucher($data);
 
+                return VoucherController::generateVoucher($data);
             }
         } catch (Exception $e) {
             return $e->getMessage();
@@ -208,7 +207,7 @@ class PatientController extends Controller
 
                 foreach ($request->prescriber as $prescriber_id) {
                     $send = new Send;
-                    if($prescriber_id != null){
+                    if ($prescriber_id != null) {
                         $send->patient_id = $patient->id;
                         $send->prescriber_id = $prescriber_id;
                         $send->save();
@@ -225,9 +224,7 @@ class PatientController extends Controller
     public function dataTableRefresh(Request $request)
     {
         try {
-            if ($request->ajax()) {
-                return response()->json(getRegister());
-            }
+            return response()->json(getRegister());
         } catch (Exception $e) {
             return $e->getMessage();
         }

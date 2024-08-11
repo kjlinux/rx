@@ -22,7 +22,7 @@ class SendFactory extends Factory
         return [
             //
             'patient_id' => fake()->numberBetween($min = 1, $max = 100),
-            'prescriber_id' => fake()->numberBetween($min = 1, $max = 10),
+            'prescriber_id' => fake()->numberBetween($min = 1, $max = 3),
         ];
     }
 }
