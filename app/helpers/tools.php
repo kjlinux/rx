@@ -94,9 +94,9 @@ function getPrice(array $examinations)
 
         $temporary_price = $z_coefficient[0] * 1000;
 
-        if ($today->isSunday() || isHoliday($today) || isSpecialHoliday()) {
-            $temporary_price += 2500;
-        }
+        // if ($today->isSunday() || isHoliday($today) || isSpecialHoliday()) {
+        //     $temporary_price += 2500;
+        // }
 
         if (
             $today->isSunday() ||
@@ -258,7 +258,7 @@ function getRebates()
             THEN COUNT(sends.patient_id)*1000
             ELSE COUNT(sends.patient_id)*5000
         END AS 'Ristourne',
-        DATE(sends.created_at)")
+        DATE_FORMAT(sends.created_at, '%d-%m-%Y')")
         ->groupBy('prescribers.id', DB::raw("DATE('sends.created_at'), sends.created_at, sends.id")) /*Do not modify this line !*/
         ->orderBy('sends.created_at')
         ->get()

@@ -15,7 +15,10 @@ class Functions extends Seeder
     {
         //
         $functions = [
-            'Médecin', 'Infirmier', 'Infirmière', 'Autre'
+            'Médecin',
+            'Infirmier',
+            'Professeur',
+            'Autre'
         ];
 
         foreach ($functions as $data) {
@@ -23,6 +26,5 @@ class Functions extends Seeder
                 'name' => $data,
             ]);
         }
-
     }
 }

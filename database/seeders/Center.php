@@ -14,60 +14,65 @@ class Center extends Seeder
     public function run(): void
     {
         //
-        
+
         DB::table('centers')->insert([
-            'name' => 'Communautaire Angré' ,
+            'name' => 'Communautaire Angré',
             'center_category_id' => 6
         ]);
-        
+
         DB::table('centers')->insert([
-            'name' => 'Chrysalide' ,
+            'name' => 'Chrysalide',
             'center_category_id' => 1
         ]);
 
         DB::table('centers')->insert([
-            'name' => 'Angré' ,
+            'name' => 'Angré',
             'center_category_id' => 2
         ]);
 
         DB::table('centers')->insert([
-            'name' => 'Cocody' ,
+            'name' => 'Cocody',
             'center_category_id' => 2
         ]);
 
         DB::table('centers')->insert([
-            'name' => 'Treichville' ,
+            'name' => 'Treichville',
             'center_category_id' => 2
         ]);
 
         DB::table('centers')->insert([
-            'name' => 'Yopougon' ,
+            'name' => 'Yopougon',
             'center_category_id' => 2
         ]);
 
         DB::table('centers')->insert([
-            'name' => 'Toit Rouge' ,
+            'name' => 'Toit Rouge',
             'center_category_id' => 3
         ]);
 
         DB::table('centers')->insert([
-            'name' => 'Gendarmerie' ,
+            'name' => 'Gendarmerie',
             'center_category_id' => 4
         ]);
 
         DB::table('centers')->insert([
-            'name' => 'Grand Centre' ,
+            'name' => 'Grand Centre',
             'center_category_id' => 1
         ]);
 
         DB::table('centers')->insert([
-            'name' => 'Yopougon Attié' ,
+            'name' => 'Yopougon Attié',
             'center_category_id' => 5
         ]);
 
         DB::table('centers')->insert([
-            'name' => 'Iroko' ,
+            'name' => 'Iroko',
             'center_category_id' => 1
+        ]);
+
+        DB::table('centers')->insert([
+            'name' => 'Externe',
+            'center_category_id' => 7
         ]);
     }
 }

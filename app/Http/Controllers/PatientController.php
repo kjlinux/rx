@@ -81,7 +81,7 @@ class PatientController extends Controller
                 $patient->gender = $request->gender;
                 $patient->age = $request->year;
                 $patient->phone = $request->phone;
-                $patient->clinical_information = capitalizeWords($request->clinical_information);
+                $patient->clinical_information = $request->clinical_information;
                 $patient->center_id = $request->center;
                 $patient->save();
 
@@ -111,7 +111,7 @@ class PatientController extends Controller
 
                 foreach ($request->prescriber as $prescriber_id) {
                     $send = new Send;
-                    if ($prescriber_id != null) {
+                    if ($prescriber_id != null || $prescriber_id != 1000) {
                         $send->patient_id = $patient->id;
                         $send->prescriber_id = $prescriber_id;
                         $send->save();
@@ -183,7 +183,7 @@ class PatientController extends Controller
                 $patient->gender = $request->gender;
                 $patient->age = $request->year;
                 $patient->phone = $request->phone;
-                $patient->clinical_information = capitalizeWords($request->clinical_information);
+                $patient->clinical_information = $request->clinical_information;
                 $patient->center_id = $request->center;
                 $patient->save();
 
@@ -207,7 +207,7 @@ class PatientController extends Controller
 
                 foreach ($request->prescriber as $prescriber_id) {
                     $send = new Send;
-                    if ($prescriber_id != null) {
+                    if ($prescriber_id != null || $prescriber_id != 1000) {
                         $send->patient_id = $patient->id;
                         $send->prescriber_id = $prescriber_id;
                         $send->save();

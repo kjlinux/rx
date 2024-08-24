@@ -20,7 +20,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/', function () {
     return view('auth.login');
-});
+})->name('connexion');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
@@ -36,10 +36,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['au
 Route::post('/update_holiday', [DashboardController::class, 'updateHoliday'])->name('update.holiday');
 Route::get('/check_holiday', [DashboardController::class, 'checkHoliday'])->name('check.holiday');
 
-require __DIR__.'/auth.php';
-require __DIR__.'/patient.php';
-require __DIR__.'/prescriber.php';
-require __DIR__.'/voucher.php';
-require __DIR__.'/insight.php';
-
-
+require __DIR__ . '/auth.php';
+require __DIR__ . '/patient.php';
+require __DIR__ . '/prescriber.php';
+require __DIR__ . '/voucher.php';
+require __DIR__ . '/insight.php';

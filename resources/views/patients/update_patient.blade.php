@@ -88,11 +88,6 @@
                             </div>
                         @else
                             <div class="mb-4 col-6">
-                                <button id="update" class="btn btn-primary btn-lg text-white w-100"><i
-                                        class="fas fa-pencil-alt"></i>
-                                    Modifier</button>
-                            </div>
-                            <div class="mb-4 col-6">
                                 <button id="print" class="btn btn-secondary btn-lg text-white w-100"><i
                                         class="fas fa-fw fa-print"></i><span>Imprimer
                                         reçu</span></button>
@@ -110,8 +105,7 @@
                                 name="forename" required />
                         </div>
                         <div class="input-group mb-4 col-2">
-                            <input type="number" class="form-control" placeholder="Age" id="year" name="year"
-                                required>
+                            <input type="number" class="form-control" placeholder="Age" id="year" name="year">
                             <div class="input-group-append">
                                 <span class="input-group-text" id="year">ans</span>
                             </div>
@@ -130,7 +124,7 @@
                         </div>
                         <div class="input-group mb-4 col-12">
                             <textarea class="form-control" id="clinical_information" name="clinical_information" rows="2"
-                                placeholder="Renseignements cliniques" required></textarea>
+                                placeholder="Renseignements cliniques"></textarea>
                         </div>
                         <div class="input-group mb-4 col-3">
                             <input data-inputmask="'mask': '99-99-99-99-99'" type="text" class="form-control"

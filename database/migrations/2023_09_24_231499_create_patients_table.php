@@ -18,7 +18,7 @@ return new class extends Migration
             $table->enum('gender', ['M', 'F']);
             $table->unsignedTinyInteger('age');
             $table->tinyText('phone');
-            $table->mediumText('clinical_information');
+            $table->mediumText('clinical_information')->nullable();
             $table->foreignId('center_id')->constrained();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

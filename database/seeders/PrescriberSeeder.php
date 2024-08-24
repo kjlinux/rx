@@ -15,5 +15,15 @@ class PrescriberSeeder extends Seeder
     {
         //
         Prescriber::factory(300)->create();
+
+        Prescriber::insert(
+            [
+                [
+                    'id' => 1000,
+                    'name' => 'Centre',
+                    'forenames' => 'Externe',
+                ]
+            ]
+        );
     }
 }

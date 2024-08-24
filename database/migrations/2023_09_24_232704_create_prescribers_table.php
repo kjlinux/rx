@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->mediumText('name');
             $table->mediumText('forenames');
-            $table->foreignId('center_id')->constrained();
-            $table->foreignId('function_id')->constrained();
-            $table->foreignId('speciality_id')->constrained(
+            $table->foreignId('center_id')->nullable()->constrained();
+            $table->foreignId('function_id')->nullable()->constrained();
+            $table->foreignId('speciality_id')->nullable()->constrained(
                 table: 'specialities'
             );
             $table->timestamp('created_at')->useCurrent();

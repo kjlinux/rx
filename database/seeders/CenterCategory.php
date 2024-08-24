@@ -15,8 +15,13 @@ class CenterCategory extends Seeder
     {
         //
         $center_categories = [
-            'Clinique médicale', 'Centre Hospitalier et Universitaire', 'Formation Sanitaire Urbaine', 
-            'Infirmerie', 'Hôpital Général', 'Centre de Santé Urbain'
+            'Clinique médicale',
+            'Centre Hospitalier et Universitaire',
+            'Formation Sanitaire Urbaine',
+            'Infirmerie',
+            'Hôpital Général',
+            'Centre de Santé Urbain',
+            'Centre'
         ];
 
         foreach ($center_categories as $data) {

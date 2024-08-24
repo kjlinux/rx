@@ -26,58 +26,58 @@
                             E-PASSEPORT</span>
                     </div>
                     <div class="col-12 text-center font-weight-bold">
-                        <span style="font-size: 15px; color:#326195">TEL : 2722525542 / 0747212827 / 0171444415</span>
+                        <span style="font-size: 15px; color:#326195">TEL : 2722261691 / 0747212827 / 0171444415</span>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row mt-3 mr-3" style="background-color: #326195">
+        <div class="row mt-3 mr-3 mb-3" style="background-color: #326195">
             <div class="col-12 text-white text-left">
                 <span>Reçu de paiement N° {{ $data['id'] }}</span>
                 <span style="margin-left: 227px">{{ $data['date'] }}, {{ $data['time'] }}</span>
             </div>
         </div>
-        <div class="row mt-3">
+        <div class="row mt-3  mb-3">
             <div class="col-12">
                 <span style="font-size: 20px; color:#326195">Nom:</span>
                 <span style="font-size: 20px; margin-left: 61px">{{ $data['name'] }}</span>
             </div>
             <div class="col-12">
-                <span style="font-size: 20px; color:#326195">Prénom.s:</span>
+                <span style="font-size: 20px; color:#326195">Prénoms:</span>
                 <span style="font-size: 20px; margin-left: 18px">{{ $data['forenames'] }}</span>
             </div>
             <div class="col-12 mr-5">
-                <span style="font-size: 20px; color:#326195">Examen.s :</span>
+                <span style="font-size: 20px; color:#326195">Examens :</span>
                 <span style="font-size: 20px; margin-left: 9px">{{ $data['examination'] }}</span>
             </div>
         </div>
-        <div class="row mt-3 mr-3" style="background-color: #326195">
+        <div class="row mt-3 mr-3 mb-3" style="background-color: #326195">
             <div class="col text-white">
                 <span>Net à payer : {{ $data['amount_to_pay'] }} F</span>
                 <span style="margin-left: 101px">Total payé : {{ $data['payed'] }} F</span>
                 <span style="margin-left: 68px">Reste à payer : {{ $data['left_to_pay'] }} F</span>
             </div>
         </div>
-        <div class="row mt-3 mr-3" style="background-color: #326195">
+        <div class="row mt-3 mr-3 mb-3" style="background-color: #326195">
             <div class="col text-white">
                 <span>Montant en lettres : {{ $data['amount_to_pay_in_letters'] }}</span>
                 <span style="margin-left: 130px">Francs CFA</span>
             </div>
         </div>
-        <div class="row mt-3">
+        <div class="row mt-3 mb-3">
             <u style="margin-left: 600px">Visa caisse</u>
             <div class="col-12 mt-n4">
                 <img src="data:image/png;base64, {!! base64_encode(
-                    QrCode::format('svg')->size(70)->style('dot')->eye('circle')->generate('test'),
+                    QrCode::format('svg')->size(70)->style('dot')->eye('circle')->generate('Votre santé est notre priorité absolue. Prenez soin de vous !'),
                 ) !!} ">
             </div>
         </div>
     </div>
-    <div class="row mt-3">
+    <div class="row mt-5 mb-5">
         -------------------------------------------------------------------------------------------------------------------------------------------
     </div>
-    <div class="container mt-3">
-        <div class="row align-items-center">
+    <div class="container mt-5">
+        <div class="row align-items-center mb-5 mt-3">
             <div>
                 <img src="{{ asset('img/csu.png') }}" alt="CSU" height="100" width="100">
             </div>
@@ -91,49 +91,30 @@
                             E-PASSEPORT</span>
                     </div>
                     <div class="col-12 text-center font-weight-bold">
-                        <span style="font-size: 15px; color:#326195">TEL : 2722525542 / 0747212827 / 0171444415</span>
+                        <span style="font-size: 15px; color:#326195">TEL : 2722261691 / 0747212827 / 0171444415</span>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row mt-3 mr-3" style="background-color: #326195">
-            <div class="col-12 text-white text-left">
-                <span>Reçu de paiement N° {{ $data['id'] }}</span>
-                <span style="margin-left: 227px">{{ $data['date'] }}, {{ $data['time'] }}</span>
-            </div>
-        </div>
-        <div class="row mt-3">
-            <div class="col-12">
-                <span style="font-size: 20px; color:#326195">Nom:</span>
-                <span style="font-size: 20px; margin-left: 61px">{{ $data['name'] }}</span>
+        <div class="row mt-3 d-flex align-items-center justify-content-center">
+            <div class="col-12 d-flex align-items-center justify-content-center">
+                <span style="font-size: 35px; color:#326195">Nom:</span>
+                <span style="font-size: 35px; margin-left: 61px">{{ $data['name'] }}</span>
             </div>
             <div class="col-12">
-                <span style="font-size: 20px; color:#326195">Prénom.s:</span>
-                <span style="font-size: 20px; margin-left: 18px">{{ $data['forenames'] }}</span>
+                <span style="font-size: 35px; color:#326195">Prénoms:</span>
+                <span style="font-size: 35px; margin-left: 18px">{{ $data['forenames'] }}</span>
             </div>
             <div class="col-12 mr-5">
-                <span style="font-size: 20px; color:#326195">Examen.s :</span>
-                <span style="font-size: 20px; margin-left: 9px">{{ $data['examination'] }}</span>
-            </div>
-        </div>
-        <div class="row mt-3 mr-3" style="background-color: #326195">
-            <div class="col text-white">
-                <span>Net à payer : {{ $data['amount_to_pay'] }} F</span>
-                <span style="margin-left: 101px">Total payé : {{ $data['payed'] }} F</span>
-                <span style="margin-left: 68px">Reste à payer : {{ $data['left_to_pay'] }} F</span>
-            </div>
-        </div>
-        <div class="row mt-3 mr-3" style="background-color: #326195">
-            <div class="col text-white">
-                <span>Montant en lettres : {{ $data['amount_to_pay_in_letters'] }}</span>
-                <span style="margin-left: 130px">Francs CFA</span>
+                <span style="font-size: 35px; color:#326195">Examens :</span>
+                <span style="font-size: 35px; margin-left: 9px">{{ $data['examination'] }}</span>
             </div>
         </div>
         <div class="row mt-3">
-            <u style="margin-left: 600px">Visa caisse</u>
+            <p style="margin-left: 520px">{{ $data['date'] }}</p>
             <div class="col-12 mt-n4">
                 <img src="data:image/png;base64, {!! base64_encode(
-                    QrCode::format('svg')->size(70)->style('dot')->eye('circle')->generate('test'),
+                    QrCode::format('svg')->size(70)->style('dot')->eye('circle')->generate('Votre santé est notre priorité absolue. Prenez soin de vous !'),
                 ) !!} ">
             </div>
         </div>
