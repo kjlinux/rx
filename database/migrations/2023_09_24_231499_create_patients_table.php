@@ -17,7 +17,7 @@ return new class extends Migration
             $table->mediumText('name');
             $table->mediumText('forenames');
             $table->enum('gender', ['M', 'F']);
-            $table->unsignedTinyInteger('age');
+            $table->unsignedTinyInteger('age')->nullable();
             $table->tinyText('phone');
             $table->mediumText('clinical_information')->nullable();
             $table->foreignId('center_id')->constrained();
