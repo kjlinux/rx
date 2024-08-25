@@ -25,7 +25,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
 
-        // DB::statement("ALTER TABLE patients AUTO_INCREMENT = 2400;");
+        DB::statement("ALTER TABLE patients AUTO_INCREMENT = 2400;");
     }
 
     /**
