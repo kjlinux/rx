@@ -32,8 +32,8 @@ class DashboardController extends Controller
         $datas['pie_prescriber_speciality']['data'] = prescribersBySpecialty();
 
         $datas['column_top_exams']['title'] = 'Top examens les plus prescrits';
-        $datas['column_top_exams']['categories'] = topExamsName()[0];
-        $datas['column_top_exams']['data'] = topExamsCount()[0];
+        $datas['column_top_exams']['categories'] = topExamsName()[0] ?? null;
+        $datas['column_top_exams']['data'] = topExamsCount()[0] ?? null;
         $datas['column_top_exams']['name'] = 'Examens';
 
         $datas['bar_busy_hours']['title'] = 'Heures de la journée les plus fréquentées pour les examens';
@@ -69,7 +69,7 @@ class DashboardController extends Controller
             $holiday = isHoliday(now());
             // $checking = Holiday::where('name', 'Holiday')->pluck('activated');
             $specialHoliday = isSpecialHoliday();
-            return response()->json([$holiday , $specialHoliday]);
+            return response()->json([$holiday, $specialHoliday]);
         } catch (Exception $e) {
             return $e->getMessage();
         }
