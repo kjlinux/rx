@@ -30,7 +30,7 @@ class VoucherFactory extends Factory
             'discount' => fake()->numberBetween($min = 0, $max = 30),
             'amount_after_discount' => fake()->numberBetween($min = 0, $max = 999999),
             'slug' => (string) Uuid::uuid4(),
-            'patient_id' => fake()->numberBetween($min = 1, $max = 50)
+            'patient_id' => fake()->numberBetween($min = 1, $max = 25)
         ];
     }
 }

@@ -101,7 +101,7 @@ function getPrice(array $examinations)
         if (
             $today->isSunday() ||
             isHoliday($today) ||
-            isSpecialHoliday() ||  
+            isSpecialHoliday() ||
             (($today->hour >= 19 && $today->hour <= 23) || ($today->hour >= 0 && $today->hour < 7))
         ) {
             $temporary_price += $temporary_price / 2;
@@ -254,7 +254,7 @@ function getRebates()
         specialities.name AS speciality,
         CONCAT(patients.name, ' ', patients.forenames) AS 'Nom Complet', 
         CASE
-            WHEN prescribers.speciality_id <> 2 
+            WHEN prescribers.speciality_id <> 2
             THEN COUNT(sends.patient_id)*1000
             ELSE COUNT(sends.patient_id)*5000
         END AS 'Ristourne',
@@ -375,4 +375,48 @@ function getExaminationsNames(array $examinations)
         $output .= $query[0] . ',';
     }
     return rtrim($output, ',');
+}
+
+function prescriberRegister($precriber_id, $payment_statut, $period)
+{
+    $query = DB::table('prescribers')
+        ->join('centers', 'centers.id', '=', 'prescribers.center_id')
+        ->join('center_categories', 'center_categories.id', '=', 'centers.center_category_id')
+        ->join('functions', 'functions.id', '=', 'prescribers.function_id')
+        ->join('specialities', 'specialities.id', '=', 'prescribers.speciality_id')
+        ->join('sends', 'sends.prescriber_id', 'prescribers.id')
+        ->join('patients', 'patients.id', 'sends.patient_id')
+        ->selectRaw("sends.id  AS id, 
+    CONCAT(center_categories.name, ' ', centers.name) AS center, 
+    CONCAT(patients.name, ' ', patients.forenames) AS 'Nom Complet', 
+    CASE
+        WHEN prescribers.speciality_id <> 2
+        THEN COUNT(sends.patient_id)*1000
+        ELSE COUNT(sends.patient_id)*5000
+    END AS 'Ristourne',
+    DATE_FORMAT(sends.created_at, '%d-%m-%Y')")
+        ->where('prescribers.id', $precriber_id)
+        ->where('paid', $payment_statut);
+
+    if (str_contains($period, 'au')) {
+        // return "au";
+        $period = explode(' au ', $period);
+        $start_date = DateTime::createFromFormat('d/m/Y', $period[0])->format('Y-m-d');
+        $end_date = DateTime::createFromFormat('d/m/Y', $period[1])->format('Y-m-d');
+        $query->where('sends.created_at', '>=', $start_date)
+            ->where('sends.created_at', '<=', $end_date);
+    } else {
+        // return '';
+        $start_date = DateTime::createFromFormat('d/m/Y', $period)->format('Y-m-d');
+        $query->where('sends.created_at', 'like', '%'.$start_date . '%');
+    }
+
+    return $query
+        ->groupBy('prescribers.id', DB::raw("DATE('sends.created_at'), sends.created_at, sends.id")) /*Do not modify this line !*/
+        ->orderBy('sends.created_at')
+        ->get()
+        ->map(function ($item) {
+            return array_values((array) $item);
+        })
+        ->toArray();
 }

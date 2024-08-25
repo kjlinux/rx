@@ -228,6 +228,7 @@
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <script src={{ asset('js/charts.js') }}></script>
     <script src="https://cdn.jsdelivr.net/npm/air-datepicker/dist/js/datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/air-datepicker/2.1.0/js/i18n/datepicker.fr.min.js" integrity="sha512-4752qa3UdRaOZtndcbjieWm5c5vGqKh/NLF9tlrvSE9ucXgdRZI7srgmftqaWuyHoSoUeqS9xrL7kWVrDO/D5A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/dist/bootstrap-switch-button.min.js">
     </script>
     <script>

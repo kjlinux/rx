@@ -56,7 +56,7 @@
                                 {{ html()->select($name = 'gender', $options = ['M' => 'M', 'F' => 'F'])->class('input-group selectpicker fit')->attributes(['title' => 'Genre', 'data-width' => '100%'])->required() }}
                             </div>
                             <div class="input-group mb-4 col-4">
-                                {{ html()->select($name = 'prescriber', $options = $prescriber_data)->class('input-group selectpicker show-tick')->attributes(['title' => 'Prescripteur(s)', 'data-width' => '100%', 'data-live-search' => 'true', 'data-size' => '5', 'data-multiple-separator' => ' | '])->multiple() }}
+                                {{ html()->select($name = 'prescriber', $options = $prescriber_data)->class('input-group selectpicker show-tick')->attributes(['title' => 'Prescripteur', 'data-width' => '100%', 'data-live-search' => 'true', 'data-size' => '5']) }}
                             </div>
                             <div class="input-group mb-4 col-6">
                                 {{ html()->select($name = 'center', $options = $center_data)->class('input-group selectpicker show-tick')->attributes(['title' => 'Centre', 'data-width' => '100%', 'data-live-search' => 'true', 'data-size' => '5'])->required() }}
@@ -89,7 +89,8 @@
                                 @can('make discount')
                                     <label for="discount_bool" class="btn btn-success">Réduction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <input type="checkbox" id="discount_bool" name="discount_bool" class="badgebox"><span
-                                        class="badge">&check;</span></label> @endcan
+                                            class="badge">&check;</span></label>
+                                @endcan
                             </div>
                             <div class="input-group mb-2 mt-n4 col-2 d-none">
                                 <input data-inputmask="'mask': '99'" type="number" class="form-control"

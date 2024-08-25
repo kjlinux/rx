@@ -21,7 +21,7 @@ class ExaminationFactory extends Factory
     {
         return [
             //
-            'patient_id' => fake()->numberBetween($min = 1, $max = 50),
+            'patient_id' => fake()->numberBetween($min = 1, $max = 25),
             'examination_type_id' => fake()->numberBetween($min = 1, $max = 102),
         ];
     }

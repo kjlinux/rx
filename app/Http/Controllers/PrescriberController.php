@@ -34,8 +34,9 @@ class PrescriberController extends Controller
     public function payed_prescriber()
     {
         $rebates = getRebates();
+        $prescriber_data  = Prescriber::getPrescribers();
         // dd($rebates);
-        return view('prescribers.payed_prescriber', compact('rebates'));
+        return view('prescribers.payed_prescriber', compact('rebates', 'prescriber_data'));
     }
 
     public function recordPrescriber(Request $request)
@@ -118,7 +119,22 @@ class PrescriberController extends Controller
     {
         try {
             if ($request->ajax()) {
-                return response()->json(getRebates());
+                // return response()->json(getRebates());
+                return response()->json($request->all());
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function prescriberRegister(Request $request){
+        try {
+            if ($request->ajax()) {
+                $rebates = prescriberRegister(
+                    $request->prescriber, $request->rebate_state, $request->yearpicker
+                );
+                // return response()->json(getRebates());
+                return response()->json($rebates);
             }
         } catch (Exception $e) {
             return $e->getMessage();
@@ -129,7 +145,13 @@ class PrescriberController extends Controller
     {
         try {
             if ($request->ajax()) {
-                Send::where('id', $request->id)->delete();
+                foreach ($request->data_selected as $id) {
+                    $send = Send::where('id', $id);
+                    $send->update([
+                        'paid' => 1
+                    ]);
+                }
+                return $request->all();
             }
         } catch (Exception $e) {
             return $e->getMessage();

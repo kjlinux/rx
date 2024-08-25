@@ -14,6 +14,6 @@ class ExaminationSeeder extends Seeder
     public function run(): void
     {
         //
-        Examination::factory(200)->create();
+        Examination::factory(20)->create();
     }
 }
