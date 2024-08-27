@@ -10,19 +10,13 @@
     <title>X-Ray Service</title>
     <link rel="shortcut icon" type="image/png" href={{ asset('img/rx.png') }}>
     <link href={{ asset('vendor/fontawesome-free/css/all.min.css') }} rel="stylesheet" type="text/css" />
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet" />
+    <link href={{ asset('css/fonts.css') }} rel="stylesheet" />
 
     <link href={{ asset('css/sb-admin-2.css') }} rel="stylesheet" />
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
-    <link
-        href="https://cdn.datatables.net/v/bs4/jszip-3.10.1/dt-1.13.8/af-2.6.0/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/cr-1.7.0/fc-4.3.0/fh-3.4.0/kt-2.11.0/r-2.5.0/rg-1.4.1/rr-1.4.1/sl-1.7.0/datatables.min.css"
-        rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/air-datepicker/dist/css/datepicker.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/css/bootstrap-switch-button.min.css"
-        rel="stylesheet">
+    <link rel="stylesheet" href={{ asset('css/bootstrap-select.min.css') }}>
+    <link href={{ asset('css/datatables.min.css') }} rel="stylesheet">
+    <link href={{ asset('css/datepicker.min.css') }} rel="stylesheet">
+    <link href={{ asset('css/bootstrap-switch-button.min.css') }} rel="stylesheet">
 </head>
 @stack('style')
 </head>
@@ -137,7 +131,8 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::check() ? Auth::user()->name : null }}</span>
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::check() ? Auth::user()->name : null }}</span>
                                 <img class="img-profile rounded-circle" src={{ asset('img/hospital.png') }}
                                     title="profil" />
                             </a>
@@ -147,9 +142,9 @@
                                     <a class="dropdown-item" href="#">
                                         <i class="fas fa-calendar-check fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Férié
-                                        <input type="checkbox" id="switch" name="switch" data-toggle="switchbutton" data-onlabel="Oui"
-                                            data-offlabel="Non" data-offstyle="danger" data-size="xs">
-                                            {{-- <input type="checkbox" id="name" name="name"> --}}
+                                        <input type="checkbox" id="switch" name="switch" data-toggle="switchbutton"
+                                            data-onlabel="Oui" data-offlabel="Non" data-offstyle="danger" data-size="xs">
+                                        {{-- <input type="checkbox" id="name" name="name"> --}}
                                     </a>
                                 @endcan
                                 {{-- <a class="dropdown-item" href="#">
@@ -212,25 +207,24 @@
     <script src={{ asset('vendor/jquery-easing/jquery.easing.min.js') }}></script>
     <script src={{ asset('js/sb-admin-2.min.js') }}></script>
     <script src={{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-    <script
-        src="https://cdn.datatables.net/v/bs4/jszip-3.10.1/dt-1.13.8/af-2.6.0/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/cr-1.7.0/fc-4.3.0/fh-3.4.0/kt-2.11.0/r-2.5.0/rg-1.4.1/rr-1.4.1/sl-1.7.0/datatables.min.js">
-    </script>
+    <script src={{ asset('js/bootstrap-select.min.js') }}></script>
+    <script src={{ asset('js/pdfmake.min.js') }}></script>
+    <script src={{ asset('js/vfs_fonts.js') }}></script>
+    <script src={{ asset('js/datatables.min.js') }}></script>
     <script src={{ asset('js/jquery.inputmask.min.js') }}></script>
     <script src={{ asset('js/inputmask.binding.js') }}></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src={{ asset('js/sweetalert2@11.js') }}></script>
+    <script src={{ asset('js/highcharts.js') }}></script>
+    <script src={{ asset('js/accessibility.js') }}></script>
+    <script src={{ asset('js/exporting.js') }}></script>
+    <script src={{ asset('js/export-data.js') }}></script>
+    <script src={{ asset('js/accessibility2.js') }}></script>
     <script src={{ asset('js/charts.js') }}></script>
-    <script src="https://cdn.jsdelivr.net/npm/air-datepicker/dist/js/datepicker.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/air-datepicker/2.1.0/js/i18n/datepicker.fr.min.js" integrity="sha512-4752qa3UdRaOZtndcbjieWm5c5vGqKh/NLF9tlrvSE9ucXgdRZI7srgmftqaWuyHoSoUeqS9xrL7kWVrDO/D5A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/dist/bootstrap-switch-button.min.js">
-    </script>
+    <script src={{ asset('js/datepicker.min.js') }}></script>
+    <script src={{ asset('js/datepicker.fr.min.js') }}
+        integrity="sha512-4752qa3UdRaOZtndcbjieWm5c5vGqKh/NLF9tlrvSE9ucXgdRZI7srgmftqaWuyHoSoUeqS9xrL7kWVrDO/D5A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src={{ asset('js/bootstrap-switch-button.min.js') }}></script>
     <script>
         document.getElementById('switch').switchButton('enable');
 

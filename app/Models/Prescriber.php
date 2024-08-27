@@ -36,8 +36,14 @@ class Prescriber extends Model
         return $this->belongsTo(Functions::class);
     }
 
-    static function getPrescribers(){
+    static function getPrescribers()
+    {
         return self::selectRaw("CONCAT('Dr. ', name, ' ', forenames) AS prescribers, id")->pluck('prescribers', 'id');
+    }
+
+    static function getPrescribersWithoutExtern()
+    {
+        return self::selectRaw("CONCAT('Dr. ', name, ' ', forenames) AS prescribers, id")->where('id', '!=', 1000)->pluck('prescribers', 'id');
     }
 
     public function sends()

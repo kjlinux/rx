@@ -28,6 +28,7 @@ class PatientController extends Controller
 
     public function updatePatient()
     {
+        // dd(getRegister());
         $exam_data = ExaminationType::getExaminations();
         $center_data = getCentersWhithCategory();
         $prescriber_data  = Prescriber::getPrescribers();
@@ -109,13 +110,17 @@ class PatientController extends Controller
                 //     $rebate->save();
                 // }
 
-                foreach ($request->prescriber as $prescriber_id) {
+                $prescriber = $request->prescriber;
+                if ($prescriber != null && $prescriber !== "1000") {
                     $send = new Send;
-                    if ($prescriber_id != null || $prescriber_id != 1000) {
-                        $send->patient_id = $patient->id;
-                        $send->prescriber_id = $prescriber_id;
-                        $send->save();
-                    }
+                    $send->patient_id = $patient->id;
+                    $send->prescriber_id = $prescriber;
+                    $send->save();
+                } else {
+                    $send = new Send;
+                    $send->patient_id = $patient->id;
+                    $send->prescriber_id = 1000;
+                    $send->save();
                 }
 
                 $data = array();
@@ -205,13 +210,12 @@ class PatientController extends Controller
                     $examination->save();
                 }
 
-                foreach ($request->prescriber as $prescriber_id) {
+                $prescriber = $request->prescriber;
+                if ($prescriber != null && $prescriber !== "1000") {
                     $send = new Send;
-                    if ($prescriber_id != null || $prescriber_id != 1000) {
-                        $send->patient_id = $patient->id;
-                        $send->prescriber_id = $prescriber_id;
-                        $send->save();
-                    }
+                    $send->patient_id = $patient->id;
+                    $send->prescriber_id = $prescriber;
+                    $send->save();
                 }
 
                 return response()->json();

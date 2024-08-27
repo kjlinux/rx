@@ -139,7 +139,6 @@ function getRegister()
                 patients.phone AS 'Téléphone'")
         ->groupBy('vouchers.id')
         ->orderByDesc('patients.updated_at')
-        // ->paginate(10);
         ->get()
         ->map(function ($item) {
             return array_values((array) $item);
@@ -382,7 +381,7 @@ function prescriberRegister($precriber_id, $payment_statut, $period)
     $query = DB::table('prescribers')
         ->join('centers', 'centers.id', '=', 'prescribers.center_id')
         ->join('center_categories', 'center_categories.id', '=', 'centers.center_category_id')
-        ->join('functions', 'functions.id', '=', 'prescribers.function_id')
+        // ->join('functions', 'functions.id', '=', 'prescribers.function_id')
         ->join('specialities', 'specialities.id', '=', 'prescribers.speciality_id')
         ->join('sends', 'sends.prescriber_id', 'prescribers.id')
         ->join('patients', 'patients.id', 'sends.patient_id')
@@ -410,7 +409,7 @@ function prescriberRegister($precriber_id, $payment_statut, $period)
         $start_date = DateTime::createFromFormat('d/m/Y', $period)->format('Y-m-d');
         $query->where('sends.created_at', 'like', '%'.$start_date . '%');
     }
-
+// return 'kscjql';
     return $query
         ->groupBy('prescribers.id', DB::raw("DATE('sends.created_at'), sends.created_at, sends.id")) /*Do not modify this line !*/
         ->orderBy('sends.created_at')

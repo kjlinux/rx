@@ -16,10 +16,13 @@ function getInsights()
         getInitial('Répartition des patients par tranche d\'âge') => 'Répartition des patients par tranche d\'âge',
         getInitial('Top prescripteurs par le nombre d\'examens prescrits') => 'Top prescripteurs par le nombre d\'examens prescrits',
         'MTDRAACP' => 'Montant total des ristournes attribuées à chaque prescripteur',
-        /*2*/ 'RDPPSP' => 'Répartition des prescripteurs par spécialité',
+        /*2*/
+        'RDPPSP' => 'Répartition des prescripteurs par spécialité',
         getInitial('Nombre d\'examens prescrits par spécialité') => 'Nombre d\'examens prescrits par spécialité',
-        /*3*/ getInitial('Top examens les plus prescrits') => 'Top examens les plus prescrits',
-        /*1*/ getInitial('Total des recettes générées') => 'Total des recettes générées',
+        /*3*/
+        getInitial('Top examens les plus prescrits') => 'Top examens les plus prescrits',
+        /*1*/
+        getInitial('Total des recettes générées') => 'Total des recettes générées',
         // 'MDMTAPPP' => 'Moyenne du montant total à payer par patient',
         'EDRAFDT' => 'Évolution des recettes au fil du temps',
         // getInitial('Montant total des recettes générées') => 'Montant total des recettes générées',
@@ -38,7 +41,8 @@ function getInsights()
         // 'EDTDREDPAFDT' => 'Évolution du total des recettes et des paiements au fil du temps',
         // getInitial('Répartition des ristournes par mois ou par trimestre') => 'Répartition des ristournes par mois ou par trimestre',
         // 'EDNDPPPAFDT' => 'Évolution du nombre de patients par prescripteur au fil du temps',
-        /*4*/ getInitial('Heures de la journée les plus fréquentées pour les examens') => 'Heures de la journée les plus fréquentées pour les examens'
+        /*4*/
+        getInitial('Heures de la journée les plus fréquentées pour les examens') => 'Heures de la journée les plus fréquentées pour les examens'
     );
 }
 
@@ -372,6 +376,8 @@ function totalRemainingToPay()
 {
     $totalAmountToPay = Voucher::sum('amount_after_discount');
     $totalAmountPaid = Voucher::sum('payed');
+    $leftToPay = Voucher::sum('left_to_pay');
+    return $leftToPay;
     return $totalAmountToPay - $totalAmountPaid;
 }
 
@@ -383,6 +389,7 @@ function totalToPayPrescribers()
 
     $totalPatientsSent = Prescriber::join('sends', 'prescribers.id', '=', 'sends.prescriber_id')
         // ->whereDate('sends.created_at', $today)
+        ->where('prescribers.id', '!=', 1000)
         ->count();
 
     $totalToPay = $amountPerPatient * $totalPatientsSent;

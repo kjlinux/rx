@@ -20,7 +20,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/', function () {
     return view('auth.login');
-})->name('connexion');
+})->middleware('guest')->name('connexion');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
@@ -32,7 +32,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+// Route::middleware('auth')->group(function () {
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::post('/update_holiday', [DashboardController::class, 'updateHoliday'])->name('update.holiday');
 Route::get('/check_holiday', [DashboardController::class, 'checkHoliday'])->name('check.holiday');
 
@@ -41,3 +42,4 @@ require __DIR__ . '/patient.php';
 require __DIR__ . '/prescriber.php';
 require __DIR__ . '/voucher.php';
 require __DIR__ . '/insight.php';
+// });

@@ -28,11 +28,11 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">RX > <strong>PATIENTS</strong></h1>
             <!-- <a
-                                                                                                                                                                          href="#"
-                                                                                                                                                                          class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-                                                                                                                                                                          ><i class="fas fa-download fa-sm text-white-50"></i> Generate
-                                                                                                                                                                          Report</a
-                                                                                                                                                                        > -->
+                                                                                                                                                                                  href="#"
+                                                                                                                                                                                  class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                                                                                                                                                                                  ><i class="fas fa-download fa-sm text-white-50"></i> Generate
+                                                                                                                                                                                  Report</a
+                                                                                                                                                                                > -->
         </div>
 
         <!-- Content Row -->
@@ -87,7 +87,7 @@
                                         class="fas fa-fw fa-trash"></i>Supprimer</button>
                             </div>
                         @else
-                            <div class="mb-4 col-6">
+                            <div class="mb-4 col-12">
                                 <button id="print" class="btn btn-secondary btn-lg text-white w-100"><i
                                         class="fas fa-fw fa-print"></i><span>Imprimer
                                         reçu</span></button>

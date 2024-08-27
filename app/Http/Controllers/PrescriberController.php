@@ -34,7 +34,7 @@ class PrescriberController extends Controller
     public function payed_prescriber()
     {
         $rebates = getRebates();
-        $prescriber_data  = Prescriber::getPrescribers();
+        $prescriber_data  = Prescriber::getPrescribersWithoutExtern();
         // dd($rebates);
         return view('prescribers.payed_prescriber', compact('rebates', 'prescriber_data'));
     }
