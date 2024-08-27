@@ -21,7 +21,11 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+                if (Auth::user()->id == 1) {
+                    return redirect()->intended(RouteServiceProvider::HOME);
+                } else {
+                    return redirect()->intended('/patient/new_patient');
+                }
             }
         }
 
