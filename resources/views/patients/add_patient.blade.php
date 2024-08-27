@@ -82,8 +82,8 @@
                             <div class="input-group pb-5 col-4">
                                 <label for="payed_bool" class="btn btn-primary">Le patient a payé la
                                     totalité&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <input type="checkbox" id="payed_bool" name="payed_bool" class="badgebox" checked><span
-                                        class="badge">&check;</span></label>
+                                    <input type="checkbox" id="payed_bool" name="payed_bool" class="badgebox" checked
+                                        disabled><span class="badge">&check;</span></label>
                             </div>
                             <div class="input-group pb-5 col-2">
                                 @can('make discount')

@@ -67,7 +67,8 @@
             </li>
 
             <li class="nav-item @if (request()->routeIs('patient.payed')) active @endif">
-                <a class="nav-link" href={{ route('patient.payed') }}>
+                {{-- <a class="nav-link" href={{ route('patient.payed') }}> --}}
+                <a class="nav-link" href="javascript:void;">
                     <i class="fas fa-money-bill-wave"></i>
                     <span>Consulter reste à payer</span></a>
             </li>

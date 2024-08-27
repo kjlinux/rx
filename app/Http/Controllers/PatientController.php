@@ -216,6 +216,11 @@ class PatientController extends Controller
                     $send->patient_id = $patient->id;
                     $send->prescriber_id = $prescriber;
                     $send->save();
+                } else {
+                    $send = new Send;
+                    $send->patient_id = $patient->id;
+                    $send->prescriber_id = 1000;
+                    $send->save();
                 }
 
                 return response()->json();
