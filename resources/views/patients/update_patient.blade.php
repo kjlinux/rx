@@ -28,11 +28,11 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">RX > <strong>PATIENTS</strong></h1>
             <!-- <a
-                                                                                                                                                                                  href="#"
-                                                                                                                                                                                  class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-                                                                                                                                                                                  ><i class="fas fa-download fa-sm text-white-50"></i> Generate
-                                                                                                                                                                                  Report</a
-                                                                                                                                                                                > -->
+                                                                                                                                                                                          href="#"
+                                                                                                                                                                                          class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                                                                                                                                                                                          ><i class="fas fa-download fa-sm text-white-50"></i> Generate
+                                                                                                                                                                                          Report</a
+                                                                                                                                                                                        > -->
         </div>
 
         <!-- Content Row -->
@@ -421,6 +421,11 @@
                 title: 'Chargement des informations.',
                 didOpen: () => {
                     Swal.showLoading();
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        }
+                    });
                     $.ajax({
                         method: 'POST',
                         url: "{{ route('patient.informations') }}",
@@ -450,6 +455,11 @@
                 title: 'Construction du reçu...',
                 didOpen: () => {
                     Swal.showLoading();
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        }
+                    });
                     $.ajax({
                         method: 'POST',
                         url: "{{ route('patient.informations') }}",
@@ -473,6 +483,11 @@
         })
 
         function printerStream() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                }
+            });
             $.ajax({
                 method: 'POST',
                 url: "{{ route('voucher.generate.stream') }}",
@@ -498,6 +513,11 @@
         }
 
         function deleteVoucherAfterStream() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                }
+            });
             $.ajax({
                 method: 'POST',
                 url: "{{ route('voucher.delete.stream') }}",
@@ -626,7 +646,11 @@
         });
 
         function priceCalculator() {
-
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                }
+            });
             $.ajax({
                 method: 'POST',
                 url: "{{ route('patient.price.calculator') }}",

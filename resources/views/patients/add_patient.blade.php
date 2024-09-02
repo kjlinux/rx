@@ -148,6 +148,11 @@
     <script>
         $('#new_examination').submit(function(e) {
             e.preventDefault();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                }
+            });
             $.ajax({
                 method: 'POST',
                 url: "{{ route('patient.record') }}",
@@ -166,7 +171,7 @@
                         title: "Enregistrement effectué."
                     });
                     redirectToVoucher(pdfUrl);
-                    clean();
+                    //clean();
                     $('#voucher').val(response.voucher_id);
                     deleteVoucherAfterStream();
                 },
@@ -186,6 +191,11 @@
         }
 
         function deleteVoucherAfterStream() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                }
+            });
             $.ajax({
                 method: 'POST',
                 url: "{{ route('voucher.delete') }}",
@@ -267,6 +277,11 @@
         });
 
         function priceCalculator() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                }
+            });
             $.ajax({
                 method: 'POST',
                 url: "{{ route('patient.price.calculator') }}",

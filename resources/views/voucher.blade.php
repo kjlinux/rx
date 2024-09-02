@@ -42,7 +42,7 @@
         <div class="row mt-3 mb-3" style="background-color: #326195; margin-right: 330px">
             <div class="col-12 text-white text-left">
                 <span>Reçu de paiement N° {{ $data['id'] }}</span>
-                <span style="margin-left: 227px">{{ $data['date'] }}, {{ $data['time'] }}</span>
+                <span style="margin-left: 205px">{{ $data['date'] }}, {{ $data['time'] }}</span>
             </div>
         </div>
         <div class="row mt-3  mb-3">
@@ -106,16 +106,16 @@
         </div>
         <div class="row mt-3">
             <div class="col-12">
-                <span style="font-size: 35px; color:#326195">Nom:</span>
-                <span style="font-size: 35px; margin-left: 82px; color:black">{{ $data['name'] }}</span>
+                <span style="font-size: 30px; color:#326195">Nom:</span>
+                <span style="font-size: 30px; margin-left: 73px; color:black">{{ $data['name'] }}</span>
             </div>
             <div class="col-12">
-                <span style="font-size: 35px; color:#326195">Prénoms:</span>
-                <span style="font-size: 35px; margin-left: 18px; color:black">{{ $data['forenames'] }}</span>
+                <span style="font-size: 30px; color:#326195">Prénoms:</span>
+                <span style="font-size: 30px; margin-left: 18px; color:black">{{ $data['forenames'] }}</span>
             </div>
             <div class="col-12 mr-5">
-                <span style="font-size: 35px; color:#326195">Examens :</span>
-                <span style="font-size: 35px; margin-left: 9px; color:black">{{ $data['examination'] }}</span>
+                <span style="font-size: 30px; color:#326195">Examens :</span>
+                <span style="font-size: 30px; margin-left: 9px; color:black">{{ $data['examination'] }}</span>
             </div>
         </div>
         <div class="row mt-3">

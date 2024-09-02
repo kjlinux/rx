@@ -17,15 +17,30 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next, string ...$guards): Response
     {
+        // if (Auth::check()) {
+        //     if (Auth::user()->id == 1) {
+        //         return redirect()->intended(RouteServiceProvider::HOME);
+        //     } else {
+        //         return redirect()->intended('/patient/new_patient');
+        //     }
+        // }
+        // $guards = empty($guards) ? [null] : $guards;
+
+        // foreach ($guards as $guard) {
+        //     if (Auth::guard($guard)->check()) {
+        //         if (Auth::user()->id == 1) {
+        //             return redirect()->intended(RouteServiceProvider::HOME);
+        //         } else {
+        //             return redirect()->intended('/patient/new_patient');
+        //         }
+        //     }
+        // }
+
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                if (Auth::user()->id == 1) {
-                    return redirect()->intended(RouteServiceProvider::HOME);
-                } else {
-                    return redirect()->intended('/patient/new_patient');
-                }
+                return redirect(RouteServiceProvider::HOME);
             }
         }
 

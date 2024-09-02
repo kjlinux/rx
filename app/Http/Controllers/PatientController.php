@@ -56,6 +56,7 @@ class PatientController extends Controller
 
     public function priceCalculator(Request $request)
     {
+        // dd($request->all());
         try {
             if ($request->ajax()) {
                 $examination_data = getPrice($request->examination);

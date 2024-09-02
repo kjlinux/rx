@@ -40,6 +40,11 @@
         var dataSet = @json($left_to_pay, JSON_UNESCAPED_UNICODE);
 
         function dataTableRefreshPayment() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                }
+            });
             $.ajax({
                 url: "{{ route('patient.refresh.payment') }}",
                 method: 'GET',
@@ -129,6 +134,11 @@
                 confirmButtonText: 'Oui, je suis sûr.e',
             }).then((result) => {
                 if (result.isConfirmed) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        }
+                    });
                     $.ajax({
                         method: 'POST',
                         url: "{{ route('patient.confirm.payment') }}",
