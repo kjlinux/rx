@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Holiday;
+use App\Models\Prescriber;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -13,7 +14,9 @@ class DashboardController extends Controller
     //
     public function index()
     {
-        // $dd = totalRevenueToday();
+        // dd(totalToPayPrescribers());
+        // dd(Prescriber::all());
+        $dd = totalRevenueToday();
         // dd((json_encode($dd, JSON_UNESCAPED_UNICODE)));
         $datas = array();
 

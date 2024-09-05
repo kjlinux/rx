@@ -38,7 +38,7 @@ class Prescriber extends Model
 
     static function getPrescribers()
     {
-        return self::selectRaw("CONCAT('Dr. ', name, ' ', forenames) AS prescribers, id")->pluck('prescribers', 'id');
+        return self::selectRaw("CONCAT('Dr. ', name, ' ', forenames) AS prescribers, id")->orderBy('prescribers')->pluck('prescribers', 'id');
     }
 
     static function getPrescribersWithoutExtern()

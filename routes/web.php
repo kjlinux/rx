@@ -32,7 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth.session'])->group(function () {
+Route::middleware('auth.session')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/update_holiday', [DashboardController::class, 'updateHoliday'])->name('update.holiday');
     Route::get('/check_holiday', [DashboardController::class, 'checkHoliday'])->name('check.holiday');

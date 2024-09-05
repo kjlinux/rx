@@ -394,5 +394,5 @@ function totalToPayPrescribers()
 
     $totalToPay = $amountPerPatient * $totalPatientsSent;
 
-    return $totalToPay;
+    return $amountPerPatient;
 }

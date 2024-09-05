@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('examinations_type', function (Blueprint $table) {
             $table->id();
-            $table->mediumText('name');
-            $table->tinyText('code');
+            $table->string('name')->unique();
+            $table->string('code')->unique();
             $table->unsignedTinyInteger('z_coefficient');
             $table->foreignId('examination_group_id')->constrained(
                 table: 'examinations_group'

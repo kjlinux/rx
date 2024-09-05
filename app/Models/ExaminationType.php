@@ -27,9 +27,8 @@ class ExaminationType extends Model
         return $this->belongsTo(ExaminationGroup::class);
     }
 
-    static function getExaminations(){
-        return self::pluck('name', 'id');
+    static function getExaminations()
+    {
+        return self::orderBy('name')->pluck('name', 'id');
     }
-
-    
 }

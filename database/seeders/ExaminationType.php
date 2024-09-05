@@ -105,7 +105,7 @@ class ExaminationType extends Seeder
             'examination_group_id' => 1,
         ]);
 
-        
+
         DB::table('examinations_type')->insert([
             'name' => 'Larynx face/profil',
             'code' => 'LFP',
@@ -148,7 +148,7 @@ class ExaminationType extends Seeder
             'examination_group_id' => 1,
         ]);
 
-        
+
         DB::table('examinations_type')->insert([
             'name' => 'Recherche d’apophyse styloïde : incidence face basse+menton dégagé D et G',
             'code' => 'RASIFBMDDG',
@@ -184,7 +184,7 @@ class ExaminationType extends Seeder
             'examination_group_id' => 2,
         ]);
 
-        
+
         DB::table('examinations_type')->insert([
             'name' => 'Poumons face/profil',
             'code' => 'PFP',
@@ -220,7 +220,7 @@ class ExaminationType extends Seeder
             'examination_group_id' => 2,
         ]);
 
-        
+
         DB::table('examinations_type')->insert([
             'name' => 'Thorax osseux ou Gril Costal face',
             'code' => 'TOGCF',
@@ -263,7 +263,7 @@ class ExaminationType extends Seeder
             'examination_group_id' => 3,
         ]);
 
-        
+
         DB::table('examinations_type')->insert([
             'name' => 'Rachis dorsal face/profil',
             'code' => 'RDFP',
@@ -306,7 +306,7 @@ class ExaminationType extends Seeder
             'examination_group_id' => 3,
         ]);
 
-        
+
         DB::table('examinations_type')->insert([
             'name' => 'Rachis lombaire incidence localisée L5-S1 F/P',
             'code' => 'RLILLSFP',
@@ -349,7 +349,6 @@ class ExaminationType extends Seeder
             'examination_group_id' => 4,
         ]);
 
-        
         DB::table('examinations_type')->insert([
             'name' => 'Épaule face, 3 incidences ( F+RI+RE )',
             'code' => 'EP3I',
@@ -413,7 +412,6 @@ class ExaminationType extends Seeder
             'examination_group_id' => 4,
         ]);
 
-        
         DB::table('examinations_type')->insert([
             'name' => 'Main F/P',
             'code' => 'MFP',
@@ -477,7 +475,7 @@ class ExaminationType extends Seeder
             'examination_group_id' => 5,
         ]);
 
-        
+
         DB::table('examinations_type')->insert([
             'name' => 'Hanche face + ¾ D ou G (F/P)',
             'code' => 'HFDG_FP',
@@ -555,7 +553,7 @@ class ExaminationType extends Seeder
             'examination_group_id' => 5,
         ]);
 
-        
+
         DB::table('examinations_type')->insert([
             'name' => 'Pied F/ ¾ (orteils)',
             'code' => 'PFO',

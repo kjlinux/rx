@@ -18,6 +18,7 @@ class PatientController extends Controller
     public function newPatient()
     {
         $exam_data = ExaminationType::getExaminations();
+        // dd($exam_data);
         $center_data = getCentersWhithCategory();
         $prescriber_data  = Prescriber::getPrescribers();
         // dd(isSpecialHoliday());
