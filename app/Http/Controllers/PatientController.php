@@ -247,8 +247,8 @@ class PatientController extends Controller
             if ($request->ajax()) {
                 Send::where('patient_id', $request->id)->delete();
                 Examination::where('patient_id', $request->id)->delete();
+                Voucher::where('patient_id', $request->id)->delete();
                 Patient::where('id', $request->id)->delete();
-                Voucher::where('id', $request->id)->delete();
             }
         } catch (Exception $e) {
             return $e->getMessage();
