@@ -36,6 +36,7 @@ Route::middleware('auth.session')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/update_holiday', [DashboardController::class, 'updateHoliday'])->name('update.holiday');
     Route::get('/check_holiday', [DashboardController::class, 'checkHoliday'])->name('check.holiday');
+    Route::post('/calculate_recipe', [DashboardController::class, 'calculateRecipe'])->name('calculate.recipe');
 
     require __DIR__ . '/auth.php';
     require __DIR__ . '/patient.php';

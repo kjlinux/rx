@@ -107,7 +107,7 @@
                 <li class="nav-item @if (request()->routeIs('insights')) active @endif">
                     <a class="nav-link" href={{ route('insights') }}>
                         <i class="fas fa-fw fa-chart-area"></i>
-                        <span>Statisiques</span></a>
+                        <span>Statistiques</span></a>
                 </li>
                 <hr class="sidebar-divider d-none d-md-block" />
             @endcan

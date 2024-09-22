@@ -372,6 +372,34 @@ function totalRevenueToday()
     return Voucher::whereDate('date', $today)->sum('amount_after_discount');
 }
 
+function totalRevenueByPeriod($period = null)
+{
+    // $query = Voucher::whereDate('date', $today)->sum('amount_after_discount');
+
+    if($period == null){
+        return totalRevenueToday();
+    }
+
+    if (str_contains($period, 'au')) {
+        // return "au";
+        $period = explode(' au ', $period);
+        $start_date = DateTime::createFromFormat('d/m/Y', $period[0])->format('Y-m-d');
+        $end_date = DateTime::createFromFormat('d/m/Y', $period[1])->modify('+1 day')->format('Y-m-d');
+        // $query->where('sends.created_at', '>=', $start_date)
+        //     ->where('sends.created_at', '<=', $end_date);
+        return Voucher::where('created_at', '>=', $start_date)
+            ->where('created_at', '<=', $end_date)
+            ->sum('amount_after_discount');
+    } else {
+        // return '';
+        $start_date = DateTime::createFromFormat('d/m/Y', $period)->format('Y-m-d');
+        // $query->where('sends.created_at', 'like', '%'.$start_date . '%');
+        return Voucher::where('created_at', 'like', '%' . $start_date . '%')->sum('amount_after_discount');
+    }
+
+    // return Voucher::whereDate('date', $today)->sum('amount_after_discount');
+}
+
 function totalRemainingToPay()
 {
     $totalAmountToPay = Voucher::sum('amount_after_discount');

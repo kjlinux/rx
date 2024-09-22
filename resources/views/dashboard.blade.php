@@ -37,9 +37,9 @@
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                     Encaissé aujourd'hui
                                 </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        {{ $datas['totalRevenueToday'] }} FCFA
-                                    </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    {{ $datas['totalRevenueToday'] }} FCFA
+                                </div>
                                 <div class="spinner-grow text-success" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
@@ -61,9 +61,9 @@
                                     Total restant à payer pour les patients
                                 </div>
                                 <div class="row no-gutters align-items-center">
-                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                                            {{ $datas['totalRemainingToPay'] }} FCFA
-                                        </div>
+                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                                        {{ $datas['totalRemainingToPay'] }} FCFA
+                                    </div>
                                     <div class="col-auto">
                                         <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                     </div>
@@ -102,7 +102,7 @@
         </div>
 
         <div class="row">
-            <div class="col-xl-7 col-lg-6">
+            <div class="col-xl-6 col-lg-6">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">
@@ -130,209 +130,279 @@
                 </div>
             </div>
 
-            <div class="col-xl-5 col-lg-6">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">
-                            Répartition des prescripteurs par spécialité
-                        </h6>
+            <div class="col-xl-6 col-lg-6">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">
+                                    {{-- Répartition des prescripteurs par spécialité --}}
+                                    Recette sur une période
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                {{-- <div id="pie_prescriber_speciality">
+                                </div> --}}
+                                <form id="state" class="form-row d-flex justify-content-center">
+                                    @csrf
+                                    <div class="input-group mb-4 col-7">
+                                        <input type="text" class="form-control" placeholder="Aujourd'hui" id="yearpicker"
+                                            name="yearpicker" data-language='fr' />
+                                    </div>
+                                    <div class="input-group mb-4 col-3">
+                                        <button type="submit" id="clean" class="form-control bg-primary text-white">
+                                            <i class="fas fa-check"></i>
+                                            Valider
+                                        </button>
+                                    </div>
+                                </form>
+                                <div class="col-12 mt-1 d-flex align-items-center justify-content-center">
+                                    <span class="text-primary" style="font-size:30px" id="brute"></span> FCFA
+                                </div>
+                                {{-- <div class="col-12 mt-5">
+                                    Recette avec ristournes payées: <span class="text-success" id="recette_ristourne">70000</span>
+                                    XOF
+                                </div> --}}
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div id="pie_prescriber_speciality">
+                    <div class="col-12">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">
+                                    Répartition des prescripteurs par spécialité
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="pie_prescriber_speciality">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-6 mb-4">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Top examens les plus prescrits</h6>
+                        </div>
+                        <div id="column_top_exams" class="card-body">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6 mb-4">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Heures de la journée les plus fréquentées pour les
+                                examens</h6>
+                        </div>
+                        <div id="bar_busy_hours" class="card-body">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    @endsection
+    @push('script')
+        <script>
+            $('#brute').text({{ $datas['recette']['brute'] }});
 
-        <div class="row">
-            <div class="col-lg-6 mb-4">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Top examens les plus prescrits</h6>
-                    </div>
-                    <div id="column_top_exams" class="card-body">
-                    </div>
-                </div>
-            </div>
+            $('#yearpicker').datepicker({
+                range: true,
+                multipleDatesSeparator: ' au '
+                // view: 'years',
+                // minView: 'years',
+                // dateFormat: 'yyyy',
+                // onSelect: function() {
+                //     drawer();
+                // }
+            })
 
-            <div class="col-lg-6 mb-4">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Heures de la journée les plus fréquentées pour les
-                            examens</h6>
-                    </div>
-                    <div id="bar_busy_hours" class="card-body">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-@endsection
-@push('script')
-    <script>
-        Highcharts.chart('line_revenue', {
-            title: {
-                text: '{{ $datas['line_revenue']['title'] }}',
-                align: 'left'
-            },
-            yAxis: {
+            $('#state').submit(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    method: 'POST',
+                    url: "{{ route('calculate.recipe') }}",
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        $('#brute').text(data)
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire({
+                            title: "Erreur lors de l'exécution",
+                            icon: "error",
+                            showConfirmButton: false,
+                            timer: 500
+                        });
+                    },
+                });
+            });
+
+            Highcharts.chart('line_revenue', {
                 title: {
-                    text: null
-                }
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'middle'
-            },
-            plotOptions: {
-                series: {
-                    label: {
-                        connectorAllowed: false
-                    },
-                    pointStart: 1
-                }
-            },
-            series: @json($datas['line_revenue']['data']),
-            responsive: {
-                rules: [{
-                    condition: {
-                        maxWidth: 500
-                    },
-                    chartOptions: {
-                        legend: {
-                            layout: 'horizontal',
-                            align: 'center',
-                            verticalAlign: 'bottom'
-                        }
+                    text: '{{ $datas['line_revenue']['title'] }}',
+                    align: 'left'
+                },
+                yAxis: {
+                    title: {
+                        text: null
                     }
-                }]
-            }
-        });
-
-        Highcharts.chart('pie_prescriber_speciality', {
-            chart: {
-                type: 'pie'
-            },
-            title: {
-                text: '{{ $datas['pie_prescriber_speciality']['title'] }}'
-            },
-            tooltip: {
-                valueSuffix: '%'
-            },
-            plotOptions: {
-                series: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: [{
-                        enabled: true,
-                        distance: 20
-                    }, {
-                        enabled: true,
-                        distance: -40,
-                        format: '{point.percentage:.1f}%',
-                        style: {
-                            fontSize: '1.2em',
-                            textOutline: 'none',
-                            opacity: 0.7
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle'
+                },
+                plotOptions: {
+                    series: {
+                        label: {
+                            connectorAllowed: false
                         },
-                        filter: {
-                            operator: '>',
-                            property: 'percentage',
-                            value: 10
+                        pointStart: 1
+                    }
+                },
+                series: @json($datas['line_revenue']['data']),
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                layout: 'horizontal',
+                                align: 'center',
+                                verticalAlign: 'bottom'
+                            }
                         }
                     }]
                 }
-            },
-            series: [{
-                name: 'Proportion',
-                colorByPoint: true,
-                data: @json($datas['pie_prescriber_speciality']['data'])
-            }]
-        });
+            });
 
-        Highcharts.chart('column_top_exams', {
-            chart: {
-                type: 'column'
-            },
-            title: {
-                text: '{{ $datas['column_top_exams']['title'] }}',
-                align: 'left'
-            },
-            xAxis: {
-                categories: @json($datas['column_top_exams']['categories']),
-                crosshair: true,
-            },
-            yAxis: {
-                min: 0,
+            Highcharts.chart('pie_prescriber_speciality', {
+                chart: {
+                    type: 'pie'
+                },
                 title: {
-                    text: null
-                }
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0
-                }
-            },
-            series: [{
-                name: '{{ $datas['column_top_exams']['name'] }}',
-                data: @json($datas['column_top_exams']['data'])
-            }]
-        });
+                    text: '{{ $datas['pie_prescriber_speciality']['title'] }}'
+                },
+                tooltip: {
+                    valueSuffix: '%'
+                },
+                plotOptions: {
+                    series: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: [{
+                            enabled: true,
+                            distance: 20
+                        }, {
+                            enabled: true,
+                            distance: -40,
+                            format: '{point.percentage:.1f}%',
+                            style: {
+                                fontSize: '1.2em',
+                                textOutline: 'none',
+                                opacity: 0.7
+                            },
+                            filter: {
+                                operator: '>',
+                                property: 'percentage',
+                                value: 10
+                            }
+                        }]
+                    }
+                },
+                series: [{
+                    name: 'Proportion',
+                    colorByPoint: true,
+                    data: @json($datas['pie_prescriber_speciality']['data'])
+                }]
+            });
 
-        Highcharts.chart('bar_busy_hours', {
-            chart: {
-                type: 'bar'
-            },
-            title: {
-                text: '{{ $datas['bar_busy_hours']['title'] }}',
-                align: 'left'
-            },
-            xAxis: {
-                categories: @json($datas['bar_busy_hours']['categories']),
+            Highcharts.chart('column_top_exams', {
+                chart: {
+                    type: 'column'
+                },
                 title: {
-                    text: null
+                    text: '{{ $datas['column_top_exams']['title'] }}',
+                    align: 'left'
                 },
-                gridLineWidth: 1,
-                lineWidth: 0
-            },
-            yAxis: {
-                min: 0,
+                xAxis: {
+                    categories: @json($datas['column_top_exams']['categories']),
+                    crosshair: true,
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: null
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: [{
+                    name: '{{ $datas['column_top_exams']['name'] }}',
+                    data: @json($datas['column_top_exams']['data'])
+                }]
+            });
+
+            Highcharts.chart('bar_busy_hours', {
+                chart: {
+                    type: 'bar'
+                },
                 title: {
-                    text: null,
-                    align: 'high'
+                    text: '{{ $datas['bar_busy_hours']['title'] }}',
+                    align: 'left'
                 },
-                labels: {
-                    overflow: 'justify'
-                },
-                gridLineWidth: 0
-            },
-            plotOptions: {
-                bar: {
-                    borderRadius: '50%',
-                    dataLabels: {
-                        enabled: true
+                xAxis: {
+                    categories: @json($datas['bar_busy_hours']['categories']),
+                    title: {
+                        text: null
                     },
-                    groupPadding: 0.1
-                }
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'top',
-                x: -40,
-                y: 80,
-                floating: true,
-                borderWidth: 1,
-                backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
-                shadow: true
-            },
-            series: [{
-                name: '{{ $datas['bar_busy_hours']['name'] }}',
-                data: @json($datas['bar_busy_hours']['data'])
-            }]
-        });
-    </script>
-@endpush
+                    gridLineWidth: 1,
+                    lineWidth: 0
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: null,
+                        align: 'high'
+                    },
+                    labels: {
+                        overflow: 'justify'
+                    },
+                    gridLineWidth: 0
+                },
+                plotOptions: {
+                    bar: {
+                        borderRadius: '50%',
+                        dataLabels: {
+                            enabled: true
+                        },
+                        groupPadding: 0.1
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -40,
+                    y: 80,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+                    shadow: true
+                },
+                series: [{
+                    name: '{{ $datas['bar_busy_hours']['name'] }}',
+                    data: @json($datas['bar_busy_hours']['data'])
+                }]
+            });
+        </script>
+    @endpush

@@ -39,7 +39,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-3 mb-3" style="background-color: #326195; margin-right: 330px">
+        <div class="row mt-3 mb-3" style="background-color: #326195; margin-right: 293px">
             <div class="col-12 text-white text-left">
                 <span>Reçu de paiement N° {{ $data['id'] }}</span>
                 <span style="margin-left: 205px">{{ $data['date'] }}, {{ $data['time'] }}</span>
@@ -55,7 +55,7 @@
                 <span style="font-size: 20px; margin-left: 18px; color:black">{{ $data['forenames'] }}</span>
             </div>
             <div class="col-12 mr-5">
-                <span style="font-size: 20px; color:#326195">Examens :</span>
+                <span style="font-size: 20px; color:#326195">Examens: </span>
                 <span style="font-size: 20px; margin-left: 9px; color:black">{{ $data['examination'] }}</span>
             </div>
         </div>
@@ -104,7 +104,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-3">
+        <div class="row mt-3 mb-5">
             <div class="col-12">
                 <span style="font-size: 30px; color:#326195">Nom:</span>
                 <span style="font-size: 30px; margin-left: 73px; color:black">{{ $data['name'] }}</span>
@@ -114,13 +114,15 @@
                 <span style="font-size: 30px; margin-left: 18px; color:black">{{ $data['forenames'] }}</span>
             </div>
             <div class="col-12 mr-5">
-                <span style="font-size: 30px; color:#326195">Examens :</span>
+                <span style="font-size: 30px; color:#326195">Examens: </span>
                 <span style="font-size: 30px; margin-left: 9px; color:black">{{ $data['examination'] }}</span>
             </div>
         </div>
-        <div class="row mt-3">
-            <p style="margin-left: 520px; color:black">{{ $data['date'] }}</p>
-            <div class="col-12 mt-n4">
+        <div class="row mt-5">
+            <div class="col-9 mt-n4">
+                <p style="margin-left: 480px; color:black; margin-top:50px; position:absolute">{{ $data['date'] }}</p>
+            </div>
+            <div class="col-3 mt-n4">
                 <img src="data:image/png;base64, {!! base64_encode(
                     QrCode::format('svg')->size(70)->style('dot')->eye('circle')->generate('Votre santé est notre priorité absolue. Prenez soin de vous !'),
                 ) !!} ">

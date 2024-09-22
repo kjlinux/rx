@@ -401,7 +401,7 @@ function prescriberRegister($precriber_id, $payment_statut, $period)
         // return "au";
         $period = explode(' au ', $period);
         $start_date = DateTime::createFromFormat('d/m/Y', $period[0])->format('Y-m-d');
-        $end_date = DateTime::createFromFormat('d/m/Y', $period[1])->format('Y-m-d');
+        $end_date = DateTime::createFromFormat('d/m/Y', $period[1])->modify('+1 day')->format('Y-m-d');
         $query->where('sends.created_at', '>=', $start_date)
             ->where('sends.created_at', '<=', $end_date);
     } else {

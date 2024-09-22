@@ -44,6 +44,9 @@ class DashboardController extends Controller
         $datas['bar_busy_hours']['data'] = busyExamHoursCount();
         $datas['bar_busy_hours']['name'] = 'Examens';
 
+        $datas['recette']['brute'] = totalRevenueToday();
+        $datas['recette']['avec_ristournes'] = totalRevenueToday() - totalToPayPrescribers();
+
         return view('dashboard', compact('datas'));
     }
 
@@ -73,6 +76,19 @@ class DashboardController extends Controller
             // $checking = Holiday::where('name', 'Holiday')->pluck('activated');
             $specialHoliday = isSpecialHoliday();
             return response()->json([$holiday, $specialHoliday]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function calculateRecipe(Request $request)
+    {
+        try {
+            if ($request->ajax()) {
+                $recipe = totalRevenueByPeriod($request->yearpicker);
+                // return response()->json(getrecipe());
+                return response()->json($recipe);
+            }
         } catch (Exception $e) {
             return $e->getMessage();
         }
