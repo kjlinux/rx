@@ -124,18 +124,21 @@ function getRegister()
         ->join('sends', 'sends.patient_id', '=', 'patients.id')
         ->join('prescribers', 'prescribers.id', '=', 'sends.prescriber_id')
         ->selectRaw("patients.updated_at AS 'Updated at',
-                patients.id AS 'N°', 
-                CONCAT(patients.name, ' ', patients.forenames) AS 'Nom Complet', 
-                patients.age AS 'Age', 
-                patients.gender AS 'Sexe', 
-                patients.clinical_information AS 'Renseignements Cliniques', 
-                GROUP_CONCAT(DISTINCT examinations_type.name) AS 'Examens',
-                GROUP_CONCAT(DISTINCT CONCAT('Dr. ', prescribers.name, ' ', prescribers.forenames)) AS 'Prescripteurs', 
-                CONCAT(center_categories.name, ' ', centers.name) AS 'Provenance', 
+                patients.id AS 'N°',
+                CONCAT(patients.name, ' ', patients.forenames) AS 'Nom Complet',
                 CASE
-                    WHEN vouchers.discount IS NULL THEN vouchers.amount_to_pay 
-                    ELSE CONCAT(vouchers.amount_after_discount, '/', vouchers.discount, '%') 
-                END AS 'Montant', 
+                    WHEN patients.age LIKE 'b%' THEN CONCAT(SUBSTRING(patients.age, 2), ' mois')
+                    ELSE CONCAT(patients.age, ' ans')
+                END AS 'Age',
+                patients.gender AS 'Sexe',
+                patients.clinical_information AS 'Renseignements Cliniques',
+                GROUP_CONCAT(DISTINCT examinations_type.name) AS 'Examens',
+                GROUP_CONCAT(DISTINCT CONCAT('Dr. ', prescribers.name, ' ', prescribers.forenames)) AS 'Prescripteurs',
+                CONCAT(center_categories.name, ' ', centers.name) AS 'Provenance',
+                CASE
+                    WHEN vouchers.discount IS NULL THEN vouchers.amount_to_pay
+                    ELSE CONCAT(vouchers.amount_after_discount, '/', vouchers.discount, '%')
+                END AS 'Montant',
                 patients.phone AS 'Téléphone'")
         ->groupBy('vouchers.id')
         ->orderByDesc('patients.updated_at')
@@ -154,13 +157,13 @@ function getPatient(int $patient_id)
         ->join('examinations', 'examinations.patient_id', '=', 'patients.id')
         ->join('sends', 'sends.patient_id', '=', 'patients.id')
         ->join('prescribers', 'prescribers.id', '=', 'sends.prescriber_id')
-        ->selectRaw("patients.name, 
-            patients.forenames, 
-            patients.age, 
-            patients.gender, 
+        ->selectRaw("patients.name,
+            patients.forenames,
+            patients.age,
+            patients.gender,
             GROUP_CONCAT(DISTINCT sends.prescriber_id) AS prescribers,
-            patients.center_id, 
-            GROUP_CONCAT(examinations.examination_type_id) AS examinations, 
+            patients.center_id,
+            GROUP_CONCAT(examinations.examination_type_id) AS examinations,
             patients.clinical_information,
             patients.phone,
             vouchers.amount_to_pay,
@@ -188,10 +191,10 @@ function getPrescribers(int $prescriber_id = null)
             ->join('center_categories', 'center_categories.id', '=', 'centers.center_category_id')
             ->join('functions', 'functions.id', '=', 'prescribers.function_id')
             ->join('specialities', 'specialities.id', '=', 'prescribers.speciality_id')
-            ->selectRaw("prescribers.id  AS id, 
-            CONCAT('Dr. ', prescribers.name, ' ', prescribers.forenames) AS name, 
-            CONCAT(center_categories.name, ' ', centers.name) AS center, 
-            functions.name AS _function, 
+            ->selectRaw("prescribers.id  AS id,
+            CONCAT('Dr. ', prescribers.name, ' ', prescribers.forenames) AS name,
+            CONCAT(center_categories.name, ' ', centers.name) AS center,
+            functions.name AS _function,
             specialities.name AS speciality")
             ->get()
             ->map(function ($item) {
@@ -221,10 +224,10 @@ function getLeftToPayForPatient()
         ->join('sends', 'sends.patient_id', '=', 'patients.id')
         ->join('prescribers', 'prescribers.id', '=', 'sends.prescriber_id')
         ->selectRaw("patients.updated_at AS 'Updated at',
-            patients.id AS 'N°', 
-            CONCAT(patients.name, ' ', patients.forenames) AS 'Nom Complet', 
+            patients.id AS 'N°',
+            CONCAT(patients.name, ' ', patients.forenames) AS 'Nom Complet',
             GROUP_CONCAT(DISTINCT examinations_type.name) AS 'Examens',
-            patients.phone AS 'Téléphone', 
+            patients.phone AS 'Téléphone',
             vouchers.amount_to_pay,
             vouchers.payed,
             vouchers.left_to_pay")
@@ -247,11 +250,11 @@ function getRebates()
         ->join('specialities', 'specialities.id', '=', 'prescribers.speciality_id')
         ->join('sends', 'sends.prescriber_id', 'prescribers.id')
         ->join('patients', 'patients.id', 'sends.patient_id')
-        ->selectRaw("sends.id  AS id, 
-        CONCAT('Dr. ', prescribers.name, ' ', prescribers.forenames) AS name, 
-        CONCAT(center_categories.name, ' ', centers.name) AS center, 
+        ->selectRaw("sends.id  AS id,
+        CONCAT('Dr. ', prescribers.name, ' ', prescribers.forenames) AS name,
+        CONCAT(center_categories.name, ' ', centers.name) AS center,
         specialities.name AS speciality,
-        CONCAT(patients.name, ' ', patients.forenames) AS 'Nom Complet', 
+        CONCAT(patients.name, ' ', patients.forenames) AS 'Nom Complet',
         CASE
             WHEN prescribers.speciality_id <> 2
             THEN COUNT(sends.patient_id)*1000
@@ -385,9 +388,9 @@ function prescriberRegister($precriber_id, $payment_statut, $period)
         ->join('specialities', 'specialities.id', '=', 'prescribers.speciality_id')
         ->join('sends', 'sends.prescriber_id', 'prescribers.id')
         ->join('patients', 'patients.id', 'sends.patient_id')
-        ->selectRaw("sends.id  AS id, 
-    CONCAT(center_categories.name, ' ', centers.name) AS center, 
-    CONCAT(patients.name, ' ', patients.forenames) AS 'Nom Complet', 
+        ->selectRaw("sends.id  AS id,
+    CONCAT(center_categories.name, ' ', centers.name) AS center,
+    CONCAT(patients.name, ' ', patients.forenames) AS 'Nom Complet',
     CASE
         WHEN prescribers.speciality_id <> 2
         THEN COUNT(sends.patient_id)*1000

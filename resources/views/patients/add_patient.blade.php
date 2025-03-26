@@ -47,7 +47,7 @@
                                     name="forenames" required />
                             </div>
                             <div class="input-group mb-4 col-2">
-                                <input type="number" class="form-control" placeholder="Age" id="year" name="year">
+                                <input type="text" class="form-control" placeholder="Age" id="year" name="year">
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="year">ans</span>
                                 </div>
@@ -87,9 +87,9 @@
                             </div>
                             <div class="input-group pb-5 col-2">
                                 {{-- @can('make discount') --}}
-                                    <label for="discount_bool" class="btn btn-success">Réduction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <input type="checkbox" id="discount_bool" name="discount_bool" class="badgebox"><span
-                                            class="badge">&check;</span></label>
+                                <label for="discount_bool" class="btn btn-success">Réduction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="checkbox" id="discount_bool" name="discount_bool" class="badgebox"><span
+                                        class="badge">&check;</span></label>
                                 {{-- @endcan --}}
                             </div>
                             <div class="input-group mb-2 mt-n4 col-2 d-none">
@@ -146,19 +146,57 @@
 @endsection
 @push('script')
     <script>
+        $('#year').inputmask({
+            mask: '999',
+            greedy: false,
+            definitions: {
+                '9': {
+                    validator: function(chrs, buffer, pos, strict, opts) {
+                        if (pos === 0) {
+                            return /[0-9b]/.test(chrs);
+                        }
+                        if (buffer[0] === 'b') {
+                            return pos <= 2 && /[0-9]/.test(chrs);
+                        }
+                        return /[0-9]/.test(chrs);
+                    }
+                }
+            },
+            onBeforePaste: function(pastedValue, opts) {
+                // Convertit la valeur collée en minuscules
+                return pastedValue.toLowerCase();
+            }
+        });
+
         $('#new_examination').submit(function(e) {
             e.preventDefault();
+            // Afficher l'indicateur de chargement
+            let loadingAlert = Swal.fire({
+                title: 'Enregistrement en cours...',
+                html: 'Veuillez patienter',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 }
             });
+
             $.ajax({
                 method: 'POST',
                 url: "{{ route('patient.record') }}",
                 data: $(this).serialize(),
                 success: function(response) {
                     const pdfUrl = response.pdf_url;
+
+                    // Fermer l'indicateur de chargement
+                    loadingAlert.close();
+
+                    // Afficher le toast de succès
                     const Toast = Swal.mixin({
                         toast: true,
                         position: "top-end",
@@ -170,18 +208,31 @@
                         icon: "success",
                         title: "Enregistrement effectué."
                     });
+
                     redirectToVoucher(pdfUrl);
-                    //clean();
                     $('#voucher').val(response.voucher_id);
                     deleteVoucherAfterStream();
                 },
                 error: function(xhr, status, error) {
-                    Swal.fire({
-                        title: "Erreur lors de l'exécution",
-                        icon: "error",
-                        showConfirmButton: false,
-                        timer: 500
-                    });
+                    // Fermer l'indicateur de chargement en cas d'erreur
+                    loadingAlert.close();
+
+                    if (xhr.status === 505) {
+                        Swal.fire({
+                            title: xhr.responseJSON.message,
+                            icon: "warning",
+                            position: 'center',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Erreur lors de l'exécution",
+                            icon: "error",
+                            showConfirmButton: false,
+                            timer: 500
+                        });
+                    }
                 },
             });
         });

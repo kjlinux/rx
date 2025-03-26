@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use view;
 use Exception;
+use App\Models\Send;
 use App\Models\Rebate;
 use App\Models\Patient;
 use App\Models\Voucher;
@@ -10,7 +12,6 @@ use App\Models\Prescriber;
 use App\Models\Examination;
 use Illuminate\Http\Request;
 use App\Models\ExaminationType;
-use App\Models\Send;
 
 class PatientController extends Controller
 {
@@ -76,13 +77,26 @@ class PatientController extends Controller
     {
         try {
             if ($request->ajax()) {
+                $recentPatient = Patient::where('name', capitalizeWords($request->name))
+                    ->where('forenames', capitalizeWords($request->forenames))
+                    ->where('age', $request->year)
+                    ->where('phone', $request->phone)
+                    ->where('created_at', '>=', now()->subMinutes(10))
+                    ->first();
+
+                if ($recentPatient) {
+                    return response()->json([
+                        'message' => 'Cet examen a déjà été enregistré.'
+                    ], 505);
+                }
+
                 $voucher = new Voucher;
                 $patient = new Patient;
 
                 $patient->name = capitalizeWords($request->name);
                 $patient->forenames = capitalizeWords($request->forenames);
                 $patient->gender = $request->gender;
-                $patient->age = $request->year;
+                $patient->age = str_replace('_', '', $request->year);
                 $patient->phone = $request->phone;
                 $patient->clinical_information = $request->clinical_information;
                 $patient->center_id = $request->center;
@@ -188,7 +202,7 @@ class PatientController extends Controller
                 $patient->name = capitalizeWords($request->name);
                 $patient->forenames = capitalizeWords($request->forename);
                 $patient->gender = $request->gender;
-                $patient->age = $request->year;
+                $patient->age = str_replace('_', '', $request->year);
                 $patient->phone = $request->phone;
                 $patient->clinical_information = $request->clinical_information;
                 $patient->center_id = $request->center;

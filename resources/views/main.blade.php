@@ -222,9 +222,7 @@
     <script src={{ asset('js/accessibility2.js') }}></script>
     <script src={{ asset('js/charts.js') }}></script>
     <script src={{ asset('js/datepicker.min.js') }}></script>
-    <script src={{ asset('js/datepicker.fr.min.js') }}
-        integrity="sha512-4752qa3UdRaOZtndcbjieWm5c5vGqKh/NLF9tlrvSE9ucXgdRZI7srgmftqaWuyHoSoUeqS9xrL7kWVrDO/D5A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src={{ asset('js/datepicker.fr.min.js') }}></script>
     <script src={{ asset('js/bootstrap-switch-button.min.js') }}></script>
     <script>
         document.getElementById('switch').switchButton('enable');

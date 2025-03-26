@@ -109,12 +109,6 @@ class PrescriberSeeder extends Seeder
                     'speciality_id' => 1
                 ],
                 [
-                    'name' => 'Diallo',
-                    'forenames' => 'Abdul',
-                    'center_id' => 1,
-                    'speciality_id' => 1
-                ],
-                [
                     'name' => 'Kacou',
                     'forenames' => 'Yolande',
                     'center_id' => 1,
