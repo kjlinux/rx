@@ -12,7 +12,7 @@ class VoucherController extends Controller
     {
         $pdf = Pdf::loadView('voucher', compact('data'));
         $pdf->setPaper('a4', 'portrait');
-        $filename =  $data['slug'].'.pdf';
+        $filename =  $data['slug'] . '.pdf';
         $pdf->save(storage_path('app/public/' . $filename));
 
         return response()->json(['pdf_url' => asset('v/' . $filename), 'voucher_id' => $data['slug']]);
@@ -28,7 +28,7 @@ class VoucherController extends Controller
         $data['name'] = $request->name;
         $data['forenames'] = $request->forename;
         $data['amount_to_pay'] = is_null($request->after_discount) ?  $request->total_amount : $request->after_discount;
-        $data['payed'] = is_null($request->payed_amount) ? 0 : $request->payed_amount;
+        $data['payed'] = is_null($request->payed_amount) ? $data['amount_to_pay'] : $request->payed_amount;
         $data['left_to_pay'] = is_null($request->payed_amount) ? 0 : $request->left_to_pay;
         $data['amount_to_pay_in_letters'] = capitalizeWords(nummberToLetters($data['amount_to_pay']));
         $data['examination'] = getExaminationsNames($request->examination);
@@ -36,7 +36,7 @@ class VoucherController extends Controller
 
         $pdf = Pdf::loadView('voucher', compact('data'));
         $pdf->setPaper('a4', 'portrait');
-        $filename =  $data['slug'].'.pdf';
+        $filename =  $data['slug'] . '.pdf';
         $pdf->save(storage_path('app/public/' . $filename));
 
         return response()->json(['pdf_url' => asset('v/' . $filename)]);
@@ -44,7 +44,7 @@ class VoucherController extends Controller
 
     public function deleteVoucherAfterStream(Request $request)
     {
-        $filePath = storage_path('app/public/'.$request->voucher.'.pdf');
+        $filePath = storage_path('app/public/' . $request->voucher . '.pdf');
 
         if (file_exists($filePath)) {
             unlink($filePath);
@@ -55,7 +55,7 @@ class VoucherController extends Controller
 
     public function deleteVoucherAfterStreamWithoutRegistering(Request $request)
     {
-        $filePath = storage_path('app/public/'.$request->slug.'.pdf');
+        $filePath = storage_path('app/public/' . $request->slug . '.pdf');
 
         if (file_exists($filePath)) {
             unlink($filePath);
