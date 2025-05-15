@@ -146,7 +146,7 @@ class PatientController extends Controller
                 $data['name'] = $patient->name;
                 $data['forenames'] = $patient->forenames;
                 $data['amount_to_pay'] = is_null($voucher->amount_after_discount) ?  $voucher->amount_to_pay : $voucher->amount_after_discount;
-                $data['payed'] = is_null($voucher->payed) ? 0 : $voucher->payed;
+                $data['payed'] = is_null($voucher->payed) ? $data['amount_to_pay'] : $voucher->payed;
                 $data['left_to_pay'] = is_null($voucher->payed) ? 0 : $voucher->left_to_pay;
                 $data['amount_to_pay_in_letters'] = capitalizeWords(nummberToLetters($data['amount_to_pay']));
                 $data['examination'] = getExaminationsNames($request->examination);
